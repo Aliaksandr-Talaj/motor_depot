@@ -13,7 +13,7 @@ public interface AutomobileDao {
     Automobile getAutomobile(String id);
 
     // get all automobiles
-    List<Automobile> getAutomobiles();
+    List<Automobile> getAllAutomobiles();
 
     //update automobile
     void updateAutomobile(Automobile automobile);

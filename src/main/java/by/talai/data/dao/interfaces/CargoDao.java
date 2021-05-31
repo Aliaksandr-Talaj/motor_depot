@@ -1,7 +1,6 @@
 package by.talai.data.dao.interfaces;
 
 import by.talai.model.Cargo;
-import by.talai.model.stock.Automobile;
 
 import java.util.List;
 
@@ -11,15 +10,15 @@ public interface CargoDao {
     String createCargo(Cargo cargo);
 
     // get cargo by id
-    Automobile getAutomobile(String id);
+    Cargo getCargo(String id);
 
-    // get all automobiles
-    List<Automobile> getAutomobiles();
+    // get all cargo
+    List<Cargo> getAllCargos();
 
-    //update automobile
-    void updateAutomobile(Automobile automobile);
+    //update cargo
+    void updateCargo(Cargo cargo);
 
-    // delete automobile
-    boolean deleteAutomobile(String id);
+    // delete cargo
+    boolean deleteCargo(String id);
 
 }

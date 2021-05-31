@@ -18,6 +18,7 @@ public class Automobile {
     private double cargoVolumeLimit;
 
     private List<Malfunction> malfunctions;
+    private TechnicalStatus status;
 
     public String getId() {
         return id;
@@ -124,6 +125,14 @@ public class Automobile {
     }
 
     private List<Maintenance> maintenanceList;
+
+    public TechnicalStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TechnicalStatus status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {
