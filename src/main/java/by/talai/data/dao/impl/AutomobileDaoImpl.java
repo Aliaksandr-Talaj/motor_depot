@@ -1,13 +1,11 @@
-package by.talai.data.dao;
+package by.talai.data.dao.impl;
 
-import by.talai.data.dao.interfaces.AutomobileDao;
+import by.talai.data.dao.AutomobileDao;
 import by.talai.model.stock.Automobile;
 
 import java.util.List;
 
 public class AutomobileDaoImpl implements AutomobileDao {
-    
-
 
 
     @Override

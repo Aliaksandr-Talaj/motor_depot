@@ -1,4 +1,4 @@
-package by.talai.data.dao.interfaces;
+package by.talai.data.dao;
 
 
 import by.talai.model.stock.Malfunction;
