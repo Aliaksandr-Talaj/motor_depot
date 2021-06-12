@@ -22,4 +22,7 @@ public interface MaintenanceDao {
     // delete Maintenance
     boolean deleteMaintenance(String id);
 
+    //get all maintenance of automobile
+    List<Maintenance> getMaintenanceOfAutomobile(String id);
+
 }

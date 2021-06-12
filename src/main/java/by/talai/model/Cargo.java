@@ -1,6 +1,8 @@
 package by.talai.model;
 
-public class Cargo {
+import java.io.Serializable;
+
+public class Cargo implements Serializable {
 
     private String name;
 

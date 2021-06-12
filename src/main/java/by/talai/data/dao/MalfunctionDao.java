@@ -20,4 +20,7 @@ public interface MalfunctionDao {
 
     // delete Malfunction
     boolean deleteMalfunction(String id);
+
+    //get all malfunctions of the automobile
+    List<Malfunction> getMalfunctionsOfAutomobile(String id);
 }

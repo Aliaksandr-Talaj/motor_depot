@@ -1,6 +1,8 @@
 package by.talai.model;
 
-public class Unit {
+import java.io.Serializable;
+
+public class Unit implements Serializable {
     private String type;
     private int length;
     private int width;
@@ -51,10 +53,10 @@ public class Unit {
     public String toString() {
         return "Unit{" +
                 "type='" + type + '\'' +
-                ", length=" + length +
-                ", width=" + width +
-                ", height=" + height +
-                ", weight=" + weight +
+                ",\n length=" + length +
+                ",\n width=" + width +
+                ",\n height=" + height +
+                ",\n weight=" + weight +
                 '}';
     }
 }

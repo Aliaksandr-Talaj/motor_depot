@@ -1,11 +1,13 @@
 package by.talai.model.personnel;
 
-public abstract class User {
-    private String id;
-    private String name;
-    private String surname;
-    private String login;
-    private String password;
+import java.io.Serializable;
+
+public abstract class User implements Serializable {
+    protected String id;
+    protected String name;
+    protected String surname;
+    protected String login;
+    protected String password;
 
     public User() {
 
@@ -57,5 +59,16 @@ public abstract class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ",\n name='" + name + '\'' +
+                ",\n surname='" + surname + '\'' +
+                ",\n login='" + login + '\'' +
+                ",\n password='" + password + '\'' +
+                '}';
     }
 }

@@ -1,9 +1,10 @@
 package by.talai.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
-public class Request {
+public class Request implements Serializable {
     private int id;
     private Date fillingDate;
     private String charterer;

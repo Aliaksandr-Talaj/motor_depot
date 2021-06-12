@@ -15,11 +15,13 @@ public final class ConnectionPool {
     private BlockingQueue<Connection> connectionQueue;
     private BlockingQueue<Connection> givenAwayConQueue;
 
-    private String driverName;
-    private String url;
-    private String user;
-    private String password;
+    private final String driverName;
+    private final String url;
+    private final String user;
+    private final String password;
     private int poolSize;
+
+    private static ConnectionPool instance;
 
     private ConnectionPool() throws ConnectionPoolException {
         DBResourceManager dbResourceManager = DBResourceManager.getInstance();
@@ -34,6 +36,13 @@ public final class ConnectionPool {
             poolSize = 10;
         }
         initPoolData();
+    }
+
+    public static ConnectionPool getInstance() throws ConnectionPoolException {
+        if (instance == null) {
+            instance = new ConnectionPool();
+        }
+        return instance;
     }
 
     public void initPoolData() throws ConnectionPoolException {
@@ -83,6 +92,36 @@ public final class ConnectionPool {
         return connection;
     }
 
+    public void returnConnectionToPool(Connection connection) {
+        try {
+            givenAwayConQueue.remove(connection);
+            connectionQueue.add(connection);
+        } catch (IllegalStateException e) {
+            throw new IllegalStateException("Error while returning the connection into the pool", e);
+            //TODO log.error
+        }
+    }
+
+    public void returnConnectionToPool(Connection connection, Statement statement) {
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            //TODO log.error "Statement isn't closed."
+        }
+
+        returnConnectionToPool(connection);
+    }
+
+    public void returnConnectionToPool(Connection connection, Statement statement, ResultSet resultSet) {
+        try {
+            resultSet.close();
+        } catch (SQLException e) {
+            //TODO log.error "ResultSet isn't closed."
+        }
+
+        returnConnectionToPool(connection, statement);
+    }
+
     private void closeConnection(Connection connection, Statement statement,
                                  ResultSet resultSet) {
         try {
@@ -91,6 +130,20 @@ public final class ConnectionPool {
             //TODO log.error "ResultSet isn't closed."
         }
 
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            //TODO log.error "Statement isn't closed."
+        }
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            //TODO log.error "Connection isn't return to the pool."
+        }
+    }
+
+    private void closeConnection(Connection connection, Statement statement) {
         try {
             statement.close();
         } catch (SQLException e) {

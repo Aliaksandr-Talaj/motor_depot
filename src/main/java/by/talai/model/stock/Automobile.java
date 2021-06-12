@@ -1,24 +1,33 @@
 package by.talai.model.stock;
 
+import by.talai.model.AutomobileType;
+import by.talai.model.Equipment;
+import by.talai.model.FuelType;
+import by.talai.model.LoadingType;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-public class Automobile {
+public class Automobile implements Serializable {
 
     private String id;
     private String brand;
     private String model;
-    private String fuel;
+    private FuelType fuelType;
     private int carrying;
-    private String type;
-    private Set<String> equipmentSet;
+    private AutomobileType automobileType;
+    private Set<Equipment> equipmentSet;
+    private Set<LoadingType> loadingTypes;
     private int platformLength;
     private int platformWidth;
     private double cargoHeightLimit;
     private double cargoVolumeLimit;
 
     private List<Malfunction> malfunctions;
-    private TechnicalStatus status;
+    private List<Maintenance> maintenanceList;
+    private TechnicalStatus technicalStatus;
+
 
     public String getId() {
         return id;
@@ -44,12 +53,12 @@ public class Automobile {
         this.model = model;
     }
 
-    public String getFuel() {
-        return fuel;
+    public FuelType getFuelType() {
+        return fuelType;
     }
 
-    public void setFuel(String fuel) {
-        this.fuel = fuel;
+    public void setFuelType(FuelType fuelType) {
+        this.fuelType = fuelType;
     }
 
     public int getCarrying() {
@@ -60,19 +69,19 @@ public class Automobile {
         this.carrying = carrying;
     }
 
-    public String getType() {
-        return type;
+    public AutomobileType getType() {
+        return automobileType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setType(AutomobileType automobileType) {
+        this.automobileType = automobileType;
     }
 
-    public Set<String> getEquipmentSet() {
+    public Set<Equipment> getEquipmentSet() {
         return equipmentSet;
     }
 
-    public void setEquipmentSet(Set<String> equipmentSet) {
+    public void setEquipmentSet(Set<Equipment> equipmentSet) {
         this.equipmentSet = equipmentSet;
     }
 
@@ -124,14 +133,20 @@ public class Automobile {
         this.maintenanceList = maintenanceList;
     }
 
-    private List<Maintenance> maintenanceList;
-
-    public TechnicalStatus getStatus() {
-        return status;
+    public TechnicalStatus getTechnicalStatus() {
+        return technicalStatus;
     }
 
-    public void setStatus(TechnicalStatus status) {
-        this.status = status;
+    public void setTechnicalStatus(TechnicalStatus technicalStatus) {
+        this.technicalStatus = technicalStatus;
+    }
+
+    public Set<LoadingType> getLoadingTypes() {
+        return loadingTypes;
+    }
+
+    public void setLoadingTypes(Set<LoadingType> loadingTypes) {
+        this.loadingTypes = loadingTypes;
     }
 
     @Override
@@ -140,9 +155,9 @@ public class Automobile {
                 "id='" + id + '\'' +
                 ",\n brand='" + brand + '\'' +
                 ",\n model='" + model + '\'' +
-                ",\n fuel='" + fuel + '\'' +
+                ",\n fuel='" + fuelType.getType() + '\'' +
                 ",\n carrying=" + carrying +
-                ",\n type='" + type + '\'' +
+                ",\n type='" + automobileType.getType() + '\'' +
                 ",\n equipmentSet=" + equipmentSet +
                 ",\n platformLength=" + platformLength +
                 ",\n platformWidth=" + platformWidth +

@@ -1,8 +1,9 @@
 package by.talai.model.stock;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Maintenance {
+public class Maintenance implements Serializable {
 
     private String type;
     private Date startTime;

@@ -3,6 +3,7 @@ package by.talai.data.dao;
 import by.talai.model.Equipment;
 
 import java.util.List;
+import java.util.Set;
 
 public interface EquipmentDao {
 
@@ -10,7 +11,7 @@ public interface EquipmentDao {
     String createEquipment(Equipment equipment);
 
     // get Equipment by id
-    Equipment getEquipment(String id);
+    Equipment getEquipment(int id);
 
     // get all Equipment
     List<Equipment> getAllEquipment();
@@ -19,6 +20,15 @@ public interface EquipmentDao {
     void updateEquipment(Equipment equipment);
 
     // delete Equipment
-    boolean deleteEquipment(String id);
+    boolean deleteEquipment(int id);
+
+    // add Equipment to automobile
+    void addToAutomobile(int id);
+
+    // delete equipment from automobile
+    boolean deleteFromAutomobile(int id);
+
+    //get all equipment on automobile
+    Set<Equipment> getAllEquipmentOnAutomobile(String id);
 
 }

@@ -3,11 +3,12 @@ package by.talai.model;
 import by.talai.model.personnel.Dispatcher;
 import by.talai.model.stock.Automobile;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
-public class Ride {
+public class Ride implements Serializable {
     private int id;
     private Date date;
     private Request request;

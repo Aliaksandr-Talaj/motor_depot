@@ -1,8 +1,9 @@
 package by.talai.model.stock;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Malfunction {
+public class Malfunction implements Serializable {
 
     private String problem;
     private Date detectionTime;

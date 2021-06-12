@@ -1,24 +1,26 @@
 package by.talai.data.dao;
 
+import by.talai.data.exception.ConnectionPoolException;
 import by.talai.model.stock.Automobile;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface AutomobileDao {
 
     // create automobile
-    String createAutomobile(Automobile automobile);
+    void createAutomobile(Automobile automobile) throws Exception;
 
     // get automobile by id
-    Automobile getAutomobile(String id);
+    Automobile getAutomobile(String id) throws Exception;
 
     // get all automobiles
-    List<Automobile> getAllAutomobiles();
+    List<Automobile> getAllAutomobiles() throws Exception;
 
     //update automobile
-    void updateAutomobile(Automobile automobile);
+    void updateAutomobile(Automobile automobile) throws Exception;
 
     // delete automobile
-    boolean deleteAutomobile(String id);
+    boolean deleteAutomobile(String id) throws Exception;
 
 }

@@ -10,8 +10,8 @@ public class Driver extends User {
         super();
     }
 
-    public Driver(String id, String name, String surname, Automobile automobile) {
-        super(id, name, surname);
+    public Driver(String id, String name, String surname, String login, String password, Automobile automobile) {
+        super(id, name, surname, login, password);
         this.automobile = automobile;
     }
 
@@ -26,7 +26,12 @@ public class Driver extends User {
     @Override
     public String toString() {
         return "Driver{" +
-                "automobile=" + automobile +
+                "id='" + id + '\'' +
+                ",\n name='" + name + '\'' +
+                ",\n surname='" + surname + '\'' +
+                ",\n login='" + login + '\'' +
+                ",\n password='" + password + '\'' +
+                ",\n automobile=" + automobile +
                 '}';
     }
 }

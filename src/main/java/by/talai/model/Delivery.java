@@ -1,10 +1,11 @@
 package by.talai.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
-public class Delivery {
+public class Delivery implements Serializable {
     private String loadingPlace;
     private Date loadingDate;
     private String destination;
