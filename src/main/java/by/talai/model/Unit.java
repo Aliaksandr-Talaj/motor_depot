@@ -3,6 +3,8 @@ package by.talai.model;
 import java.io.Serializable;
 
 public class Unit implements Serializable {
+
+    private int id;
     private String type;
     private int length;
     private int width;
@@ -49,10 +51,19 @@ public class Unit implements Serializable {
         this.weight = weight;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Unit{" +
-                "type='" + type + '\'' +
+                "id=" + id +
+                ",\n type='" + type + '\'' +
                 ",\n length=" + length +
                 ",\n width=" + width +
                 ",\n height=" + height +

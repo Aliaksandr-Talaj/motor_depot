@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Cargo implements Serializable {
 
+    private int id;
     private String name;
 
     private Unit unit;
@@ -33,10 +34,19 @@ public class Cargo implements Serializable {
         this.quantity = quantity;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Cargo{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ",\n name='" + name + '\'' +
                 ",\n unit=" + unit +
                 ",\n quantity=" + quantity +
                 '}';

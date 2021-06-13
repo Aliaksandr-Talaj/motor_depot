@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.List;
 
 public class Request implements Serializable {
+
     private int id;
     private Date fillingDate;
     private String charterer;
@@ -48,9 +49,9 @@ public class Request implements Serializable {
     public String toString() {
         return "Request{" +
                 "id=" + id +
-                ", fillingDate=" + fillingDate +
-                ", charterer='" + charterer + '\'' +
-                ", deliveryList=" + deliveryList +
+                ",\n fillingDate=" + fillingDate +
+                ",\n charterer='" + charterer + '\'' +
+                ",\n deliveryList=" + deliveryList +
                 '}';
     }
 }

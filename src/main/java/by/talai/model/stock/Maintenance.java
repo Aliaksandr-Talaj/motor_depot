@@ -5,9 +5,18 @@ import java.sql.Date;
 
 public class Maintenance implements Serializable {
 
+    private int id;
     private String type;
     private Date startTime;
     private Date finishTime;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getType() {
         return type;
@@ -36,7 +45,8 @@ public class Maintenance implements Serializable {
     @Override
     public String toString() {
         return "Maintenance{" +
-                "type='" + type + '\'' +
+                "id=" + id +
+                ",\n type='" + type + '\'' +
                 ",\n startTime=" + startTime +
                 ",\n finishTime=" + finishTime +
                 '}';

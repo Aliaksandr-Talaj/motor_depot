@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class LoadingType implements Serializable {
 
     private int id;
-
     private String type;
 
     public LoadingType() {

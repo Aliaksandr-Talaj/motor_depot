@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Ride implements Serializable {
+
     private int id;
     private Date date;
     private Request request;

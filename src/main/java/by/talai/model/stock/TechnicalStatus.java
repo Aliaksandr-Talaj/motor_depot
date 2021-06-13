@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class TechnicalStatus implements Serializable {
 
     private int id;
-
     private String status;
 
     public TechnicalStatus() {

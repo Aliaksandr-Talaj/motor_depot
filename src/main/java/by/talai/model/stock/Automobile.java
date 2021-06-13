@@ -1,9 +1,6 @@
 package by.talai.model.stock;
 
-import by.talai.model.AutomobileType;
-import by.talai.model.Equipment;
-import by.talai.model.FuelType;
-import by.talai.model.LoadingType;
+import by.talai.model.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,7 +24,7 @@ public class Automobile implements Serializable {
     private List<Malfunction> malfunctions;
     private List<Maintenance> maintenanceList;
     private TechnicalStatus technicalStatus;
-
+    private List<AutomobileAttachment> automobileAttachmentList;
 
     public String getId() {
         return id;
@@ -149,22 +146,41 @@ public class Automobile implements Serializable {
         this.loadingTypes = loadingTypes;
     }
 
+    public AutomobileType getAutomobileType() {
+        return automobileType;
+    }
+
+    public void setAutomobileType(AutomobileType automobileType) {
+        this.automobileType = automobileType;
+    }
+
+    public List<AutomobileAttachment> getAutomobileAttachmentList() {
+        return automobileAttachmentList;
+    }
+
+    public void setAutomobileAttachmentList(List<AutomobileAttachment> automobileAttachmentList) {
+        this.automobileAttachmentList = automobileAttachmentList;
+    }
+
     @Override
     public String toString() {
         return "Automobile{" +
                 "id='" + id + '\'' +
                 ",\n brand='" + brand + '\'' +
                 ",\n model='" + model + '\'' +
-                ",\n fuel='" + fuelType.getType() + '\'' +
+                ",\n fuelType=" + fuelType +
                 ",\n carrying=" + carrying +
-                ",\n type='" + automobileType.getType() + '\'' +
+                ",\n automobileType=" + automobileType +
                 ",\n equipmentSet=" + equipmentSet +
+                ",\n loadingTypes=" + loadingTypes +
                 ",\n platformLength=" + platformLength +
                 ",\n platformWidth=" + platformWidth +
                 ",\n cargoHeightLimit=" + cargoHeightLimit +
                 ",\n cargoVolumeLimit=" + cargoVolumeLimit +
                 ",\n malfunctions=" + malfunctions +
                 ",\n maintenanceList=" + maintenanceList +
+                ",\n technicalStatus=" + technicalStatus +
+                ",\n automobileAttachmentList=" + automobileAttachmentList +
                 '}';
     }
 }

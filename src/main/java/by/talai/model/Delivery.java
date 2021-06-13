@@ -6,12 +6,22 @@ import java.util.List;
 import java.util.Set;
 
 public class Delivery implements Serializable {
+
+    private int id;
     private String loadingPlace;
     private Date loadingDate;
     private String destination;
     private Date term;
     private Set<String> additionalRequirements;
     private List<Cargo> cargoList;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getLoadingPlace() {
         return loadingPlace;
@@ -64,7 +74,8 @@ public class Delivery implements Serializable {
     @Override
     public String toString() {
         return "Delivery{" +
-                "loadingPlace='" + loadingPlace + '\'' +
+                "id=" + id +
+                ",\n loadingPlace='" + loadingPlace + '\'' +
                 ",\n loadingDate=" + loadingDate +
                 ",\n destination='" + destination + '\'' +
                 ",\n term=" + term +

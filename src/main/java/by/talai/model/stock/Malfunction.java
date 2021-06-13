@@ -5,9 +5,18 @@ import java.sql.Date;
 
 public class Malfunction implements Serializable {
 
+    private int id;
     private String problem;
     private Date detectionTime;
     private Date fixTime;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getProblem() {
         return problem;
@@ -36,7 +45,8 @@ public class Malfunction implements Serializable {
     @Override
     public String toString() {
         return "Malfunction{" +
-                "problem='" + problem + '\'' +
+                "id=" + id +
+                ",\n problem='" + problem + '\'' +
                 ",\n detectionTime=" + detectionTime +
                 ",\n fixTime=" + fixTime +
                 '}';
