@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface DispatcherDao {
     // create dispatcher
-    String createDispatcher(Dispatcher dispatcher);
+    void createDispatcher(Dispatcher dispatcher);
 
     // get dispatcher by id
-    Dispatcher getDispatcher(String id);
+    Dispatcher getDispatcher(int id);
 
     // get all cargo
     List<Dispatcher> getAllDispatchers();
@@ -19,5 +19,5 @@ public interface DispatcherDao {
     void updateDispatcher(Dispatcher dispatcher);
 
     // delete dispatcher
-    boolean deleteDispatcher(String id);
+    void deleteDispatcher(int id);
 }

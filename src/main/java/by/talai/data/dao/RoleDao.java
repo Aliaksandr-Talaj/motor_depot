@@ -8,18 +8,18 @@ import java.util.List;
 public interface RoleDao {
 
     // create role
-    int createRole(Role role);
+    void createRole(Role role) throws Exception;
 
     // get role by id
-    Role getRole(int id);
+    Role getRole(int id) throws Exception;
 
     // get all roles
-    List<Role> getAllRoles();
+    List<Role> getAllRoles() throws Exception;
 
     //update role
-    void updateRole(Role role);
+    void updateRole(Role role) throws Exception;
 
     // delete role
-    boolean deleteRole(int id);
+    void deleteRole(int id) throws Exception;
 
 }

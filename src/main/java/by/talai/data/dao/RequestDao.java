@@ -9,7 +9,7 @@ public interface RequestDao {
     String createRequest(Request request);
 
     // get Request by id
-    Request getRequest(String id);
+    Request getRequest(int id);
 
     // get all Requests
     List<Request> getAllRequests();
@@ -18,5 +18,5 @@ public interface RequestDao {
     void updateRequest(Request request);
 
     // delete Request
-    boolean deleteRequest(String id);
+    void deleteRequest(String id);
 }

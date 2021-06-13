@@ -12,7 +12,7 @@ public class CargoDaoImpl implements CargoDao {
     }
 
     @Override
-    public Cargo getCargo(String id) {
+    public Cargo getCargo(int id) {
         return null;
     }
 
@@ -27,7 +27,8 @@ public class CargoDaoImpl implements CargoDao {
     }
 
     @Override
-    public boolean deleteCargo(String id) {
-        return false;
+    public void deleteCargo(int id) {
+
+
     }
 }

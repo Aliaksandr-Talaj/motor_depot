@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface MalfunctionDao {
     // create Malfunction
-    String createMalfunction(Malfunction malfunction);
+    void createMalfunction(Malfunction malfunction);
 
     // get Malfunction by id
-    Malfunction getMalfunction(String id);
+    Malfunction getMalfunction(int id);
 
     // get all Malfunctions
     List<Malfunction> getAllMalfunctions();
@@ -19,7 +19,7 @@ public interface MalfunctionDao {
     void updateMalfunction(Malfunction malfunction);
 
     // delete Malfunction
-    boolean deleteMalfunction(String id);
+    void deleteMalfunction(int id);
 
     //get all malfunctions of the automobile
     List<Malfunction> getMalfunctionsOfAutomobile(String id);

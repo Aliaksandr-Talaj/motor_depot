@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class RideStatus implements Serializable {
 
     private int id;
-
     private String status;
 
     public RideStatus() {
@@ -28,5 +27,11 @@ public class RideStatus implements Serializable {
         this.status = status;
     }
 
-
+    @Override
+    public String toString() {
+        return "RideStatus{" +
+                "id=" + id +
+                ",\n status='" + status + '\'' +
+                '}';
+    }
 }

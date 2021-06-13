@@ -10,7 +10,7 @@ public interface CargoDao {
     String createCargo(Cargo cargo);
 
     // get cargo by id
-    Cargo getCargo(String id);
+    Cargo getCargo(int id);
 
     // get all cargo
     List<Cargo> getAllCargos();
@@ -19,6 +19,6 @@ public interface CargoDao {
     void updateCargo(Cargo cargo);
 
     // delete cargo
-    boolean deleteCargo(String id);
+    void deleteCargo(int id);
 
 }

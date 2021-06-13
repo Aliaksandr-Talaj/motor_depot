@@ -1,9 +1,7 @@
 package by.talai.data.dao;
 
-import by.talai.data.exception.ConnectionPoolException;
 import by.talai.model.stock.Automobile;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface AutomobileDao {
@@ -21,6 +19,6 @@ public interface AutomobileDao {
     void updateAutomobile(Automobile automobile) throws Exception;
 
     // delete automobile
-    boolean deleteAutomobile(String id) throws Exception;
+    void deleteAutomobile(String id) throws Exception;
 
 }

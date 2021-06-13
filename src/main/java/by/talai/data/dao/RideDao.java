@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface RideDao {
     // createRide
-    String createRide(Ride ride);
+    void createRide(Ride ride);
 
     // get Ride by id
-    Ride getRide(String id);
+    Ride getRide(int id);
 
     // get all Rides
     List<Ride> getAllRides();
@@ -19,5 +19,5 @@ public interface RideDao {
     void updateRide(Ride ride);
 
     // delete Ride
-    boolean deleteRide(String id);
+    void deleteRide(String id);
 }

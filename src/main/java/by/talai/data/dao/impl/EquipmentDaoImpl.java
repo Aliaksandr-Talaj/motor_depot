@@ -10,14 +10,10 @@ import java.util.Set;
 
 public class EquipmentDaoImpl implements EquipmentDao {
 
-    ConnectionPool connectionPool = ConnectionPool.getInstance();
-
-    public EquipmentDaoImpl() throws ConnectionPoolException {
-    }
 
     @Override
-    public String createEquipment(Equipment equipment) {
-        return null;
+    public void createEquipment(Equipment equipment) {
+
     }
 
     @Override
@@ -36,22 +32,37 @@ public class EquipmentDaoImpl implements EquipmentDao {
     }
 
     @Override
-    public boolean deleteEquipment(int id) {
-        return false;
-    }
-
-    @Override
-    public void addToAutomobile(int id) {
+    public void deleteEquipment(int id) {
 
     }
 
     @Override
-    public boolean deleteFromAutomobile(int id) {
-        return false;
+    public void addEquipmentToAutomobile(int equipmentId, String automobileId) {
+
     }
 
     @Override
-    public Set<Equipment> getAllEquipmentOnAutomobile(String id) {
+    public void removeEquipmentFromAutomobile(int equipmentId, String automobileId) {
+
+    }
+
+    @Override
+    public Set<Equipment> getAllEquipmentOnAutomobile(String automobileId) {
         return null;
+    }
+
+    @Override
+    public void addEquipmentToRequest(int equipmentId, int requestId) {
+
+    }
+
+    @Override
+    public Set<Equipment> getAllEquipmentOfRequest(int requestId) {
+        return null;
+    }
+
+    @Override
+    public void removeEquipmentFromRequest(int equipmentId, int requestId) {
+
     }
 }

@@ -16,8 +16,8 @@ public interface FuelTypeDao {
     Set<FuelType> findAllFuelTypes();
 
     //update fuel type
-    void updateFuelType();
+    void updateFuelType(FuelType fuelType);
 
     //delete fuel type
-    boolean deleteFuelType();
+    void deleteFuelType(int id);
 }

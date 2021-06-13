@@ -6,17 +6,17 @@ import java.util.List;
 
 public interface UnitDao {
     // create Unit
-    String createUnit(Unit unit);
+    void createUnit(Unit unit) throws Exception;
 
     // get Unit by id
-    Unit getUnit(String id);
+    Unit getUnit(int id) throws Exception;
 
     // get all Units
-    List<Unit> getAllUnits();
+    List<Unit> getAllUnits() throws Exception;
 
     //update Unit
-    void updateUnit(Unit unit);
+    void updateUnit(Unit unit) throws Exception;
 
     // delete Unit
-    boolean deleteUnit(String id);
+    void deleteUnit(int id) throws Exception;
 }

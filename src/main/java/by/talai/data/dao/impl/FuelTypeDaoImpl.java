@@ -22,12 +22,12 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
     }
 
     @Override
-    public void updateFuelType() {
+    public void updateFuelType(FuelType fuelType) {
 
     }
 
     @Override
-    public boolean deleteFuelType() {
-        return false;
+    public void deleteFuelType(int id) {
+
     }
 }

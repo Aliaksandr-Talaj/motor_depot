@@ -7,12 +7,12 @@ import java.util.List;
 
 public class RideDaoImpl implements RideDao {
     @Override
-    public String createRide(Ride ride) {
-        return null;
+    public void createRide(Ride ride) {
+
     }
 
     @Override
-    public Ride getRide(String id) {
+    public Ride getRide(int id) {
         return null;
     }
 
@@ -27,7 +27,7 @@ public class RideDaoImpl implements RideDao {
     }
 
     @Override
-    public boolean deleteRide(String id) {
-        return false;
+    public void deleteRide(String id) {
+
     }
 }

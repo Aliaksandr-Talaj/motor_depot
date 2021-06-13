@@ -27,7 +27,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
     MalfunctionDao malfunctionDao = new MalfunctionDaoImpl();
     TechnicalStatusDao technicalStatusDao = new TechnicalStatusDaoImpl();
     FuelTypeDao fuelTypeDao = new FuelTypeDaoImpl();
-    TypeDao typeDao = new TypeDaoImpl();
+    AutomobileTypeDao automobileTypeDao = new AutomobileTypeDaoImpl();
 
 
     public static final Logger logger = LoggerFactory.getLogger(AutomobileDaoImpl.class);
@@ -44,7 +44,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     .prepareStatement("INSERT INTO `motor_depot`.`automobile` (`id`, `brand`, `model`, `type_id`," +
                             " `fuel_type_id`, `carrying`, `platform_length`, `platform_width`, `cargo_height_limit`," +
                             " `cargo_volume_limit`, `technical_status_id`) " +
-                            "VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');");
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
             preparedStatement.setString(1, automobile.getId());
             preparedStatement.setString(2, automobile.getBrand());
             preparedStatement.setString(3, automobile.getModel());
@@ -61,9 +61,9 @@ public class AutomobileDaoImpl implements AutomobileDao {
 
             preparedStatement.setInt(11, automobile.getTechnicalStatus().getId());
 
-            ResultSet resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+            connectionPool.returnConnectionToPool(connection, preparedStatement);
 
         } catch (SQLException e) {
             logger.error("Sql exception in createAutomobile() method");
@@ -97,7 +97,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
             automobile.setCarrying(resultSet.getInt("carrying"));
 
             int typeId = resultSet.getInt("type");
-            automobile.setType(typeDao.findType(typeId));
+            automobile.setType(automobileTypeDao.findAutomobileType(typeId));
 
             automobile.setPlatformLength(resultSet.getInt("platform_length"));
             automobile.setPlatformWidth(resultSet.getInt("platform_width"));
@@ -153,7 +153,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 automobile.setCarrying(resultSet.getInt("carrying"));
 
                 int typeId = resultSet.getInt("type");
-                automobile.setType(typeDao.findType(typeId));
+                automobile.setType(automobileTypeDao.findAutomobileType(typeId));
 
                 automobile.setPlatformLength(resultSet.getInt("platform_length"));
                 automobile.setPlatformWidth(resultSet.getInt("platform_width"));
@@ -174,8 +174,8 @@ public class AutomobileDaoImpl implements AutomobileDao {
 
                 automobiles.add(automobile);
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
             }
+            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
         } catch (SQLException e) {
             logger.error("Sql exception in getAllAutomobiles() method");
@@ -196,10 +196,10 @@ public class AutomobileDaoImpl implements AutomobileDao {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement("UPDATE `motor_depot`.`automobile` " +
-                            "SET `brand` = '?', `model` = '?', `type_id` = '?', `fuel_type_id` = '?'," +
-                            " `carrying` = '?', `platform_length` = '?', `platform_width` = '?'," +
-                            " `cargo_height_limit` = '?', `cargo_volume_limit` = '?', `technical_status_id` = '?'" +
-                            " WHERE (`id` = '?');");
+                            "SET `brand` = ?, `model` = ?, `type_id` = ?, `fuel_type_id` = ?," +
+                            " `carrying` = ?, `platform_length` = ?, `platform_width` = ?," +
+                            " `cargo_height_limit` = ?, `cargo_volume_limit` = ?, `technical_status_id` = ?" +
+                            " WHERE (`id` = ?);");
 
             preparedStatement.setString(1, automobile.getBrand());
             preparedStatement.setString(2, automobile.getModel());
@@ -214,9 +214,9 @@ public class AutomobileDaoImpl implements AutomobileDao {
 
             preparedStatement.setString(11, automobile.getId());
 
-            ResultSet resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+            connectionPool.returnConnectionToPool(connection, preparedStatement);
 
         } catch (SQLException e) {
             logger.error("Sql exception in updateAutomobile() method");
@@ -231,26 +231,26 @@ public class AutomobileDaoImpl implements AutomobileDao {
     }
 
     @Override
-    public boolean deleteAutomobile(String id) throws Exception {
+    public void deleteAutomobile(String id) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM `motor_depot`.`automobile` WHERE (`id` = '?');");
+                    .prepareStatement("DELETE FROM `motor_depot`.`automobile` WHERE (`id` = ?);");
 
             preparedStatement.setString(1, id);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+            connectionPool.returnConnectionToPool(connection, preparedStatement);
 
         } catch (SQLException e) {
-            logger.error("Sql exception in createAutomobile() method");
+            logger.error("Sql exception in deleteAutomobile() method");
             throw new SQLException("exception in deleteAutomobile() method", e);
         } catch (ConnectionPoolException e) {
-            logger.error("Connection pool exception in createAutomobile() method");
+            logger.error("Connection pool exception in deleteAutomobile() method");
             throw new ConnectionPoolException("exception in deleteAutomobile() method", e);
         } catch (Exception e) {
-            logger.error("Exception in createAutomobile() method");
+            logger.error("Exception in deleteAutomobile() method");
             throw new Exception("exception in deleteAutomobile() method", e);
         }
     }

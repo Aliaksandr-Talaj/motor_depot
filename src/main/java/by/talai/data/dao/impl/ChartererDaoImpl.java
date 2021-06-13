@@ -1,14 +1,16 @@
 package by.talai.data.dao.impl;
 
 import by.talai.data.dao.ChartererDao;
+import by.talai.model.Address;
 import by.talai.model.Charterer;
 
 import java.util.List;
+import java.util.Set;
 
 public class ChartererDaoImpl implements ChartererDao {
     @Override
-    public int createCharterer(Charterer charterer) {
-        return 0;
+    public void createCharterer(Charterer charterer) {
+
     }
 
     @Override
@@ -27,7 +29,22 @@ public class ChartererDaoImpl implements ChartererDao {
     }
 
     @Override
-    public boolean deleteCharterer(int id) {
-        return false;
+    public void deleteCharterer(int id) {
+
+    }
+
+    @Override
+    public void addAddressToCharterer(int addressId, int chartererId) {
+
+    }
+
+    @Override
+    public Set<Address> findUsedAddresses(int chartererId) {
+        return null;
+    }
+
+    @Override
+    public void deleteUsageOfAddress(int addressId, int chartererId) {
+
     }
 }

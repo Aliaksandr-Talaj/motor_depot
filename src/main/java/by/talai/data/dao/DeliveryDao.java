@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface DeliveryDao {
     // create delivery
-    String createDelivery(Delivery delivery);
+    void createDelivery(Delivery delivery);
 
     // get delivery by id
-    Delivery getDelivery(String id);
+    Delivery getDelivery(int id);
 
     // get all delivery
     List<Delivery> getAllDeliveries();
@@ -19,5 +19,5 @@ public interface DeliveryDao {
     void updateDelivery(Delivery delivery);
 
     // delete delivery
-    boolean deleteDelivery(String id);
+    void deleteDelivery(int id);
 }

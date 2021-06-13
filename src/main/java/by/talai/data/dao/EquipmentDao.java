@@ -8,7 +8,7 @@ import java.util.Set;
 public interface EquipmentDao {
 
     // create Equipment
-    String createEquipment(Equipment equipment);
+    void createEquipment(Equipment equipment);
 
     // get Equipment by id
     Equipment getEquipment(int id);
@@ -20,15 +20,26 @@ public interface EquipmentDao {
     void updateEquipment(Equipment equipment);
 
     // delete Equipment
-    boolean deleteEquipment(int id);
+    void deleteEquipment(int id);
 
-    // add Equipment to automobile
-    void addToAutomobile(int id);
 
-    // delete equipment from automobile
-    boolean deleteFromAutomobile(int id);
+    // add equipment to the automobile
+    void addEquipmentToAutomobile(int equipmentId, String automobileId);
 
-    //get all equipment on automobile
-    Set<Equipment> getAllEquipmentOnAutomobile(String id);
+    //remove equipment from the automobile
+    void removeEquipmentFromAutomobile(int equipmentId, String automobileId);
+
+    // get  all equipment on the automobile
+    Set<Equipment> getAllEquipmentOnAutomobile(String automobileId);
+
+
+    // add required equipment to the request
+    void addEquipmentToRequest(int equipmentId, int requestId);
+
+    // get  all required equipment of the request
+    Set<Equipment> getAllEquipmentOfRequest(int requestId);
+
+    //remove required equipment from the request
+    void removeEquipmentFromRequest(int equipmentId, int requestId);
 
 }

@@ -8,10 +8,10 @@ import java.util.List;
 public interface MaintenanceDao {
 
     // create Maintenance
-    String createMaintenance(Maintenance maintenance);
+    int createMaintenance(Maintenance maintenance);
 
     // get Maintenance by id
-    Maintenance getMaintenance(String id);
+    Maintenance getMaintenance(int id);
 
     // get all Maintenance
     List<Maintenance> getAllMaintenance();
@@ -20,7 +20,7 @@ public interface MaintenanceDao {
     void updateMaintenance(Maintenance maintenance);
 
     // delete Maintenance
-    boolean deleteMaintenance(String id);
+    void deleteMaintenance(int id);
 
     //get all maintenance of automobile
     List<Maintenance> getMaintenanceOfAutomobile(String id);

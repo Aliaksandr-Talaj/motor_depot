@@ -12,7 +12,7 @@ public class RequestDaoImpl implements RequestDao {
     }
 
     @Override
-    public Request getRequest(String id) {
+    public Request getRequest(int id) {
         return null;
     }
 
@@ -27,7 +27,7 @@ public class RequestDaoImpl implements RequestDao {
     }
 
     @Override
-    public boolean deleteRequest(String id) {
-        return false;
+    public void deleteRequest(String id) {
+
     }
 }

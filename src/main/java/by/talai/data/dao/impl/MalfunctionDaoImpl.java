@@ -7,12 +7,12 @@ import java.util.List;
 
 public class MalfunctionDaoImpl implements MalfunctionDao {
     @Override
-    public String createMalfunction(Malfunction malfunction) {
-        return null;
+    public void createMalfunction(Malfunction malfunction) {
+
     }
 
     @Override
-    public Malfunction getMalfunction(String id) {
+    public Malfunction getMalfunction(int id) {
         return null;
     }
 
@@ -27,8 +27,8 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
     }
 
     @Override
-    public boolean deleteMalfunction(String id) {
-        return false;
+    public void deleteMalfunction(int id) {
+
     }
 
     @Override
