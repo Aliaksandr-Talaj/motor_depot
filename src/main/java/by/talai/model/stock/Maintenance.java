@@ -9,6 +9,7 @@ public class Maintenance implements Serializable {
     private String type;
     private Date startTime;
     private Date finishTime;
+    private String automobileId;
 
     public int getId() {
         return id;
@@ -42,6 +43,14 @@ public class Maintenance implements Serializable {
         this.finishTime = finishTime;
     }
 
+    public String getAutomobileId() {
+        return automobileId;
+    }
+
+    public void setAutomobileId(String automobileId) {
+        this.automobileId = automobileId;
+    }
+
     @Override
     public String toString() {
         return "Maintenance{" +
@@ -49,6 +58,7 @@ public class Maintenance implements Serializable {
                 ",\n type='" + type + '\'' +
                 ",\n startTime=" + startTime +
                 ",\n finishTime=" + finishTime +
+                ",\n automobileId='" + automobileId + '\'' +
                 '}';
     }
 }

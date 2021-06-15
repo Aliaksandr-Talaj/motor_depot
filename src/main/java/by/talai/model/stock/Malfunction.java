@@ -9,6 +9,7 @@ public class Malfunction implements Serializable {
     private String problem;
     private Date detectionTime;
     private Date fixTime;
+    private String automobileId;
 
     public int getId() {
         return id;
@@ -42,6 +43,14 @@ public class Malfunction implements Serializable {
         this.fixTime = fixTime;
     }
 
+    public String getAutomobileId() {
+        return automobileId;
+    }
+
+    public void setAutomobileId(String automobileId) {
+        this.automobileId = automobileId;
+    }
+
     @Override
     public String toString() {
         return "Malfunction{" +
@@ -49,6 +58,7 @@ public class Malfunction implements Serializable {
                 ",\n problem='" + problem + '\'' +
                 ",\n detectionTime=" + detectionTime +
                 ",\n fixTime=" + fixTime +
+                ",\n automobileId='" + automobileId + '\'' +
                 '}';
     }
 }

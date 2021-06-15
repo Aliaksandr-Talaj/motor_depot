@@ -6,7 +6,7 @@ public class Charterer implements Serializable {
 
     private int id;
     private String name;
-    private String ownAddress;
+    private Address ownAddress;
 
     public int getId() {
         return id;
@@ -24,11 +24,11 @@ public class Charterer implements Serializable {
         this.name = name;
     }
 
-    public String getOwnAddress() {
+    public Address getOwnAddress() {
         return ownAddress;
     }
 
-    public void setOwnAddress(String ownAddress) {
+    public void setOwnAddress(Address ownAddress) {
         this.ownAddress = ownAddress;
     }
 

@@ -23,7 +23,7 @@ public class Automobile implements Serializable {
 
     private List<Malfunction> malfunctions;
     private List<Maintenance> maintenanceList;
-    private TechnicalStatus technicalStatus;
+    private Status technicalStatus;
     private List<AutomobileAttachment> automobileAttachmentList;
 
     public String getId() {
@@ -130,11 +130,11 @@ public class Automobile implements Serializable {
         this.maintenanceList = maintenanceList;
     }
 
-    public TechnicalStatus getTechnicalStatus() {
+    public Status getTechnicalStatus() {
         return technicalStatus;
     }
 
-    public void setTechnicalStatus(TechnicalStatus technicalStatus) {
+    public void setTechnicalStatus(Status technicalStatus) {
         this.technicalStatus = technicalStatus;
     }
 

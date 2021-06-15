@@ -10,6 +10,10 @@ public class Cargo implements Serializable {
     private Unit unit;
     private double quantity;
 
+    private Delivery delivery;
+    private Ride ride;
+
+
     public String getName() {
         return name;
     }
@@ -42,6 +46,22 @@ public class Cargo implements Serializable {
         this.id = id;
     }
 
+    public Delivery getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+    }
+
+    public Ride getRide() {
+        return ride;
+    }
+
+    public void setRide(Ride ride) {
+        this.ride = ride;
+    }
+
     @Override
     public String toString() {
         return "Cargo{" +
@@ -49,6 +69,8 @@ public class Cargo implements Serializable {
                 ",\n name='" + name + '\'' +
                 ",\n unit=" + unit +
                 ",\n quantity=" + quantity +
+                ",\n delivery=" + delivery +
+                ",\n ride=" + ride +
                 '}';
     }
 }

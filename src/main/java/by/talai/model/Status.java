@@ -1,13 +1,13 @@
-package by.talai.model.stock;
+package by.talai.model;
 
 import java.io.Serializable;
 
-public class RideStatus implements Serializable {
+public class Status implements Serializable {
 
     private int id;
     private String status;
 
-    public RideStatus() {
+    public Status() {
 
     }
 
@@ -29,7 +29,7 @@ public class RideStatus implements Serializable {
 
     @Override
     public String toString() {
-        return "RideStatus{" +
+        return "Status{" +
                 "id=" + id +
                 ",\n status='" + status + '\'' +
                 '}';

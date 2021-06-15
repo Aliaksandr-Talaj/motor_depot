@@ -5,11 +5,21 @@ import java.sql.Date;
 
 public class AutomobileAttachment implements Serializable {
 
-    private String  AutomobileId;
+    private int id;
+    private String AutomobileId;
     private int DriverId;
 
     private Date dateOfAttachment;
     private Date dateOfDetachment;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getAutomobileId() {
         return AutomobileId;
@@ -46,7 +56,8 @@ public class AutomobileAttachment implements Serializable {
     @Override
     public String toString() {
         return "AutomobileAttachment{" +
-                "AutomobileId='" + AutomobileId + '\'' +
+                "id=" + id +
+                ",\n AutomobileId='" + AutomobileId + '\'' +
                 ",\n DriverId=" + DriverId +
                 ",\n dateOfAttachment=" + dateOfAttachment +
                 ",\n dateOfDetachment=" + dateOfDetachment +
