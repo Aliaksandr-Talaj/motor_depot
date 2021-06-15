@@ -1,9 +1,9 @@
 package by.talai.data.dao.impl;
 
 import by.talai.data.dao.ConnectionPool;
-import by.talai.data.dao.TechnicalStatusDao;
+import by.talai.data.dao.StatusDao;
 import by.talai.data.exception.ConnectionPoolException;
-import by.talai.model.stock.TechnicalStatus;
+import by.talai.model.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TechnicalStatusDaoImpl implements TechnicalStatusDao {
+public class TechnicalStatusDaoImpl implements StatusDao {
 
     ConnectionPool connectionPool = ConnectionPool.getInstance();
 
@@ -24,7 +24,7 @@ public class TechnicalStatusDaoImpl implements TechnicalStatusDao {
     }
 
     @Override
-    public void createTechnicalStatus(TechnicalStatus technicalStatus) throws Exception {
+    public void createStatus(Status technicalStatus) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
@@ -35,6 +35,7 @@ public class TechnicalStatusDaoImpl implements TechnicalStatusDao {
             preparedStatement.setString(2, technicalStatus.getStatus());
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 
@@ -51,8 +52,8 @@ public class TechnicalStatusDaoImpl implements TechnicalStatusDao {
     }
 
     @Override
-    public TechnicalStatus findTechnicalStatus(int id) throws Exception {
-        TechnicalStatus technicalStatus = new TechnicalStatus();
+    public Status findStatus(int id) throws Exception {
+        Status technicalStatus = new Status();
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
@@ -79,8 +80,8 @@ public class TechnicalStatusDaoImpl implements TechnicalStatusDao {
     }
 
     @Override
-    public Set<TechnicalStatus> findAllTechnicalStatuses() throws Exception {
-        Set<TechnicalStatus> technicalStatusSet = new HashSet<>();
+    public Set<Status> findAllStatuses() throws Exception {
+        Set<Status> technicalStatusSet = new HashSet<>();
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
@@ -88,7 +89,7 @@ public class TechnicalStatusDaoImpl implements TechnicalStatusDao {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                TechnicalStatus technicalStatus = new TechnicalStatus();
+                Status technicalStatus = new Status();
 
                 technicalStatus.setId(resultSet.getInt("id"));
                 technicalStatus.setStatus(resultSet.getString("status"));
@@ -112,7 +113,7 @@ public class TechnicalStatusDaoImpl implements TechnicalStatusDao {
     }
 
     @Override
-    public void updateTechnicalStatus(TechnicalStatus technicalStatus) throws Exception {
+    public void updateStatus(Status technicalStatus) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
@@ -124,6 +125,7 @@ public class TechnicalStatusDaoImpl implements TechnicalStatusDao {
             preparedStatement.setInt(2, technicalStatus.getId());
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 
@@ -141,7 +143,7 @@ public class TechnicalStatusDaoImpl implements TechnicalStatusDao {
     }
 
     @Override
-    public void deleteTechnicalStatus(int id) throws Exception {
+    public void deleteStatus(int id) throws Exception {
 
         try {
             Connection connection = connectionPool.takeConnection();
@@ -151,6 +153,7 @@ public class TechnicalStatusDaoImpl implements TechnicalStatusDao {
             preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 

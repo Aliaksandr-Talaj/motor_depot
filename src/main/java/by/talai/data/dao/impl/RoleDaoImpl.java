@@ -35,6 +35,7 @@ public class RoleDaoImpl implements RoleDao {
             preparedStatement.setString(2, role.getName());
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 
@@ -124,6 +125,7 @@ public class RoleDaoImpl implements RoleDao {
             preparedStatement.setInt(2, role.getId());
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 
@@ -150,6 +152,7 @@ public class RoleDaoImpl implements RoleDao {
             preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 

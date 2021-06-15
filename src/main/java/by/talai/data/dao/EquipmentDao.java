@@ -23,14 +23,7 @@ public interface EquipmentDao {
     void deleteEquipment(int id);
 
 
-    // add equipment to the automobile
-    void addEquipmentToAutomobile(int equipmentId, String automobileId);
 
-    //remove equipment from the automobile
-    void removeEquipmentFromAutomobile(int equipmentId, String automobileId);
-
-    // get  all equipment on the automobile
-    Set<Equipment> getAllEquipmentOnAutomobile(String automobileId);
 
 
     // add required equipment to the request

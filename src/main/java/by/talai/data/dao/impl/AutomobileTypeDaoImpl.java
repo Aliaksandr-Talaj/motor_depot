@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
 
-    ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     public static final Logger logger = LoggerFactory.getLogger(AutomobileTypeDaoImpl.class);
 
@@ -35,6 +35,7 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
             preparedStatement.setString(2, automobileType.getType());
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 
@@ -124,6 +125,7 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
             preparedStatement.setInt(2, automobileType.getId());
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 
@@ -150,6 +152,7 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
             preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 

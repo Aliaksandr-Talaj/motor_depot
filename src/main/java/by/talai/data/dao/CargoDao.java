@@ -7,18 +7,18 @@ import java.util.List;
 public interface CargoDao {
 
     // create cargo
-    String createCargo(Cargo cargo);
+    void createCargo(Cargo cargo) throws Exception;
 
     // get cargo by id
-    Cargo getCargo(int id);
+    Cargo getCargo(int id) throws Exception;
 
     // get all cargo
-    List<Cargo> getAllCargos();
+    List<Cargo> getAllCargos() throws Exception;
 
     //update cargo
-    void updateCargo(Cargo cargo);
+    void updateCargo(Cargo cargo) throws Exception;
 
     // delete cargo
-    void deleteCargo(int id);
+    void deleteCargo(int id) throws Exception;
 
 }

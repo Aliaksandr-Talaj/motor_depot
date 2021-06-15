@@ -31,10 +31,4 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
 
     }
 
-    @Override
-    public List<Malfunction> getMalfunctionsOfAutomobile(String id) {
-        return null;
-    }
-
-
 }

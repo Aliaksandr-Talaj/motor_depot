@@ -7,12 +7,12 @@ import java.util.List;
 
 public class DeliveryDaoImpl implements DeliveryDao {
     @Override
-    public String createDelivery(Delivery delivery) {
-        return null;
+    public void createDelivery(Delivery delivery) {
+
     }
 
     @Override
-    public Delivery getDelivery(String id) {
+    public Delivery getDelivery(int id) {
         return null;
     }
 
@@ -27,7 +27,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
     }
 
     @Override
-    public boolean deleteDelivery(String id) {
-        return false;
+    public void deleteDelivery(int id) {
+
     }
 }

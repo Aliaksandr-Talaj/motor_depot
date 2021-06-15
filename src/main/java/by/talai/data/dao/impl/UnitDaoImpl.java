@@ -16,7 +16,7 @@ import java.util.List;
 
 public class UnitDaoImpl implements UnitDao {
 
-    ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     public static final Logger logger = LoggerFactory.getLogger(UnitDaoImpl.class);
 
@@ -40,6 +40,7 @@ public class UnitDaoImpl implements UnitDao {
             preparedStatement.setDouble(6, unit.getWeight());
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 
@@ -145,6 +146,7 @@ public class UnitDaoImpl implements UnitDao {
             preparedStatement.setInt(6, unit.getId());
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 
@@ -171,6 +173,7 @@ public class UnitDaoImpl implements UnitDao {
             preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 

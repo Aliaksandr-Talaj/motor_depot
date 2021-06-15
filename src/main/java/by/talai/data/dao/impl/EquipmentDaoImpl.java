@@ -36,20 +36,6 @@ public class EquipmentDaoImpl implements EquipmentDao {
 
     }
 
-    @Override
-    public void addEquipmentToAutomobile(int equipmentId, String automobileId) {
-
-    }
-
-    @Override
-    public void removeEquipmentFromAutomobile(int equipmentId, String automobileId) {
-
-    }
-
-    @Override
-    public Set<Equipment> getAllEquipmentOnAutomobile(String automobileId) {
-        return null;
-    }
 
     @Override
     public void addEquipmentToRequest(int equipmentId, int requestId) {

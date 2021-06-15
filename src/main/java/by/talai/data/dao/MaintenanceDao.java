@@ -8,7 +8,7 @@ import java.util.List;
 public interface MaintenanceDao {
 
     // create Maintenance
-    int createMaintenance(Maintenance maintenance);
+    void createMaintenance(Maintenance maintenance);
 
     // get Maintenance by id
     Maintenance getMaintenance(int id);
@@ -22,7 +22,6 @@ public interface MaintenanceDao {
     // delete Maintenance
     void deleteMaintenance(int id);
 
-    //get all maintenance of automobile
-    List<Maintenance> getMaintenanceOfAutomobile(String id);
+
 
 }

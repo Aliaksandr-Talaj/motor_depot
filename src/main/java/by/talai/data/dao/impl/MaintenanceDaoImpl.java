@@ -8,12 +8,12 @@ import java.util.List;
 public class MaintenanceDaoImpl implements MaintenanceDao {
 
     @Override
-    public String createMaintenance(Maintenance maintenance) {
-        return null;
+    public void createMaintenance(Maintenance maintenance) {
+
     }
 
     @Override
-    public Maintenance getMaintenance(String id) {
+    public Maintenance getMaintenance(int id) {
         return null;
     }
 
@@ -28,12 +28,9 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
     }
 
     @Override
-    public boolean deleteMaintenance(String id) {
-        return false;
+    public void deleteMaintenance(int id) {
+
     }
 
-    @Override
-    public List<Maintenance> getMaintenanceOfAutomobile(String id) {
-        return null;
-    }
+
 }

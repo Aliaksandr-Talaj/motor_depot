@@ -21,6 +21,5 @@ public interface MalfunctionDao {
     // delete Malfunction
     void deleteMalfunction(int id);
 
-    //get all malfunctions of the automobile
-    List<Malfunction> getMalfunctionsOfAutomobile(String id);
+
 }

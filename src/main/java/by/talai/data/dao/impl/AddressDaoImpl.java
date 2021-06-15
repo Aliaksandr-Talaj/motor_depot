@@ -16,7 +16,7 @@ import java.util.List;
 
 public class AddressDaoImpl implements AddressDao {
 
-    ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     public static final Logger logger = LoggerFactory.getLogger(AddressDaoImpl.class);
 
@@ -41,6 +41,7 @@ public class AddressDaoImpl implements AddressDao {
             preparedStatement.setString(7, address.getApartment());
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 
@@ -150,6 +151,7 @@ public class AddressDaoImpl implements AddressDao {
             preparedStatement.setInt(7, address.getId());
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 
@@ -176,6 +178,7 @@ public class AddressDaoImpl implements AddressDao {
             preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
+            connection.commit();
 
             connectionPool.returnConnectionToPool(connection, preparedStatement);
 

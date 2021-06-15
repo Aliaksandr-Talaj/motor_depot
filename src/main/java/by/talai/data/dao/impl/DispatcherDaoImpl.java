@@ -7,12 +7,12 @@ import java.util.List;
 
 public class DispatcherDaoImpl implements DispatcherDao {
     @Override
-    public String createDispatcher(Dispatcher dispatcher) {
-        return null;
+    public void createDispatcher(Dispatcher dispatcher) {
+
     }
 
     @Override
-    public Dispatcher getDispatcher(String id) {
+    public Dispatcher getDispatcher(int id) {
         return null;
     }
 
@@ -27,7 +27,7 @@ public class DispatcherDaoImpl implements DispatcherDao {
     }
 
     @Override
-    public boolean deleteDispatcher(String id) {
-        return false;
+    public void deleteDispatcher(int id) {
+
     }
 }
