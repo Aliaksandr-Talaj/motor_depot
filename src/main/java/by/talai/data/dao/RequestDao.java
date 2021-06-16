@@ -6,17 +6,17 @@ import java.util.List;
 
 public interface RequestDao {
     // create Request
-    String createRequest(Request request);
+    void createRequest(Request request) throws Exception;
 
     // get Request by id
-    Request getRequest(int id);
+    Request getRequest(int id) throws Exception;
 
     // get all Requests
-    List<Request> getAllRequests();
+    List<Request> getAllRequests() throws Exception;
 
     //update Request
-    void updateRequest(Request request);
+    void updateRequest(Request request) throws Exception;
 
     // delete Request
-    void deleteRequest(String id);
+    void deleteRequest(int id) throws Exception;
 }

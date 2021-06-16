@@ -245,18 +245,110 @@ public class CargoDaoImpl implements CargoDao {
                 connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
-                logger.error("Sql exception in getAllCargos() method");
-                throw new SQLException("exception in getAllCargos() method", e);
+                logger.error("Sql exception in getAllCargosOfRide() method");
+                throw new SQLException("exception in getAllCargosOfRide() method", e);
             }
         } catch (ConnectionPoolException e) {
-            logger.error("Connection pool exception in getAllCargos() method");
-            throw new ConnectionPoolException("exception in getAllCargos() method", e);
+            logger.error("Connection pool exception in getAllCargosOfRide() method");
+            throw new ConnectionPoolException("exception in getAllCargosOfRide() method", e);
         } catch (Exception e) {
-            logger.error("Exception in getAllCargos() method");
-            throw new Exception("exception in getAllCargos() method", e);
+            logger.error("Exception in getAllCargosOfRide() method");
+            throw new Exception("exception in getAllCargosOfRide() method", e);
         }
         return cargos;
     }
 
+    @Override
+    public List<Cargo> getAllCargosOfDelivery(int deliveryId) throws Exception {
+        List<Cargo> cargos = new ArrayList<>();
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("SELECT * FROM motor_depot.cargo " +
+                            "WHERE delivery_id = ?; ");
+            preparedStatement.setInt(1, deliveryId);
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    Cargo cargo = new Cargo();
+
+                    cargo.setId(resultSet.getInt("id"));
+                    cargo.setName(resultSet.getString("name"));
+
+                    int unitId = resultSet.getInt("unit_id");
+                    cargo.setUnit(unitDao.getUnit(unitId));
+
+                    cargo.setDelivery(deliveryDao.getDelivery(deliveryId));
+
+                    int rideId = resultSet.getInt("ride_id");
+                    cargo.setRide(rideDao.getRide(rideId));
+
+                    cargo.setQuantity(resultSet.getDouble("quantity"));
+
+                    cargos.add(cargo);
+                }
+
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in getAllCargosOfDelivery() method");
+                throw new SQLException("exception in getAllCargosOfDelivery() method", e);
+            }
+        } catch (ConnectionPoolException e) {
+            logger.error("Connection pool exception in getAllCargosOfDelivery() method");
+            throw new ConnectionPoolException("exception in getAllCargosOfDelivery() method", e);
+        } catch (Exception e) {
+            logger.error("Exception in getAllCargosOfDelivery() method");
+            throw new Exception("exception in getAllCargosOfDelivery() method", e);
+        }
+        return cargos;
+    }
+
+    @Override
+    public void addOrUpdateCargo(Cargo cargo) throws Exception {
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("INSERT INTO " +
+                            " motor_depot.cargo (id, name, unit_id, delivery_id, ride_id, quantity" +
+                            " VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE " +
+                            " name = ?, unit_id = ?, delivery_id = ?, ride_id = ?, quantity = ?;");
+
+            preparedStatement.setInt(1, cargo.getId());
+
+            preparedStatement.setString(2, cargo.getName());
+            preparedStatement.setString(7, cargo.getName());
+
+            preparedStatement.setInt(3, cargo.getUnit().getId());
+            preparedStatement.setInt(8, cargo.getUnit().getId());
+
+            preparedStatement.setInt(4, cargo.getDelivery().getId());
+            preparedStatement.setInt(9, cargo.getDelivery().getId());
+
+            preparedStatement.setInt(5, cargo.getRide().getId());
+            preparedStatement.setInt(10, cargo.getRide().getId());
+
+            preparedStatement.setDouble(6, cargo.getQuantity());
+            preparedStatement.setDouble(11, cargo.getQuantity());
+
+            try (connection; preparedStatement) {
+
+                preparedStatement.executeUpdate();
+                connection.commit();
+
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in addOrUpdateCargo() method");
+                throw new SQLException("exception in addOrUpdateCargo() method", e);
+            }
+        } catch (ConnectionPoolException e) {
+            logger.error("Connection pool exception in addOrUpdateCargo() method");
+            throw new ConnectionPoolException("exception in addOrUpdateCargo() method", e);
+        } catch (Exception e) {
+            logger.error("Exception in addOrUpdateCargo() method");
+            throw new Exception("exception in addOrUpdateCargo() method", e);
+        }
+    }
 
 }

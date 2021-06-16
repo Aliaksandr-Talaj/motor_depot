@@ -8,7 +8,10 @@ public class Request implements Serializable {
 
     private int id;
     private Date fillingDate;
-    private String charterer;
+    private Charterer charterer;
+    private AutomobileType requiredAutomobileType;
+    private LoadingType requiredLoadingType;
+    private Status executionStatus;
 
     private List<Delivery> deliveryList;
 
@@ -29,11 +32,11 @@ public class Request implements Serializable {
         this.fillingDate = fillingDate;
     }
 
-    public String getCharterer() {
+    public Charterer getCharterer() {
         return charterer;
     }
 
-    public void setCharterer(String charterer) {
+    public void setCharterer(Charterer charterer) {
         this.charterer = charterer;
     }
 
@@ -45,12 +48,39 @@ public class Request implements Serializable {
         this.deliveryList = deliveryList;
     }
 
+    public AutomobileType getRequiredAutomobileType() {
+        return requiredAutomobileType;
+    }
+
+    public void setRequiredAutomobileType(AutomobileType requiredAutomobileType) {
+        this.requiredAutomobileType = requiredAutomobileType;
+    }
+
+    public LoadingType getRequiredLoadingType() {
+        return requiredLoadingType;
+    }
+
+    public void setRequiredLoadingType(LoadingType requiredLoadingType) {
+        this.requiredLoadingType = requiredLoadingType;
+    }
+
+    public Status getExecutionStatus() {
+        return executionStatus;
+    }
+
+    public void setExecutionStatus(Status executionStatus) {
+        this.executionStatus = executionStatus;
+    }
+
     @Override
     public String toString() {
         return "Request{" +
                 "id=" + id +
                 ",\n fillingDate=" + fillingDate +
-                ",\n charterer='" + charterer + '\'' +
+                ",\n charterer=" + charterer +
+                ",\n requiredAutomobileType=" + requiredAutomobileType +
+                ",\n requiredLoadingType=" + requiredLoadingType +
+                ",\n executionStatus=" + executionStatus +
                 ",\n deliveryList=" + deliveryList +
                 '}';
     }

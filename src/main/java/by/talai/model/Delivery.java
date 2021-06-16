@@ -12,7 +12,7 @@ public class Delivery implements Serializable {
     private Address destination;
     private Date term;
     private Request request;
-    private Status status;
+    private Status executionStatus;
 
     private List<Cargo> cargoList;
 
@@ -73,12 +73,12 @@ public class Delivery implements Serializable {
         this.request = request;
     }
 
-    public Status getStatus() {
-        return status;
+    public Status getExecutionStatus() {
+        return executionStatus;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setExecutionStatus(Status executionStatus) {
+        this.executionStatus = executionStatus;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class Delivery implements Serializable {
                 ",\n destination=" + destination +
                 ",\n term=" + term +
                 ",\n request=" + request +
-                ",\n status=" + status +
+                ",\n status=" + executionStatus +
                 ",\n cargoList=" + cargoList +
                 '}';
     }

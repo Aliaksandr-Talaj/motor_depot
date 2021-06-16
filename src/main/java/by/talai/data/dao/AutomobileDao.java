@@ -52,15 +52,15 @@ public interface AutomobileDao {
 
     //Interaction with MALFUNCTIONS
     //GET ALL malfunctions OF the automobile
-    List<Malfunction> getMalfunctionsOfAutomobile(String id) throws Exception;
+    List<Malfunction> getMalfunctionsOfAutomobile(Automobile automobile) throws Exception;
 
     //Interaction with MAINTENANCE
     //GET ALL maintenance OF automobile
-    List<Maintenance> getMaintenanceOfAutomobile(String id) throws Exception;
+    List<Maintenance> getMaintenanceOfAutomobile(Automobile automobile) throws Exception;
 
     //Interaction with AUTOMOBILE ATTACHMENTS
     //find attachments of automobile
-    List<AutomobileAttachment> findAutomobileAttachments(String automobileId) throws Exception;
+    List<AutomobileAttachment> findAutomobileAttachments(Automobile automobile) throws Exception;
 
 
 }
