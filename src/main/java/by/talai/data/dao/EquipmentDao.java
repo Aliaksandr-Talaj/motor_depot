@@ -8,31 +8,31 @@ import java.util.Set;
 public interface EquipmentDao {
 
     // create Equipment
-    void createEquipment(Equipment equipment);
+    void createEquipment(Equipment equipment) throws Exception;
 
     // get Equipment by id
-    Equipment getEquipment(int id);
+    Equipment getEquipment(int id) throws Exception;
 
     // get all Equipment
-    List<Equipment> getAllEquipment();
+    List<Equipment> getAllEquipment() throws Exception;
 
     //update Equipment
-    void updateEquipment(Equipment equipment);
+    void updateEquipment(Equipment equipment) throws Exception;
 
     // delete Equipment
-    void deleteEquipment(int id);
+    void deleteEquipment(int id) throws Exception;
 
 
 
 
 
     // add required equipment to the request
-    void addEquipmentToRequest(int equipmentId, int requestId);
+    void addEquipmentToRequest(int equipmentId, int requestId) throws Exception;
 
     // get  all required equipment of the request
-    Set<Equipment> getAllEquipmentOfRequest(int requestId);
+    Set<Equipment> getAllEquipmentOfRequest(int requestId) throws Exception;
 
     //remove required equipment from the request
-    void removeEquipmentFromRequest(int equipmentId, int requestId);
+    void removeEquipmentFromRequest(int equipmentId, int requestId) throws Exception;
 
 }

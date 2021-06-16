@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DeliveryDao {
     // create delivery
-    void createDelivery(Delivery delivery);
+    void createDelivery(Delivery delivery) throws Exception;
 
     // get delivery by id
     Delivery getDelivery(int id);

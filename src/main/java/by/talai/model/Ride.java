@@ -1,26 +1,26 @@
 package by.talai.model;
 
-import by.talai.model.personnel.Dispatcher;
+import by.talai.model.personnel.User;
 import by.talai.model.stock.Automobile;
 
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
-import java.util.Set;
 
 public class Ride implements Serializable {
 
     private int id;
     private Date date;
     private Request request;
-    private Dispatcher dispatcher;
+    private User dispatcher;
     private Automobile automobile;
 
-    private String loadingPlace;
+    private Address loadingPlace;
     private Date loadingDate;
-    private String destination;
+    private Address destination;
     private Date term;
-    private Set<String> additionalRequirements;
+    private Status executionStatus;
+
     private List<Cargo> cargoList;
 
     public int getId() {
@@ -47,11 +47,11 @@ public class Ride implements Serializable {
         this.request = request;
     }
 
-    public Dispatcher getDispatcher() {
+    public User getDispatcher() {
         return dispatcher;
     }
 
-    public void setDispatcher(Dispatcher dispatcher) {
+    public void setDispatcher(User dispatcher) {
         this.dispatcher = dispatcher;
     }
 
@@ -63,14 +63,6 @@ public class Ride implements Serializable {
         this.automobile = automobile;
     }
 
-    public String getLoadingPlace() {
-        return loadingPlace;
-    }
-
-    public void setLoadingPlace(String loadingPlace) {
-        this.loadingPlace = loadingPlace;
-    }
-
     public Date getLoadingDate() {
         return loadingDate;
     }
@@ -79,11 +71,19 @@ public class Ride implements Serializable {
         this.loadingDate = loadingDate;
     }
 
-    public String getDestination() {
+    public Address getLoadingPlace() {
+        return loadingPlace;
+    }
+
+    public void setLoadingPlace(Address loadingPlace) {
+        this.loadingPlace = loadingPlace;
+    }
+
+    public Address getDestination() {
         return destination;
     }
 
-    public void setDestination(String destination) {
+    public void setDestination(Address destination) {
         this.destination = destination;
     }
 
@@ -95,12 +95,12 @@ public class Ride implements Serializable {
         this.term = term;
     }
 
-    public Set<String> getAdditionalRequirements() {
-        return additionalRequirements;
+    public Status getExecutionStatus() {
+        return executionStatus;
     }
 
-    public void setAdditionalRequirements(Set<String> additionalRequirements) {
-        this.additionalRequirements = additionalRequirements;
+    public void setExecutionStatus(Status executionStatus) {
+        this.executionStatus = executionStatus;
     }
 
     public List<Cargo> getCargoList() {
@@ -123,7 +123,7 @@ public class Ride implements Serializable {
                 ",\n loadingDate=" + loadingDate +
                 ",\n destination='" + destination + '\'' +
                 ",\n term=" + term +
-                ",\n additionalRequirements=" + additionalRequirements +
+                ",\n executionStatus=" + executionStatus +
                 ",\n cargoList=" + cargoList +
                 '}';
     }

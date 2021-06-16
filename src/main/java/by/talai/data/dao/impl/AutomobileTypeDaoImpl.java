@@ -28,20 +28,22 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO `motor_depot`.`automobile_type` (`id`, `type`) " +
+                    .prepareStatement("INSERT INTO motor_depot.automobile_type (id, type) " +
                             "VALUES (?, ?);");
 
             preparedStatement.setInt(1, automobileType.getId());
             preparedStatement.setString(2, automobileType.getType());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in createAutomobileType() method");
-            throw new SQLException("exception in createAutomobileType() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in createAutomobileType() method");
+                throw new SQLException("exception in createAutomobileType() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createAutomobileType() method");
             throw new ConnectionPoolException("exception in createAutomobileType() method", e);
@@ -57,18 +59,20 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from motor_depot.automobile_type where id=?;");
+                    .prepareStatement("SELECT * FROM motor_depot.automobile_type WHERE id=?;");
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
 
-            automobileType.setId(id);
-            automobileType.setType(resultSet.getString("type"));
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+                automobileType.setId(id);
+                automobileType.setType(resultSet.getString("type"));
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in findAutomobileType() method");
-            throw new SQLException("exception in findAutomobileType() method", e);
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in findAutomobileType() method");
+                throw new SQLException("exception in findAutomobileType() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findAutomobileType() method");
             throw new ConnectionPoolException("exception in findAutomobileType() method", e);
@@ -85,23 +89,25 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from motor_depot.automobile_type; ");
-            ResultSet resultSet = preparedStatement.executeQuery();
+                    .prepareStatement("SELECT * FROM motor_depot.automobile_type; ");
 
-            while (resultSet.next()) {
-                AutomobileType automobileType = new AutomobileType();
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                automobileType.setId(resultSet.getInt("id"));
-                automobileType.setType(resultSet.getString("type"));
+                while (resultSet.next()) {
+                    AutomobileType automobileType = new AutomobileType();
 
-                automobileTypeSet.add(automobileType);
+                    automobileType.setId(resultSet.getInt("id"));
+                    automobileType.setType(resultSet.getString("type"));
 
+                    automobileTypeSet.add(automobileType);
+
+                }
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in findAllAutomobileTypes() method");
+                throw new SQLException("exception in findAllAutomobileTypes() method", e);
             }
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
-
-        } catch (SQLException e) {
-            logger.error("Sql exception in findAllAutomobileTypes() method");
-            throw new SQLException("exception in findAllAutomobileTypes() method", e);
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findAllAutomobileTypes() method");
             throw new ConnectionPoolException("exception in findAllAutomobileTypes() method", e);
@@ -117,21 +123,22 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE `motor_depot`.`automobile_type` " +
-                            "SET `type` = ? WHERE (`id` = ?);");
-
+                    .prepareStatement("UPDATE motor_depot.automobile_type " +
+                            "SET type = ? WHERE (id = ?);");
 
             preparedStatement.setString(1, automobileType.getType());
             preparedStatement.setInt(2, automobileType.getId());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in updateAutomobileType() method");
-            throw new SQLException("exception in updateAutomobileType() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in updateAutomobileType() method");
+                throw new SQLException("exception in updateAutomobileType() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateAutomobileType() method");
             throw new ConnectionPoolException("exception in updateAutomobileType() method", e);
@@ -139,7 +146,6 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
             logger.error("Exception in updateAutomobileType() method");
             throw new Exception("exception in updateAutomobileType() method", e);
         }
-
     }
 
     @Override
@@ -147,18 +153,20 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM `motor_depot`.`automobile_type` WHERE (`id` = ?);");
+                    .prepareStatement("DELETE FROM motor_depot.automobile_type WHERE (id = ?);");
 
             preparedStatement.setInt(1, id);
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in deleteAutomobileType() method");
-            throw new SQLException("exception in deleteAutomobileType() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in deleteAutomobileType() method");
+                throw new SQLException("exception in deleteAutomobileType() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteAutomobileType() method");
             throw new ConnectionPoolException("exception in deleteAutomobileType() method", e);

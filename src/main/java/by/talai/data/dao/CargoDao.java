@@ -21,4 +21,5 @@ public interface CargoDao {
     // delete cargo
     void deleteCargo(int id) throws Exception;
 
+    List<Cargo> getAllCargosOfRide(int rideId) throws Exception;
 }

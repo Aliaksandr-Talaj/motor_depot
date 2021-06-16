@@ -8,20 +8,21 @@ import java.util.List;
 public interface MaintenanceDao {
 
     // create Maintenance
-    void createMaintenance(Maintenance maintenance);
+    void createMaintenance(Maintenance maintenance) throws Exception;
 
     // get Maintenance by id
-    Maintenance getMaintenance(int id);
+    Maintenance getMaintenance(int id) throws Exception;
 
     // get all Maintenance
-    List<Maintenance> getAllMaintenance();
+    List<Maintenance> getAllMaintenance() throws Exception;
 
     //update Maintenance
-    void updateMaintenance(Maintenance maintenance);
+    void updateMaintenance(Maintenance maintenance) throws Exception;
+
+    void addOrUpdateMaintenance(Maintenance maintenance) throws Exception;
 
     // delete Maintenance
-    void deleteMaintenance(int id);
 
-
+    void deleteMaintenance(int id) throws Exception;
 
 }

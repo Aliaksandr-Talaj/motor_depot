@@ -29,19 +29,21 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement("INSERT INTO " +
-                            "`motor_depot`.`fuel` (`id`, `type`)" +
+                            "motor_depot.fuel (id, type)" +
                             " VALUES (?, ?);");
             preparedStatement.setInt(1, fuelType.getId());
             preparedStatement.setString(2, fuelType.getType());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in createFuelType() method");
-            throw new SQLException("exception in createFuelType() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in createFuelType() method");
+                throw new SQLException("exception in createFuelType() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createFuelType() method");
             throw new ConnectionPoolException("exception in createFuelType() method", e);
@@ -57,18 +59,20 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from motor_depot.fuel where id=?;");
+                    .prepareStatement("SELECT * FROM motor_depot.fuel WHERE id = ?;");
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
 
-            fuelType.setId(id);
-            fuelType.setType(resultSet.getString("type"));
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+                fuelType.setId(id);
+                fuelType.setType(resultSet.getString("type"));
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in findFuelType() method");
-            throw new SQLException("exception in findFuelType() method", e);
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in findFuelType() method");
+                throw new SQLException("exception in findFuelType() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findFuelType() method");
             throw new ConnectionPoolException("exception in findFuelType() method", e);
@@ -85,23 +89,25 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from motor_depot.fuel; ");
-            ResultSet resultSet = preparedStatement.executeQuery();
+                    .prepareStatement("SELECT * FROM motor_depot.fuel; ");
 
-            while (resultSet.next()) {
-                FuelType fuelType = new FuelType();
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                fuelType.setId(resultSet.getInt("id"));
-                fuelType.setType(resultSet.getString("type"));
+                while (resultSet.next()) {
+                    FuelType fuelType = new FuelType();
 
-                fuelTypes.add(fuelType);
+                    fuelType.setId(resultSet.getInt("id"));
+                    fuelType.setType(resultSet.getString("type"));
+
+                    fuelTypes.add(fuelType);
+                }
+
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in findAllFuelTypes() method");
+                throw new SQLException("exception in findAllFuelTypes() method", e);
             }
-
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
-
-        } catch (SQLException e) {
-            logger.error("Sql exception in findAllFuelTypes() method");
-            throw new SQLException("exception in findAllFuelTypes() method", e);
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findAllFuelTypes() method");
             throw new ConnectionPoolException("exception in findAllFuelTypes() method", e);
@@ -117,21 +123,23 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE `motor_depot`.`fuel` " +
-                            "SET `type` = ? WHERE (`id` = ?);");
+                    .prepareStatement("UPDATE motor_depot.fuel " +
+                            "SET type = ? WHERE (id = ?);");
 
 
             preparedStatement.setString(1, fuelType.getType());
             preparedStatement.setInt(2, fuelType.getId());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in updateFuelType() method");
-            throw new SQLException("exception in updateFuelType() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in updateFuelType() method");
+                throw new SQLException("exception in updateFuelType() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateFuelType() method");
             throw new ConnectionPoolException("exception in updateFuelType() method", e);
@@ -146,18 +154,20 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM `motor_depot`.`fuel` WHERE (`id` = ?);");
+                    .prepareStatement("DELETE FROM motor_depot.fuel WHERE (id = ?);");
 
             preparedStatement.setInt(1, id);
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in deleteFuelType() method");
-            throw new SQLException("exception in deleteFuelType() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in deleteFuelType() method");
+                throw new SQLException("exception in deleteFuelType() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteFuelType() method");
             throw new ConnectionPoolException("exception in deleteFuelType() method", e);

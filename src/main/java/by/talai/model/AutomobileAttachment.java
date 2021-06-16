@@ -1,13 +1,16 @@
 package by.talai.model;
 
+import by.talai.model.personnel.Driver;
+import by.talai.model.stock.Automobile;
+
 import java.io.Serializable;
 import java.sql.Date;
 
 public class AutomobileAttachment implements Serializable {
 
     private int id;
-    private String AutomobileId;
-    private int DriverId;
+    private Automobile Automobile;
+    private Driver Driver;
 
     private Date dateOfAttachment;
     private Date dateOfDetachment;
@@ -21,20 +24,20 @@ public class AutomobileAttachment implements Serializable {
         this.id = id;
     }
 
-    public String getAutomobileId() {
-        return AutomobileId;
+    public by.talai.model.stock.Automobile getAutomobile() {
+        return Automobile;
     }
 
-    public void setAutomobileId(String automobileId) {
-        AutomobileId = automobileId;
+    public void setAutomobile(by.talai.model.stock.Automobile automobile) {
+        Automobile = automobile;
     }
 
-    public int getDriverId() {
-        return DriverId;
+    public by.talai.model.personnel.Driver getDriver() {
+        return Driver;
     }
 
-    public void setDriverId(int driverId) {
-        DriverId = driverId;
+    public void setDriver(by.talai.model.personnel.Driver driver) {
+        Driver = driver;
     }
 
     public Date getDateOfAttachment() {
@@ -57,8 +60,8 @@ public class AutomobileAttachment implements Serializable {
     public String toString() {
         return "AutomobileAttachment{" +
                 "id=" + id +
-                ",\n AutomobileId='" + AutomobileId + '\'' +
-                ",\n DriverId=" + DriverId +
+                ",\n Automobile=" + Automobile +
+                ",\n Driver=" + Driver +
                 ",\n dateOfAttachment=" + dateOfAttachment +
                 ",\n dateOfDetachment=" + dateOfDetachment +
                 '}';

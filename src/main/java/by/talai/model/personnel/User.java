@@ -1,19 +1,22 @@
 package by.talai.model.personnel;
 
+import by.talai.model.Role;
+
 import java.io.Serializable;
 
-public abstract class User implements Serializable {
-    protected String id;
+public class User implements Serializable {
+    protected int id;
     protected String name;
     protected String surname;
     protected String login;
     protected String password;
+    protected Role role;
 
     public User() {
 
     }
 
-    public User(String id, String name, String surname, String login, String password) {
+    public User(int id, String name, String surname, String login, String password) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -21,7 +24,7 @@ public abstract class User implements Serializable {
         this.password = password;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -41,7 +44,7 @@ public abstract class User implements Serializable {
         return password;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -61,14 +64,23 @@ public abstract class User implements Serializable {
         this.password = password;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ",\n name='" + name + '\'' +
                 ",\n surname='" + surname + '\'' +
                 ",\n login='" + login + '\'' +
                 ",\n password='" + password + '\'' +
+                ",\n role=" + role +
                 '}';
     }
 }

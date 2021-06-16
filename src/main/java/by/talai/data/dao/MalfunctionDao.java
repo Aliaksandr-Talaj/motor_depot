@@ -7,19 +7,21 @@ import java.util.List;
 
 public interface MalfunctionDao {
     // create Malfunction
-    void createMalfunction(Malfunction malfunction);
+    void createMalfunction(Malfunction malfunction) throws Exception;
 
     // get Malfunction by id
-    Malfunction getMalfunction(int id);
+    Malfunction getMalfunction(int id) throws Exception;
 
     // get all Malfunctions
-    List<Malfunction> getAllMalfunctions();
+    List<Malfunction> getAllMalfunctions() throws Exception;
 
     //update Malfunction
-    void updateMalfunction(Malfunction malfunction);
+    void updateMalfunction(Malfunction malfunction) throws Exception;
+
+    void addOrUpdateMalfunction(Malfunction malfunction) throws Exception;
 
     // delete Malfunction
-    void deleteMalfunction(int id);
+    void deleteMalfunction(int id) throws Exception;
 
 
 }

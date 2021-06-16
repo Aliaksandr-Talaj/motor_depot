@@ -41,14 +41,16 @@ public class ChartererDaoImpl implements ChartererDao {
             preparedStatement.setString(2, charterer.getName());
             preparedStatement.setInt(3, charterer.getOwnAddress().getId());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in createCharterer() method");
-            throw new SQLException("exception in createCharterer() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in createCharterer() method");
+                throw new SQLException("exception in createCharterer() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createCharterer() method");
             throw new ConnectionPoolException("exception in createCharterer() method", e);
@@ -64,21 +66,23 @@ public class ChartererDaoImpl implements ChartererDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from motor_depot.charterer where id = ?;");
+                    .prepareStatement("SELECT * FROM motor_depot.charterer WHERE id = ?;");
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
 
-            charterer.setId(id);
-            charterer.setName(resultSet.getString("name"));
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            int ownAddressId = resultSet.getInt("own_address_id");
-            charterer.setOwnAddress(addressDao.getAddress(ownAddressId));
+                charterer.setId(id);
+                charterer.setName(resultSet.getString("name"));
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+                int ownAddressId = resultSet.getInt("own_address_id");
+                charterer.setOwnAddress(addressDao.getAddress(ownAddressId));
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in getCharterer() method");
-            throw new SQLException("exception in getCharterer() method", e);
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in getCharterer() method");
+                throw new SQLException("exception in getCharterer() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getCharterer() method");
             throw new ConnectionPoolException("exception in getCharterer() method", e);
@@ -95,26 +99,27 @@ public class ChartererDaoImpl implements ChartererDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from motor_depot.charterer; ");
-            ResultSet resultSet = preparedStatement.executeQuery();
+                    .prepareStatement("SELECT * SELECT motor_depot.charterer; ");
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            while (resultSet.next()) {
-                Charterer charterer = new Charterer();
+                while (resultSet.next()) {
+                    Charterer charterer = new Charterer();
 
-                charterer.setId(resultSet.getInt("id"));
-                charterer.setName(resultSet.getString("name"));
+                    charterer.setId(resultSet.getInt("id"));
+                    charterer.setName(resultSet.getString("name"));
 
-                int ownAddressId = resultSet.getInt("own_address_id");
-                charterer.setOwnAddress(addressDao.getAddress(ownAddressId));
+                    int ownAddressId = resultSet.getInt("own_address_id");
+                    charterer.setOwnAddress(addressDao.getAddress(ownAddressId));
 
-                charterers.add(charterer);
+                    charterers.add(charterer);
+                }
+
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in getAllCharterers() method");
+                throw new SQLException("exception in getAllCharterers() method", e);
             }
-
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
-
-        } catch (SQLException e) {
-            logger.error("Sql exception in getAllCharterers() method");
-            throw new SQLException("exception in getAllCharterers() method", e);
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllCharterers() method");
             throw new ConnectionPoolException("exception in getAllCharterers() method", e);
@@ -139,14 +144,16 @@ public class ChartererDaoImpl implements ChartererDao {
 
             preparedStatement.setInt(3, charterer.getId());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in updateCharterer() method");
-            throw new SQLException("exception in updateCharterer() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in updateCharterer() method");
+                throw new SQLException("exception in updateCharterer() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateCharterer() method");
             throw new ConnectionPoolException("exception in updateCharterer() method", e);
@@ -161,18 +168,20 @@ public class ChartererDaoImpl implements ChartererDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM motor_depot.charterer WHERE (`id` = ?);");
+                    .prepareStatement("DELETE FROM motor_depot.charterer WHERE (id = ?);");
 
             preparedStatement.setInt(1, id);
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in deleteCharterer() method");
-            throw new SQLException("exception in deleteCharterer() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in deleteCharterer() method");
+                throw new SQLException("exception in deleteCharterer() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteCharterer() method");
             throw new ConnectionPoolException("exception in deleteCharterer() method", e);
@@ -193,14 +202,16 @@ public class ChartererDaoImpl implements ChartererDao {
             preparedStatement.setInt(1, chartererId);
             preparedStatement.setInt(2, addressId);
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in addAddressToCharterer() method");
-            throw new SQLException("exception in addAddressToCharterer() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in addAddressToCharterer() method");
+                throw new SQLException("exception in addAddressToCharterer() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in addAddressToCharterer() method");
             throw new ConnectionPoolException("exception in addAddressToCharterer() method", e);
@@ -220,27 +231,29 @@ public class ChartererDaoImpl implements ChartererDao {
                             "WHERE (charterer_id = ?) " +
                             "and (motor_depot.address.id = motor_depot.charterer_use_address.address_id); ");
             preparedStatement.setInt(1, chartererId);
-            ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                Address address = new Address();
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                address.setId(resultSet.getInt("id"));
-                address.setCountry((resultSet.getString("country")));
-                address.setRegion(resultSet.getString("region"));
-                address.setLocality(resultSet.getString("locality"));
-                address.setStreet(resultSet.getString("street"));
-                address.setBuilding(resultSet.getString("building"));
-                address.setApartment(resultSet.getString("apartment"));
+                while (resultSet.next()) {
+                    Address address = new Address();
 
-                addresses.add(address);
+                    address.setId(resultSet.getInt("id"));
+                    address.setCountry((resultSet.getString("country")));
+                    address.setRegion(resultSet.getString("region"));
+                    address.setLocality(resultSet.getString("locality"));
+                    address.setStreet(resultSet.getString("street"));
+                    address.setBuilding(resultSet.getString("building"));
+                    address.setApartment(resultSet.getString("apartment"));
+
+                    addresses.add(address);
+                }
+
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in findUsedAddresses() method");
+                throw new SQLException("exception in findUsedAddresses() method", e);
             }
-
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
-
-        } catch (SQLException e) {
-            logger.error("Sql exception in findUsedAddresses() method");
-            throw new SQLException("exception in findUsedAddresses() method", e);
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findUsedAddresses() method");
             throw new ConnectionPoolException("exception in findUsedAddresses() method", e);
@@ -260,16 +273,18 @@ public class ChartererDaoImpl implements ChartererDao {
                             "WHERE (charterer_id = ?, address_id = ?);");
 
             preparedStatement.setInt(1, chartererId);
-            preparedStatement.setInt(2,addressId);
+            preparedStatement.setInt(2, addressId);
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in deleteUsageOfAddress() method");
-            throw new SQLException("exception in deleteUsageOfAddress() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in deleteUsageOfAddress() method");
+                throw new SQLException("exception in deleteUsageOfAddress() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteUsageOfAddress() method");
             throw new ConnectionPoolException("exception in deleteUsageOfAddress() method", e);

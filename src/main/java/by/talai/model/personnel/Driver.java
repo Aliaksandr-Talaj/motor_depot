@@ -1,37 +1,42 @@
 package by.talai.model.personnel;
 
-import by.talai.model.stock.Automobile;
+import by.talai.model.AutomobileAttachment;
+
+import java.util.List;
+import java.util.Set;
 
 public class Driver extends User {
 
-    private Automobile automobile;
+    private List<AutomobileAttachment> automobileAttachments;
 
     public Driver() {
         super();
     }
 
-    public Driver(String id, String name, String surname, String login, String password, Automobile automobile) {
+    public Driver(int id, String name, String surname, String login,
+                  String password, List<AutomobileAttachment> automobileAttachments) {
         super(id, name, surname, login, password);
-        this.automobile = automobile;
+        this.automobileAttachments = automobileAttachments;
     }
 
-    public Automobile getAutomobile() {
-        return automobile;
+    public List<AutomobileAttachment> getAutomobileAttachments() {
+        return automobileAttachments;
     }
 
-    public void setAutomobile(Automobile automobile) {
-        this.automobile = automobile;
+    public void setAutomobileAttachments(List<AutomobileAttachment> automobileAttachments) {
+        this.automobileAttachments = automobileAttachments;
     }
 
     @Override
     public String toString() {
         return "Driver{" +
-                "id='" + id + '\'' +
+                "automobileAttachment=" + automobileAttachments +
+                ",\n id=" + id +
                 ",\n name='" + name + '\'' +
                 ",\n surname='" + surname + '\'' +
                 ",\n login='" + login + '\'' +
                 ",\n password='" + password + '\'' +
-                ",\n automobile=" + automobile +
+                ",\n role=" + role +
                 '}';
     }
 }

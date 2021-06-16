@@ -29,7 +29,7 @@ public class UnitDaoImpl implements UnitDao {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement("INSERT INTO " +
-                            "`motor_depot`.`unit` (`id`, `type`, `length`, `width`, `height`, `weight`)" +
+                            "motor_depot.unit (id, type, length, width, height, weight)" +
                             " VALUES (?, ?, ?, ?, ?, ?);");
             preparedStatement.setInt(1, unit.getId());
             preparedStatement.setString(2, unit.getType());
@@ -39,14 +39,16 @@ public class UnitDaoImpl implements UnitDao {
             preparedStatement.setDouble(5, unit.getHeight());
             preparedStatement.setDouble(6, unit.getWeight());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in createUnit() method");
-            throw new SQLException("exception in createUnit() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in createUnit() method");
+                throw new SQLException("exception in createUnit() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createUnit() method");
             throw new ConnectionPoolException("exception in createUnit() method", e);
@@ -62,22 +64,24 @@ public class UnitDaoImpl implements UnitDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from motor_depot.unit where id=?;");
+                    .prepareStatement("SELECT * FROM motor_depot.unit WHERE id = ?;");
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
 
-            unit.setId(id);
-            unit.setType(resultSet.getString("type"));
-            unit.setLength(resultSet.getInt("length"));
-            unit.setWidth(resultSet.getInt("width"));
-            unit.setHeight(resultSet.getDouble("height"));
-            unit.setWeight(resultSet.getDouble("weight"));
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+                unit.setId(id);
+                unit.setType(resultSet.getString("type"));
+                unit.setLength(resultSet.getInt("length"));
+                unit.setWidth(resultSet.getInt("width"));
+                unit.setHeight(resultSet.getDouble("height"));
+                unit.setWeight(resultSet.getDouble("weight"));
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in getUnit() method");
-            throw new SQLException("exception in getUnit() method", e);
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in getUnit() method");
+                throw new SQLException("exception in getUnit() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getUnit() method");
             throw new ConnectionPoolException("exception in getUnit() method", e);
@@ -95,27 +99,29 @@ public class UnitDaoImpl implements UnitDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from motor_depot.unit; ");
-            ResultSet resultSet = preparedStatement.executeQuery();
+                    .prepareStatement("SELECT * FROM motor_depot.unit; ");
 
-            while (resultSet.next()) {
-                Unit unit = new Unit();
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                unit.setId(resultSet.getInt("id"));
-                unit.setType(resultSet.getString("type"));
-                unit.setLength(resultSet.getInt("length"));
-                unit.setWidth(resultSet.getInt("width"));
-                unit.setHeight(resultSet.getDouble("height"));
-                unit.setWeight(resultSet.getDouble("weight"));
+                while (resultSet.next()) {
+                    Unit unit = new Unit();
 
-                unitList.add(unit);
+                    unit.setId(resultSet.getInt("id"));
+                    unit.setType(resultSet.getString("type"));
+                    unit.setLength(resultSet.getInt("length"));
+                    unit.setWidth(resultSet.getInt("width"));
+                    unit.setHeight(resultSet.getDouble("height"));
+                    unit.setWeight(resultSet.getDouble("weight"));
+
+                    unitList.add(unit);
+                }
+
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in getAllUnits() method");
+                throw new SQLException("exception in getAllUnits() method", e);
             }
-
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
-
-        } catch (SQLException e) {
-            logger.error("Sql exception in getAllUnits() method");
-            throw new SQLException("exception in getAllUnits() method", e);
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllUnits() method");
             throw new ConnectionPoolException("exception in getAllUnits() method", e);
@@ -132,9 +138,9 @@ public class UnitDaoImpl implements UnitDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE `motor_depot`.`unit` " +
-                            "SET `type` = ?, `length` = ?, `width` = ?, `height` = ?, `weight` = ? " +
-                            "WHERE (`id` = ?);");
+                    .prepareStatement("UPDATE motor_depot.unit " +
+                            "SET type = ?, length = ?, width = ?, height = ?, weight = ? " +
+                            "WHERE (id = ?);");
 
 
             preparedStatement.setString(1, unit.getType());
@@ -145,14 +151,16 @@ public class UnitDaoImpl implements UnitDao {
 
             preparedStatement.setInt(6, unit.getId());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in updateUnit() method");
-            throw new SQLException("exception in updateUnit() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in updateUnit() method");
+                throw new SQLException("exception in updateUnit() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateUnit() method");
             throw new ConnectionPoolException("exception in updateUnit() method", e);
@@ -168,18 +176,20 @@ public class UnitDaoImpl implements UnitDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM `motor_depot`.`unit` WHERE (`id` = ?);");
+                    .prepareStatement("DELETE FROM motor_depot.unit WHERE (id = ?);");
 
             preparedStatement.setInt(1, id);
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in deleteUnit() method");
-            throw new SQLException("exception in deleteUnit() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in deleteUnit() method");
+                throw new SQLException("exception in deleteUnit() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteUnit() method");
             throw new ConnectionPoolException("exception in deleteUnit() method", e);

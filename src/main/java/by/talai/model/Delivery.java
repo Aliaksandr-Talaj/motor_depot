@@ -3,17 +3,19 @@ package by.talai.model;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
-import java.util.Set;
 
 public class Delivery implements Serializable {
 
     private int id;
-    private String loadingPlace;
+    private Address loadingPlace;
     private Date loadingDate;
-    private String destination;
+    private Address destination;
     private Date term;
-    private Set<String> additionalRequirements;
+    private Request request;
+    private Status status;
+
     private List<Cargo> cargoList;
+
 
     public int getId() {
         return id;
@@ -23,11 +25,11 @@ public class Delivery implements Serializable {
         this.id = id;
     }
 
-    public String getLoadingPlace() {
+    public Address getLoadingPlace() {
         return loadingPlace;
     }
 
-    public void setLoadingPlace(String loadingPlace) {
+    public void setLoadingPlace(Address loadingPlace) {
         this.loadingPlace = loadingPlace;
     }
 
@@ -39,11 +41,11 @@ public class Delivery implements Serializable {
         this.loadingDate = loadingDate;
     }
 
-    public String getDestination() {
+    public Address getDestination() {
         return destination;
     }
 
-    public void setDestination(String destination) {
+    public void setDestination(Address destination) {
         this.destination = destination;
     }
 
@@ -55,14 +57,6 @@ public class Delivery implements Serializable {
         this.term = term;
     }
 
-    public Set<String> getAdditionalRequirements() {
-        return additionalRequirements;
-    }
-
-    public void setAdditionalRequirements(Set<String> additionalRequirements) {
-        this.additionalRequirements = additionalRequirements;
-    }
-
     public List<Cargo> getCargoList() {
         return cargoList;
     }
@@ -71,15 +65,32 @@ public class Delivery implements Serializable {
         this.cargoList = cargoList;
     }
 
+    public Request getRequest() {
+        return request;
+    }
+
+    public void setRequest(Request request) {
+        this.request = request;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Delivery{" +
                 "id=" + id +
-                ",\n loadingPlace='" + loadingPlace + '\'' +
+                ",\n loadingPlace=" + loadingPlace +
                 ",\n loadingDate=" + loadingDate +
-                ",\n destination='" + destination + '\'' +
+                ",\n destination=" + destination +
                 ",\n term=" + term +
-                ",\n additionalRequirements=" + additionalRequirements +
+                ",\n request=" + request +
+                ",\n status=" + status +
                 ",\n cargoList=" + cargoList +
                 '}';
     }

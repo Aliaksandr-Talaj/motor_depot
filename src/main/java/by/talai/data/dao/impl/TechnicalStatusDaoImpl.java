@@ -29,19 +29,21 @@ public class TechnicalStatusDaoImpl implements StatusDao {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement("INSERT INTO " +
-                            "`motor_depot`.`technical_status` (`id`, `status`)" +
+                            "motor_depot.technical_status (id, status)" +
                             " VALUES (?, ?);");
             preparedStatement.setInt(1, technicalStatus.getId());
             preparedStatement.setString(2, technicalStatus.getStatus());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in createTechnicalStatus() method");
-            throw new SQLException("exception in createTechnicalStatus() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in createTechnicalStatus() method");
+                throw new SQLException("exception in createTechnicalStatus() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createTechnicalStatus() method");
             throw new ConnectionPoolException("exception in createTechnicalStatus() method", e);
@@ -57,18 +59,20 @@ public class TechnicalStatusDaoImpl implements StatusDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from motor_depot.technical_status where id=?;");
+                    .prepareStatement("SELECT * FROM motor_depot.technical_status WHERE id = ?;");
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
 
-            technicalStatus.setId(id);
-            technicalStatus.setStatus(resultSet.getString("status"));
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+                technicalStatus.setId(id);
+                technicalStatus.setStatus(resultSet.getString("status"));
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in findTechnicalStatus() method");
-            throw new SQLException("exception in findTechnicalStatus() method", e);
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in findTechnicalStatus() method");
+                throw new SQLException("exception in findTechnicalStatus() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findTechnicalStatus() method");
             throw new ConnectionPoolException("exception in findTechnicalStatus() method", e);
@@ -85,23 +89,25 @@ public class TechnicalStatusDaoImpl implements StatusDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from motor_depot.technical_status; ");
-            ResultSet resultSet = preparedStatement.executeQuery();
+                    .prepareStatement("SELECT * FROM motor_depot.technical_status; ");
 
-            while (resultSet.next()) {
-                Status technicalStatus = new Status();
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                technicalStatus.setId(resultSet.getInt("id"));
-                technicalStatus.setStatus(resultSet.getString("status"));
+                while (resultSet.next()) {
+                    Status technicalStatus = new Status();
 
-                technicalStatusSet.add(technicalStatus);
+                    technicalStatus.setId(resultSet.getInt("id"));
+                    technicalStatus.setStatus(resultSet.getString("status"));
+
+                    technicalStatusSet.add(technicalStatus);
+                }
+
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in findAllTechnicalStatuses() method");
+                throw new SQLException("Exception in findAllTechnicalStatuses() method", e);
             }
-
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
-
-        } catch (SQLException e) {
-            logger.error("Sql exception in findAllTechnicalStatuses() method");
-            throw new SQLException("Exception in findAllTechnicalStatuses() method", e);
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findAllTechnicalStatuses() method");
             throw new ConnectionPoolException("Exception in findAllTechnicalStatuses() method", e);
@@ -117,21 +123,23 @@ public class TechnicalStatusDaoImpl implements StatusDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE `motor_depot`.`technical_status` " +
-                            "SET `status` = ? WHERE (`id` = ?);");
+                    .prepareStatement("UPDATE motor_depot.technical_status " +
+                            "SET status = ? WHERE (id = ?);");
 
 
             preparedStatement.setString(1, technicalStatus.getStatus());
             preparedStatement.setInt(2, technicalStatus.getId());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in updateTechnicalStatus() method");
-            throw new SQLException("exception in updateTechnicalStatus() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in updateTechnicalStatus() method");
+                throw new SQLException("exception in updateTechnicalStatus() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateTechnicalStatus() method");
             throw new ConnectionPoolException("exception in updateTechnicalStatus() method", e);
@@ -148,18 +156,20 @@ public class TechnicalStatusDaoImpl implements StatusDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM `motor_depot`.`technical_status` WHERE (`id` = ?);");
+                    .prepareStatement("DELETE FROM motor_depot.technical_status WHERE (id = ?);");
 
             preparedStatement.setInt(1, id);
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in deleteTechnicalStatus() method");
-            throw new SQLException("exception in deleteTechnicalStatus() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in deleteTechnicalStatus() method");
+                throw new SQLException("exception in deleteTechnicalStatus() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteTechnicalStatus() method");
             throw new ConnectionPoolException("exception in deleteTechnicalStatus() method", e);

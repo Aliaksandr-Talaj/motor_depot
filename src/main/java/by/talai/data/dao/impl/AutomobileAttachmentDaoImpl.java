@@ -1,9 +1,12 @@
 package by.talai.data.dao.impl;
 
 import by.talai.data.dao.AutomobileAttachmentDao;
+import by.talai.data.dao.AutomobileDao;
 import by.talai.data.dao.ConnectionPool;
+import by.talai.data.dao.UserDao;
 import by.talai.data.exception.ConnectionPoolException;
 import by.talai.model.AutomobileAttachment;
+import by.talai.model.personnel.Driver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +20,9 @@ import java.util.List;
 public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
 
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
+
+    private final AutomobileDao automobileDao = new AutomobileDaoImpl();
+    private final UserDao userDao = new UserDaoImpl();
 
     public static final Logger logger = LoggerFactory.getLogger(AutomobileAttachmentDaoImpl.class);
 
@@ -32,19 +38,21 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
                             "(id, automobile_id, driver_id, date_of_attachment, date_of_detachment) " +
                             "VALUES (?, ?, ?, ?);");
             preparedStatement.setInt(1, automobileAttachment.getId());
-            preparedStatement.setString(2, automobileAttachment.getAutomobileId());
-            preparedStatement.setInt(3, automobileAttachment.getDriverId());
+            preparedStatement.setString(2, automobileAttachment.getAutomobile().getId());
+            preparedStatement.setInt(3, automobileAttachment.getDriver().getId());
             preparedStatement.setDate(4, automobileAttachment.getDateOfAttachment());
             preparedStatement.setDate(5, automobileAttachment.getDateOfDetachment());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in createAttachment() method");
-            throw new SQLException("exception in createAttachment() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in createAttachment() method");
+                throw new SQLException("exception in createAttachment() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createAttachment() method");
             throw new ConnectionPoolException("exception in createAttachment() method", e);
@@ -60,26 +68,35 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from motor_depot.automobile_attachment; ");
-            ResultSet resultSet = preparedStatement.executeQuery();
+                    .prepareStatement("SELECT * FROM motor_depot.automobile_attachment; ");
 
-            while (resultSet.next()) {
-                AutomobileAttachment automobileAttachment = new AutomobileAttachment();
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                automobileAttachment.setId(resultSet.getInt("id"));
-                automobileAttachment.setAutomobileId(resultSet.getString("automobile_id"));
-                automobileAttachment.setDriverId(resultSet.getInt("driver_id"));
-                automobileAttachment.setDateOfAttachment(resultSet.getDate("date_of_attachment"));
-                automobileAttachment.setDateOfDetachment(resultSet.getDate("date_of_detachment"));
+                while (resultSet.next()) {
+                    AutomobileAttachment automobileAttachment = new AutomobileAttachment();
 
-                automobileAttachments.add(automobileAttachment);
+                    automobileAttachment.setId(resultSet.getInt("id"));
+
+                    String automobileId = resultSet.getString("automobile_id");
+                    automobileAttachment.setAutomobile(automobileDao.getAutomobile(automobileId));
+
+                    int driverId = resultSet.getInt("driver_id");
+                    Driver driver = (Driver) userDao.getUser(driverId);
+                    driver.setAutomobileAttachments(automobileAttachments);
+                    automobileAttachment.setDriver(driver);
+
+                    automobileAttachment.setDateOfAttachment(resultSet.getDate("date_of_attachment"));
+                    automobileAttachment.setDateOfDetachment(resultSet.getDate("date_of_detachment"));
+
+                    automobileAttachments.add(automobileAttachment);
+                }
+
+                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in findAllAutomobileAttachments() method");
+                throw new SQLException("exception in findAllAutomobileAttachments() method", e);
             }
-
-            connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
-
-        } catch (SQLException e) {
-            logger.error("Sql exception in findAllAutomobileAttachments() method");
-            throw new SQLException("exception in findAllAutomobileAttachments() method", e);
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findAllAutomobileAttachments() method");
             throw new ConnectionPoolException("exception in findAllAutomobileAttachments() method", e);
@@ -91,32 +108,33 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
     }
 
 
-
     @Override
     public void updateAutomobileAttachment(AutomobileAttachment automobileAttachment) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE `motor_depot`.`automobile_attachment` " +
+                    .prepareStatement("UPDATE motor_depot.automobile_attachment " +
                             "SET automobile_id = ?, driver_id = ?, " +
                             "date_of_attachment = ?, date_of_detachment = ? " +
                             "WHERE (id = ?);");
 
-            preparedStatement.setString(1, automobileAttachment.getAutomobileId());
-            preparedStatement.setInt(2, automobileAttachment.getDriverId());
+            preparedStatement.setString(1, automobileAttachment.getAutomobile().getId());
+            preparedStatement.setInt(2, automobileAttachment.getDriver().getId());
             preparedStatement.setDate(3, automobileAttachment.getDateOfAttachment());
             preparedStatement.setDate(4, automobileAttachment.getDateOfDetachment());
 
             preparedStatement.setInt(5, automobileAttachment.getId());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in updateAutomobileAttachment() method");
-            throw new SQLException("exception in updateAutomobileAttachment() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in updateAutomobileAttachment() method");
+                throw new SQLException("exception in updateAutomobileAttachment() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateAutomobileAttachment() method");
             throw new ConnectionPoolException("exception in updateAutomobileAttachment() method", e);
@@ -131,18 +149,20 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM `motor_depot`.`automobile_attachment` WHERE (`id` = ?);");
+                    .prepareStatement("DELETE FROM motor_depot.automobile_attachment WHERE (id = ?);");
 
             preparedStatement.setInt(1, id);
 
-            preparedStatement.executeUpdate();
-            connection.commit();
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
 
-            connectionPool.returnConnectionToPool(connection, preparedStatement);
+                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
-        } catch (SQLException e) {
-            logger.error("Sql exception in deleteAutomobileAttachment() method");
-            throw new SQLException("exception in deleteAutomobileAttachment() method", e);
+            } catch (SQLException e) {
+                logger.error("Sql exception in deleteAutomobileAttachment() method");
+                throw new SQLException("exception in deleteAutomobileAttachment() method", e);
+            }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteAutomobileAttachment() method");
             throw new ConnectionPoolException("exception in deleteAutomobileAttachment() method", e);
