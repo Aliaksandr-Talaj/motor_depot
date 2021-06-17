@@ -3,6 +3,7 @@ package by.talai.data.dao.impl;
 import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.LoadingTypeDao;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.LoadingType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,14 +43,14 @@ public class LoadingTypeDaoImpl implements LoadingTypeDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createLoadingType() method");
-                throw new SQLException("exception in createLoadingType() method", e);
+                throw new DaoException("exception in createLoadingType() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createLoadingType() method");
-            throw new ConnectionPoolException("exception in createLoadingType() method", e);
+            throw new DaoException("exception in createLoadingType() method", e);
         } catch (Exception e) {
             logger.error("Exception in createLoadingType() method");
-            throw new Exception("exception in createLoadingType() method", e);
+            throw new DaoException("exception in createLoadingType() method", e);
         }
     }
 
@@ -71,14 +72,14 @@ public class LoadingTypeDaoImpl implements LoadingTypeDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getLoadingType() method");
-                throw new SQLException("exception in getLoadingType() method", e);
+                throw new DaoException("exception in getLoadingType() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getLoadingType() method");
-            throw new ConnectionPoolException("exception in getLoadingType() method", e);
+            throw new DaoException("exception in getLoadingType() method", e);
         } catch (Exception e) {
             logger.error("Exception in getLoadingType() method");
-            throw new Exception("exception in getLoadingType() method", e);
+            throw new DaoException("exception in getLoadingType() method", e);
         }
         return loadingType;
     }
@@ -106,14 +107,14 @@ public class LoadingTypeDaoImpl implements LoadingTypeDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllLoadingTypes() method");
-                throw new SQLException("exception in getAllLoadingTypes() method", e);
+                throw new DaoException("exception in getAllLoadingTypes() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllLoadingTypes() method");
-            throw new ConnectionPoolException("exception in getAllLoadingTypes() method", e);
+            throw new DaoException("exception in getAllLoadingTypes() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllLoadingTypes() method");
-            throw new Exception("exception in getAllLoadingTypes() method", e);
+            throw new DaoException("exception in getAllLoadingTypes() method", e);
         }
         return loadingTypes;
     }
@@ -139,14 +140,14 @@ public class LoadingTypeDaoImpl implements LoadingTypeDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateLoadingType() method");
-                throw new SQLException("exception in updateLoadingType() method", e);
+                throw new DaoException("exception in updateLoadingType() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateLoadingType() method");
-            throw new ConnectionPoolException("exception in updateLoadingType() method", e);
+            throw new DaoException("exception in updateLoadingType() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateLoadingType() method");
-            throw new Exception("exception in updateLoadingType() method", e);
+            throw new DaoException("exception in updateLoadingType() method", e);
         }
     }
 
@@ -167,14 +168,14 @@ public class LoadingTypeDaoImpl implements LoadingTypeDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteLoadingType() method");
-                throw new SQLException("exception in deleteLoadingType() method", e);
+                throw new DaoException("exception in deleteLoadingType() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteLoadingType() method");
-            throw new ConnectionPoolException("exception in deleteLoadingType() method", e);
+            throw new DaoException("exception in deleteLoadingType() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteLoadingType() method");
-            throw new Exception("exception in deleteLoadingType() method", e);
+            throw new DaoException("exception in deleteLoadingType() method", e);
         }
     }
 }

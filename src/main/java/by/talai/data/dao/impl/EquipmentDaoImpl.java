@@ -3,6 +3,7 @@ package by.talai.data.dao.impl;
 import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.EquipmentDao;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.Equipment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,14 +47,14 @@ public class EquipmentDaoImpl implements EquipmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createEquipment() method");
-                throw new SQLException("exception in createEquipment() method", e);
+                throw new DaoException("exception in createEquipment() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createEquipment() method");
-            throw new ConnectionPoolException("exception in createEquipment() method", e);
+            throw new DaoException("exception in createEquipment() method", e);
         } catch (Exception e) {
             logger.error("Exception in createEquipment() method");
-            throw new Exception("exception in createEquipment() method", e);
+            throw new DaoException("exception in createEquipment() method", e);
         }
     }
 
@@ -76,14 +77,14 @@ public class EquipmentDaoImpl implements EquipmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getEquipment() method");
-                throw new SQLException("exception in getEquipment() method", e);
+                throw new DaoException("exception in getEquipment() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getEquipment() method");
-            throw new ConnectionPoolException("exception in getEquipment() method", e);
+            throw new DaoException("exception in getEquipment() method", e);
         } catch (Exception e) {
             logger.error("Exception in getEquipment() method");
-            throw new Exception("exception in getEquipment() method", e);
+            throw new DaoException("exception in getEquipment() method", e);
         }
         return equipment;
     }
@@ -112,14 +113,14 @@ public class EquipmentDaoImpl implements EquipmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllEquipment() method");
-                throw new SQLException("exception in getAllEquipment() method", e);
+                throw new DaoException("exception in getAllEquipment() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllEquipment() method");
-            throw new ConnectionPoolException("exception in getAllEquipment() method", e);
+            throw new DaoException("exception in getAllEquipment() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllEquipment() method");
-            throw new Exception("exception in getAllEquipment() method", e);
+            throw new DaoException("exception in getAllEquipment() method", e);
         }
         return equipmentList;
     }
@@ -146,14 +147,14 @@ public class EquipmentDaoImpl implements EquipmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateEquipment() method");
-                throw new SQLException("exception in updateEquipment() method", e);
+                throw new DaoException("exception in updateEquipment() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateEquipment() method");
-            throw new ConnectionPoolException("exception in updateEquipment() method", e);
+            throw new DaoException("exception in updateEquipment() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateEquipment() method");
-            throw new Exception("exception in updateEquipment() method", e);
+            throw new DaoException("exception in updateEquipment() method", e);
         }
     }
 
@@ -174,14 +175,14 @@ public class EquipmentDaoImpl implements EquipmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteEquipment() method");
-                throw new SQLException("exception in deleteEquipment() method", e);
+                throw new DaoException("exception in deleteEquipment() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteEquipment() method");
-            throw new ConnectionPoolException("exception in deleteEquipment() method", e);
+            throw new DaoException("exception in deleteEquipment() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteEquipment() method");
-            throw new Exception("exception in deleteEquipment() method", e);
+            throw new DaoException("exception in deleteEquipment() method", e);
         }
     }
 
@@ -205,14 +206,14 @@ public class EquipmentDaoImpl implements EquipmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addEquipmentToRequest() method");
-                throw new SQLException("exception in addEquipmentToRequest() method", e);
+                throw new DaoException("exception in addEquipmentToRequest() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in addEquipmentToRequest() method");
-            throw new ConnectionPoolException("exception in addEquipmentToRequest() method", e);
+            throw new DaoException("exception in addEquipmentToRequest() method", e);
         } catch (Exception e) {
             logger.error("Exception in addEquipmentToRequest() method");
-            throw new Exception("exception in addEquipmentToRequest() method", e);
+            throw new DaoException("exception in addEquipmentToRequest() method", e);
         }
     }
 
@@ -242,14 +243,14 @@ public class EquipmentDaoImpl implements EquipmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllEquipmentOfRequest() method");
-                throw new SQLException("exception in getAllEquipmentOfRequest() method", e);
+                throw new DaoException("exception in getAllEquipmentOfRequest() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllEquipmentOfRequest() method");
-            throw new ConnectionPoolException("exception in getAllEquipmenOfRequestt() method", e);
+            throw new DaoException("exception in getAllEquipmenOfRequestt() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllEquipmentOfRequest() method");
-            throw new Exception("exception in getAllEquipmentOfRequest() method", e);
+            throw new DaoException("exception in getAllEquipmentOfRequest() method", e);
         }
         return equipmentList;
     }
@@ -272,14 +273,14 @@ public class EquipmentDaoImpl implements EquipmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in removeEquipmentFromRequest() method");
-                throw new SQLException("exception in removeEquipmentFromRequest() method", e);
+                throw new DaoException("exception in removeEquipmentFromRequest() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in removeEquipmentFromRequest() method");
-            throw new ConnectionPoolException("exception in removeEquipmentFromRequest() method", e);
+            throw new DaoException("exception in removeEquipmentFromRequest() method", e);
         } catch (Exception e) {
             logger.error("Exception in removeEquipmentFromRequest() method");
-            throw new Exception("exception in removeEquipmentFromRequest() method", e);
+            throw new DaoException("exception in removeEquipmentFromRequest() method", e);
         }
     }
 }

@@ -3,6 +3,7 @@ package by.talai.data.dao.impl;
 import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.StatusDao;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,14 +44,14 @@ public class ExecutionStatusDaoImpl implements StatusDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createExecutionStatus() method");
-                throw new SQLException("exception in createExecutionStatus() method", e);
+                throw new DaoException("exception in createExecutionStatus() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createExecutionStatus() method");
-            throw new ConnectionPoolException("exception in createExecutionStatus() method", e);
+            throw new DaoException("exception in createExecutionStatus() method", e);
         } catch (Exception e) {
             logger.error("Exception in createExecutionStatus() method");
-            throw new Exception("exception in createExecutionStatus() method", e);
+            throw new DaoException("exception in createExecutionStatus() method", e);
         }
     }
 
@@ -72,14 +73,14 @@ public class ExecutionStatusDaoImpl implements StatusDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findExecutionStatus() method");
-                throw new SQLException("exception in findExecutionStatus() method", e);
+                throw new DaoException("exception in findExecutionStatus() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findExecutionStatus() method");
-            throw new ConnectionPoolException("exception in findExecutionStatus() method", e);
+            throw new DaoException("exception in findExecutionStatus() method", e);
         } catch (Exception e) {
             logger.error("Exception in findExecutionStatus() method");
-            throw new Exception("exception in findExecutionStatus() method", e);
+            throw new DaoException("exception in findExecutionStatus() method", e);
         }
         return executionStatus;
     }
@@ -107,14 +108,14 @@ public class ExecutionStatusDaoImpl implements StatusDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findAllExecutionStatuses() method");
-                throw new SQLException("Exception in findAllExecutionStatuses() method", e);
+                throw new DaoException("Exception in findAllExecutionStatuses() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findAllExecutionStatuses() method");
-            throw new ConnectionPoolException("Exception in findAllExecutionStatuses() method", e);
+            throw new DaoException("Exception in findAllExecutionStatuses() method", e);
         } catch (Exception e) {
             logger.error("Exception in findAllExecutionStatuses() method");
-            throw new Exception("Exception in findAllExecutionStatuses() method", e);
+            throw new DaoException("Exception in findAllExecutionStatuses() method", e);
         }
         return executionStatusSet;
     }
@@ -139,14 +140,14 @@ public class ExecutionStatusDaoImpl implements StatusDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateExecutionStatus() method");
-                throw new SQLException("exception in updateExecutionStatus() method", e);
+                throw new DaoException("exception in updateExecutionStatus() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateExecutionStatus() method");
-            throw new ConnectionPoolException("exception in updateExecutionStatus() method", e);
+            throw new DaoException("exception in updateExecutionStatus() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateExecutionStatus() method");
-            throw new Exception("exception in updateExecutionStatus() method", e);
+            throw new DaoException("exception in updateExecutionStatus() method", e);
         }
 
     }
@@ -169,14 +170,14 @@ public class ExecutionStatusDaoImpl implements StatusDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteExecutionStatus() method");
-                throw new SQLException("exception in deleteExecutionStatus() method", e);
+                throw new DaoException("exception in deleteExecutionStatus() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteExecutionStatus() method");
-            throw new ConnectionPoolException("exception in deleteExecutionStatus() method", e);
+            throw new DaoException("exception in deleteExecutionStatus() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteExecutionStatus() method");
-            throw new Exception("exception in deleteExecutionStatus() method", e);
+            throw new DaoException("exception in deleteExecutionStatus() method", e);
         }
     }
 

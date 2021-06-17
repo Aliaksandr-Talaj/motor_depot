@@ -1,6 +1,7 @@
 package by.talai.model.personnel;
 
 import by.talai.model.Role;
+import by.talai.model.Status;
 
 import java.io.Serializable;
 
@@ -11,6 +12,7 @@ public class User implements Serializable {
     protected String login;
     protected String password;
     protected Role role;
+    protected Status status;
 
     public User() {
 
@@ -72,6 +74,14 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -81,6 +91,7 @@ public class User implements Serializable {
                 ",\n login='" + login + '\'' +
                 ",\n password='" + password + '\'' +
                 ",\n role=" + role +
+                ",\n status=" + status +
                 '}';
     }
 }

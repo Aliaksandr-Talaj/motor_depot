@@ -2,6 +2,7 @@ package by.talai.data.dao.impl;
 
 import by.talai.data.dao.*;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.Ride;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,14 +60,14 @@ public class RideDaoImpl implements RideDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createRide() method");
-                throw new SQLException("exception in createRide() method", e);
+                throw new DaoException("exception in createRide() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createRide() method");
-            throw new ConnectionPoolException("exception in createRide() method", e);
+            throw new DaoException("exception in createRide() method", e);
         } catch (Exception e) {
             logger.error("Exception in createRide() method");
-            throw new Exception("exception in createRide() method", e);
+            throw new DaoException("exception in createRide() method", e);
         }
     }
 
@@ -113,14 +114,14 @@ public class RideDaoImpl implements RideDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getRide() method");
-                throw new SQLException("exception in getRide() method", e);
+                throw new DaoException("exception in getRide() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getRide() method");
-            throw new ConnectionPoolException("exception in getRide() method", e);
+            throw new DaoException("exception in getRide() method", e);
         } catch (Exception e) {
             logger.error("Exception in getRide() method");
-            throw new Exception("exception in getRide() method", e);
+            throw new DaoException("exception in getRide() method", e);
         }
         return ride;
     }
@@ -173,14 +174,14 @@ public class RideDaoImpl implements RideDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllRides() method");
-                throw new SQLException("exception in getAllRides() method", e);
+                throw new DaoException("exception in getAllRides() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllRides() method");
-            throw new ConnectionPoolException("exception in getAllRides() method", e);
+            throw new DaoException("exception in getAllRides() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllRides() method");
-            throw new Exception("exception in getAllRides() method", e);
+            throw new DaoException("exception in getAllRides() method", e);
         }
         return rides;
     }
@@ -217,14 +218,14 @@ public class RideDaoImpl implements RideDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateRide() method");
-                throw new SQLException("exception in updateRide() method", e);
+                throw new DaoException("exception in updateRide() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateRide() method");
-            throw new ConnectionPoolException("exception in updateRide() method", e);
+            throw new DaoException("exception in updateRide() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateRide() method");
-            throw new Exception("exception in updateRide() method", e);
+            throw new DaoException("exception in updateRide() method", e);
         }
     }
 
@@ -245,14 +246,14 @@ public class RideDaoImpl implements RideDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteRide() method");
-                throw new SQLException("exception in deleteRide() method", e);
+                throw new DaoException("exception in deleteRide() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteRide() method");
-            throw new ConnectionPoolException("exception in deleteRide() method", e);
+            throw new DaoException("exception in deleteRide() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteRide() method");
-            throw new Exception("exception in deleteRide() method", e);
+            throw new DaoException("exception in deleteRide() method", e);
         }
     }
 }

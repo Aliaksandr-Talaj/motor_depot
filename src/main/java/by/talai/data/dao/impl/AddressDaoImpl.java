@@ -3,6 +3,7 @@ package by.talai.data.dao.impl;
 import by.talai.data.dao.AddressDao;
 import by.talai.data.dao.ConnectionPool;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.Address;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,15 @@ public class AddressDaoImpl implements AddressDao {
 
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
+    private final String CREATE_ADDRESS_SQL = "INSERT INTO motor_depot.address" +
+            " (id, country, region, locality, street, building, apartment)" +
+            " VALUES (?, ?, ?, ?, ?, ?, ?);";
+    private final String GET_ADDRESS_SQL = "SELECT * FROM motor_depot.address WHERE id = ?;";
+    private final String GET_ALL_ADDRESSES = "SELECT * FROM motor_depot.address; ";
+    private final String UPDATE_ADDRESS = "UPDATE motor_depot.address " +
+            "SET country = ?, region = ?, locality = ?, street = ?, building = ?, apartment = ? WHERE (id = ?);";
+    private final String DELETE_ADDRESS = "DELETE FROM motor_depot.address WHERE (id = ?);";
+
     public static final Logger logger = LoggerFactory.getLogger(AddressDaoImpl.class);
 
     public AddressDaoImpl() throws ConnectionPoolException {
@@ -28,10 +38,8 @@ public class AddressDaoImpl implements AddressDao {
 
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO motor_depot.address" +
-                            " (id, country, region, locality, street, building, apartment)" +
-                            " VALUES (?, ?, ?, ?, ?, ?, ?);");
+            PreparedStatement preparedStatement = connection.prepareStatement(CREATE_ADDRESS_SQL);
+
             preparedStatement.setInt(1, address.getId());
             preparedStatement.setString(2, address.getCountry());
             preparedStatement.setString(3, address.getRegion());
@@ -48,14 +56,14 @@ public class AddressDaoImpl implements AddressDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createAddress() method");
-                throw new SQLException("exception in createAddress() method", e);
+                throw new DaoException("exception in createAddress() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createAddress() method");
-            throw new ConnectionPoolException("exception in createAddress() method", e);
+            throw new DaoException("exception in createAddress() method", e);
         } catch (Exception e) {
             logger.error("Exception in createAddress() method");
-            throw new Exception("exception in createAddress() method", e);
+            throw new DaoException("exception in createAddress() method", e);
         }
     }
 
@@ -66,7 +74,7 @@ public class AddressDaoImpl implements AddressDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.address WHERE id = ?;");
+                    .prepareStatement(GET_ADDRESS_SQL);
             preparedStatement.setInt(1, id);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -83,14 +91,14 @@ public class AddressDaoImpl implements AddressDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAddress() method");
-                throw new SQLException("exception in getAddress() method", e);
+                throw new DaoException("exception in getAddress() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAddress() method");
-            throw new ConnectionPoolException("exception in getAddress() method", e);
+            throw new DaoException("exception in getAddress() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAddress() method");
-            throw new Exception("exception in getAddress() method", e);
+            throw new DaoException("exception in getAddress() method", e);
         }
         return address;
     }
@@ -101,8 +109,7 @@ public class AddressDaoImpl implements AddressDao {
         List<Address> addresses = new ArrayList<>();
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.address; ");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_ADDRESSES);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -124,14 +131,14 @@ public class AddressDaoImpl implements AddressDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllAddresses() method");
-                throw new SQLException("exception in getAllAddresses() method", e);
+                throw new DaoException("exception in getAllAddresses() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllAddresses() method");
-            throw new ConnectionPoolException("exception in getAllAddresses() method", e);
+            throw new DaoException("exception in getAllAddresses() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllAddresses() method");
-            throw new Exception("exception in getAllAddresses() method", e);
+            throw new DaoException("exception in getAllAddresses() method", e);
         }
         return addresses;
     }
@@ -140,11 +147,7 @@ public class AddressDaoImpl implements AddressDao {
     public void updateAddress(Address address) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE motor_depot.address " +
-                            "SET country = ?, region = ?, locality = ?, street = ?, building = ?," +
-                            " apartment = ? " +
-                            "WHERE (id = ?);");
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ADDRESS);
 
             preparedStatement.setString(1, address.getCountry());
             preparedStatement.setString(2, address.getRegion());
@@ -163,14 +166,14 @@ public class AddressDaoImpl implements AddressDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateAddress() method");
-                throw new SQLException("exception in updateAddress() method", e);
+                throw new DaoException("exception in updateAddress() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateAddress() method");
-            throw new ConnectionPoolException("exception in updateAddress() method", e);
+            throw new DaoException("exception in updateAddress() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateAddress() method");
-            throw new Exception("exception in updateAddress() method", e);
+            throw new DaoException("exception in updateAddress() method", e);
         }
 
     }
@@ -179,8 +182,7 @@ public class AddressDaoImpl implements AddressDao {
     public void deleteAddress(int id) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM motor_depot.address WHERE (id = ?);");
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ADDRESS);
 
             preparedStatement.setInt(1, id);
 
@@ -192,14 +194,14 @@ public class AddressDaoImpl implements AddressDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteAddress() method");
-                throw new SQLException("exception in deleteAddress() method", e);
+                throw new DaoException("exception in deleteAddress() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteAddress() method");
-            throw new ConnectionPoolException("exception in deleteAddress() method", e);
+            throw new DaoException("exception in deleteAddress() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteAddress() method");
-            throw new Exception("exception in deleteAddress() method", e);
+            throw new DaoException("exception in deleteAddress() method", e);
         }
     }
 

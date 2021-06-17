@@ -3,6 +3,7 @@ package by.talai.data.dao.impl;
 import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.RoleDao;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,14 +43,14 @@ public class RoleDaoImpl implements RoleDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createRole() method");
-                throw new SQLException("exception in createRole() method", e);
+                throw new DaoException("exception in createRole() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createRole() method");
-            throw new ConnectionPoolException("exception in createRole() method", e);
+            throw new DaoException("exception in createRole() method", e);
         } catch (Exception e) {
             logger.error("Exception in createRole() method");
-            throw new Exception("exception in createRole() method", e);
+            throw new DaoException("exception in createRole() method", e);
         }
     }
 
@@ -71,14 +72,14 @@ public class RoleDaoImpl implements RoleDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getRole() method");
-                throw new SQLException("exception in getRole() method", e);
+                throw new DaoException("exception in getRole() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getRole() method");
-            throw new ConnectionPoolException("exception in getRole() method", e);
+            throw new DaoException("exception in getRole() method", e);
         } catch (Exception e) {
             logger.error("Exception in getRole() method");
-            throw new Exception("exception in getRole() method", e);
+            throw new DaoException("exception in getRole() method", e);
         }
         return role;
     }
@@ -106,14 +107,14 @@ public class RoleDaoImpl implements RoleDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllRoles() method");
-                throw new SQLException("exception in getAllRoles() method", e);
+                throw new DaoException("exception in getAllRoles() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllRoles() method");
-            throw new ConnectionPoolException("exception in getAllRoles() method", e);
+            throw new DaoException("exception in getAllRoles() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllRoles() method");
-            throw new Exception("exception in getAllRoles() method", e);
+            throw new DaoException("exception in getAllRoles() method", e);
         }
         return roles;
     }
@@ -138,14 +139,14 @@ public class RoleDaoImpl implements RoleDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateRole() method");
-                throw new SQLException("exception in updateRole() method", e);
+                throw new DaoException("exception in updateRole() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateRole() method");
-            throw new ConnectionPoolException("exception in updateRole() method", e);
+            throw new DaoException("exception in updateRole() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateRole() method");
-            throw new Exception("exception in updateRole() method", e);
+            throw new DaoException("exception in updateRole() method", e);
         }
 
     }
@@ -167,14 +168,14 @@ public class RoleDaoImpl implements RoleDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteRole() method");
-                throw new SQLException("exception in deleteRole() method", e);
+                throw new DaoException("exception in deleteRole() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteRole() method");
-            throw new ConnectionPoolException("exception in deleteRole() method", e);
+            throw new DaoException("exception in deleteRole() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteRole() method");
-            throw new Exception("exception in deleteRole() method", e);
+            throw new DaoException("exception in deleteRole() method", e);
         }
     }
 }

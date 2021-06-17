@@ -5,6 +5,7 @@ import by.talai.data.dao.AutomobileDao;
 import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.UserDao;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.AutomobileAttachment;
 import by.talai.model.personnel.Driver;
 import org.slf4j.Logger;
@@ -51,14 +52,14 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createAttachment() method");
-                throw new SQLException("exception in createAttachment() method", e);
+                throw new DaoException("exception in createAttachment() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createAttachment() method");
-            throw new ConnectionPoolException("exception in createAttachment() method", e);
+            throw new DaoException("exception in createAttachment() method", e);
         } catch (Exception e) {
             logger.error("Exception in createAttachment() method");
-            throw new Exception("exception in createAttachment() method", e);
+            throw new DaoException("exception in createAttachment() method", e);
         }
     }
 
@@ -95,14 +96,14 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findAllAutomobileAttachments() method");
-                throw new SQLException("exception in findAllAutomobileAttachments() method", e);
+                throw new DaoException("exception in findAllAutomobileAttachments() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findAllAutomobileAttachments() method");
-            throw new ConnectionPoolException("exception in findAllAutomobileAttachments() method", e);
+            throw new DaoException("exception in findAllAutomobileAttachments() method", e);
         } catch (Exception e) {
             logger.error("Exception in findAllAutomobileAttachments() method");
-            throw new Exception("exception in findAllAutomobileAttachments() method", e);
+            throw new DaoException("exception in findAllAutomobileAttachments() method", e);
         }
         return automobileAttachments;
     }
@@ -133,14 +134,14 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateAutomobileAttachment() method");
-                throw new SQLException("exception in updateAutomobileAttachment() method", e);
+                throw new DaoException("exception in updateAutomobileAttachment() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateAutomobileAttachment() method");
-            throw new ConnectionPoolException("exception in updateAutomobileAttachment() method", e);
+            throw new DaoException("exception in updateAutomobileAttachment() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateAutomobileAttachment() method");
-            throw new Exception("exception in updateAutomobileAttachment() method", e);
+            throw new DaoException("exception in updateAutomobileAttachment() method", e);
         }
     }
 
@@ -161,14 +162,14 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteAutomobileAttachment() method");
-                throw new SQLException("exception in deleteAutomobileAttachment() method", e);
+                throw new DaoException("exception in deleteAutomobileAttachment() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteAutomobileAttachment() method");
-            throw new ConnectionPoolException("exception in deleteAutomobileAttachment() method", e);
+            throw new DaoException("exception in deleteAutomobileAttachment() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteAutomobileAttachment() method");
-            throw new Exception("exception in deleteAutomobileAttachment() method", e);
+            throw new DaoException("exception in deleteAutomobileAttachment() method", e);
         }
     }
 }

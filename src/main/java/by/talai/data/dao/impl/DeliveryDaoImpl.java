@@ -2,6 +2,7 @@ package by.talai.data.dao.impl;
 
 import by.talai.data.dao.*;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.Cargo;
 import by.talai.model.Delivery;
 import by.talai.model.Request;
@@ -62,14 +63,14 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createDelivery() method");
-                throw new SQLException("exception in createDelivery() method", e);
+                throw new DaoException("exception in createDelivery() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createDelivery() method");
-            throw new ConnectionPoolException("exception in createDelivery() method", e);
+            throw new DaoException("exception in createDelivery() method", e);
         } catch (Exception e) {
             logger.error("Exception in createDelivery() method");
-            throw new Exception("exception in createDelivery() method", e);
+            throw new DaoException("exception in createDelivery() method", e);
         }
     }
 
@@ -108,14 +109,14 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getDelivery() method");
-                throw new SQLException("exception in getDelivery() method", e);
+                throw new DaoException("exception in getDelivery() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getDelivery() method");
-            throw new ConnectionPoolException("exception in getDelivery() method", e);
+            throw new DaoException("exception in getDelivery() method", e);
         } catch (Exception e) {
             logger.error("Exception in getDelivery() method");
-            throw new Exception("exception in getDelivery() method", e);
+            throw new DaoException("exception in getDelivery() method", e);
         }
         return delivery;
     }
@@ -161,14 +162,14 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllDeliveries() method");
-                throw new SQLException("exception in getAllDeliveries() method", e);
+                throw new DaoException("exception in getAllDeliveries() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllDeliveries() method");
-            throw new ConnectionPoolException("exception in getAllDeliveries() method", e);
+            throw new DaoException("exception in getAllDeliveries() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllDeliveries() method");
-            throw new Exception("exception in getAllDeliveries() method", e);
+            throw new DaoException("exception in getAllDeliveries() method", e);
         }
         return deliveries;
     }
@@ -207,14 +208,14 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateDelivery() method");
-                throw new SQLException("exception in updateDelivery() method", e);
+                throw new DaoException("exception in updateDelivery() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateDelivery() method");
-            throw new ConnectionPoolException("exception in updateDelivery() method", e);
+            throw new DaoException("exception in updateDelivery() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateDelivery() method");
-            throw new Exception("exception in updateDelivery() method", e);
+            throw new DaoException("exception in updateDelivery() method", e);
         }
     }
 
@@ -235,14 +236,14 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteDelivery() method");
-                throw new SQLException("exception in deleteDelivery() method", e);
+                throw new DaoException("exception in deleteDelivery() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteDelivery() method");
-            throw new ConnectionPoolException("exception in deleteDelivery() method", e);
+            throw new DaoException("exception in deleteDelivery() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteDelivery() method");
-            throw new Exception("exception in deleteDelivery() method", e);
+            throw new DaoException("exception in deleteDelivery() method", e);
         }
     }
 
@@ -287,14 +288,14 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllDeliveriesOfRequest() method");
-                throw new SQLException("exception in getAllDeliveriesOfRequest() method", e);
+                throw new DaoException("exception in getAllDeliveriesOfRequest() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllDeliveriesOfRequest() method");
-            throw new ConnectionPoolException("exception in getAllDeliveriesOfRequest() method", e);
+            throw new DaoException("exception in getAllDeliveriesOfRequest() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllDeliveriesOfRequest() method");
-            throw new Exception("exception in getAllDeliveriesOfRequest() method", e);
+            throw new DaoException("exception in getAllDeliveriesOfRequest() method", e);
         }
         return deliveries;
     }
@@ -348,14 +349,14 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addOrUpdateDelivery() method");
-                throw new SQLException("exception in addOrUpdateDelivery() method", e);
+                throw new DaoException("exception in addOrUpdateDelivery() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in addOrUpdateDelivery() method");
-            throw new ConnectionPoolException("exception in addOrUpdateDelivery() method", e);
+            throw new DaoException("exception in addOrUpdateDelivery() method", e);
         } catch (Exception e) {
             logger.error("Exception in addOrUpdateDelivery() method");
-            throw new Exception("exception in addOrUpdateDelivery() method", e);
+            throw new DaoException("exception in addOrUpdateDelivery() method", e);
         }
     }
 

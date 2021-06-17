@@ -4,6 +4,7 @@ import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.RoleDao;
 import by.talai.data.dao.UserDao;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.personnel.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,14 +51,14 @@ public class UserDaoImpl implements UserDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createUser() method");
-                throw new SQLException("exception in createUser() method", e);
+                throw new DaoException("exception in createUser() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createUser() method");
-            throw new ConnectionPoolException("exception in createUser() method", e);
+            throw new DaoException("exception in createUser() method", e);
         } catch (Exception e) {
             logger.error("Exception in createUser() method");
-            throw new Exception("exception in createUser() method", e);
+            throw new DaoException("exception in createUser() method", e);
         }
     }
 
@@ -85,14 +86,14 @@ public class UserDaoImpl implements UserDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getUser() method");
-                throw new SQLException("exception in getUser() method", e);
+                throw new DaoException("exception in getUser() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getUser() method");
-            throw new ConnectionPoolException("exception in getUser() method", e);
+            throw new DaoException("exception in getUser() method", e);
         } catch (Exception e) {
             logger.error("Exception in getUser() method");
-            throw new Exception("exception in getUser() method", e);
+            throw new DaoException("exception in getUser() method", e);
         }
         return user;
     }
@@ -126,14 +127,14 @@ public class UserDaoImpl implements UserDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllUsers() method");
-                throw new SQLException("exception in getAllUsers() method", e);
+                throw new DaoException("exception in getAllUsers() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllUsers() method");
-            throw new ConnectionPoolException("exception in getAllUsers() method", e);
+            throw new DaoException("exception in getAllUsers() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllUsers() method");
-            throw new Exception("exception in getAllUsers() method", e);
+            throw new DaoException("exception in getAllUsers() method", e);
         }
         return users;
     }
@@ -168,14 +169,14 @@ public class UserDaoImpl implements UserDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllUsersWithRole() method");
-                throw new SQLException("exception in getAllUsersWithRole() method", e);
+                throw new DaoException("exception in getAllUsersWithRole() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllUsersWithRole() method");
-            throw new ConnectionPoolException("exception in getAllUsersWithRole() method", e);
+            throw new DaoException("exception in getAllUsersWithRole() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllUsersWithRole() method");
-            throw new Exception("exception in getAllUsersWithRole() method", e);
+            throw new DaoException("exception in getAllUsersWithRole() method", e);
         }
         return users;
     }
@@ -206,14 +207,14 @@ public class UserDaoImpl implements UserDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateUser() method");
-                throw new SQLException("exception in updateUser() method", e);
+                throw new DaoException("exception in updateUser() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateUser() method");
-            throw new ConnectionPoolException("exception in updateUser() method", e);
+            throw new DaoException("exception in updateUser() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateUser() method");
-            throw new Exception("exception in updateUser() method", e);
+            throw new DaoException("exception in updateUser() method", e);
         }
     }
 
@@ -234,14 +235,14 @@ public class UserDaoImpl implements UserDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteUser() method");
-                throw new SQLException("exception in deleteUser() method", e);
+                throw new DaoException("exception in deleteUser() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteUser() method");
-            throw new ConnectionPoolException("exception in deleteUser() method", e);
+            throw new DaoException("exception in deleteUser() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteUser() method");
-            throw new Exception("exception in deleteUser() method", e);
+            throw new DaoException("exception in deleteUser() method", e);
         }
     }
 }

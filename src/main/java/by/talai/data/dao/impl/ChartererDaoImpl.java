@@ -4,6 +4,7 @@ import by.talai.data.dao.AddressDao;
 import by.talai.data.dao.ChartererDao;
 import by.talai.data.dao.ConnectionPool;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.Address;
 import by.talai.model.Charterer;
 import org.slf4j.Logger;
@@ -49,14 +50,14 @@ public class ChartererDaoImpl implements ChartererDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createCharterer() method");
-                throw new SQLException("exception in createCharterer() method", e);
+                throw new DaoException("exception in createCharterer() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createCharterer() method");
-            throw new ConnectionPoolException("exception in createCharterer() method", e);
+            throw new DaoException("exception in createCharterer() method", e);
         } catch (Exception e) {
             logger.error("Exception in createCharterer() method");
-            throw new Exception("exception in createCharterer() method", e);
+            throw new DaoException("exception in createCharterer() method", e);
         }
     }
 
@@ -81,14 +82,14 @@ public class ChartererDaoImpl implements ChartererDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getCharterer() method");
-                throw new SQLException("exception in getCharterer() method", e);
+                throw new DaoException("exception in getCharterer() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getCharterer() method");
-            throw new ConnectionPoolException("exception in getCharterer() method", e);
+            throw new DaoException("exception in getCharterer() method", e);
         } catch (Exception e) {
             logger.error("Exception in getCharterer() method");
-            throw new Exception("exception in getCharterer() method", e);
+            throw new DaoException("exception in getCharterer() method", e);
         }
         return charterer;
     }
@@ -118,14 +119,14 @@ public class ChartererDaoImpl implements ChartererDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllCharterers() method");
-                throw new SQLException("exception in getAllCharterers() method", e);
+                throw new DaoException("exception in getAllCharterers() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllCharterers() method");
-            throw new ConnectionPoolException("exception in getAllCharterers() method", e);
+            throw new DaoException("exception in getAllCharterers() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllCharterers() method");
-            throw new Exception("exception in getAllCharterers() method", e);
+            throw new DaoException("exception in getAllCharterers() method", e);
         }
         return charterers;
     }
@@ -152,14 +153,14 @@ public class ChartererDaoImpl implements ChartererDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateCharterer() method");
-                throw new SQLException("exception in updateCharterer() method", e);
+                throw new DaoException("exception in updateCharterer() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateCharterer() method");
-            throw new ConnectionPoolException("exception in updateCharterer() method", e);
+            throw new DaoException("exception in updateCharterer() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateCharterer() method");
-            throw new Exception("exception in updateCharterer() method", e);
+            throw new DaoException("exception in updateCharterer() method", e);
         }
     }
 
@@ -180,14 +181,14 @@ public class ChartererDaoImpl implements ChartererDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteCharterer() method");
-                throw new SQLException("exception in deleteCharterer() method", e);
+                throw new DaoException("exception in deleteCharterer() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteCharterer() method");
-            throw new ConnectionPoolException("exception in deleteCharterer() method", e);
+            throw new DaoException("exception in deleteCharterer() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteCharterer() method");
-            throw new Exception("exception in deleteCharterer() method", e);
+            throw new DaoException("exception in deleteCharterer() method", e);
         }
     }
 
@@ -210,14 +211,14 @@ public class ChartererDaoImpl implements ChartererDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addAddressToCharterer() method");
-                throw new SQLException("exception in addAddressToCharterer() method", e);
+                throw new DaoException("exception in addAddressToCharterer() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in addAddressToCharterer() method");
-            throw new ConnectionPoolException("exception in addAddressToCharterer() method", e);
+            throw new DaoException("exception in addAddressToCharterer() method", e);
         } catch (Exception e) {
             logger.error("Exception in addAddressToCharterer() method");
-            throw new Exception("exception in addAddressToCharterer() method", e);
+            throw new DaoException("exception in addAddressToCharterer() method", e);
         }
     }
 
@@ -252,14 +253,14 @@ public class ChartererDaoImpl implements ChartererDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findUsedAddresses() method");
-                throw new SQLException("exception in findUsedAddresses() method", e);
+                throw new DaoException("exception in findUsedAddresses() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findUsedAddresses() method");
-            throw new ConnectionPoolException("exception in findUsedAddresses() method", e);
+            throw new DaoException("exception in findUsedAddresses() method", e);
         } catch (Exception e) {
             logger.error("Exception in findUsedAddresses() method");
-            throw new Exception("exception in findUsedAddresses() method", e);
+            throw new DaoException("exception in findUsedAddresses() method", e);
         }
         return addresses;
     }
@@ -283,14 +284,14 @@ public class ChartererDaoImpl implements ChartererDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteUsageOfAddress() method");
-                throw new SQLException("exception in deleteUsageOfAddress() method", e);
+                throw new DaoException("exception in deleteUsageOfAddress() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteUsageOfAddress() method");
-            throw new ConnectionPoolException("exception in deleteUsageOfAddress() method", e);
+            throw new DaoException("exception in deleteUsageOfAddress() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteUsageOfAddress() method");
-            throw new Exception("exception in deleteUsageOfAddress() method", e);
+            throw new DaoException("exception in deleteUsageOfAddress() method", e);
         }
     }
 }

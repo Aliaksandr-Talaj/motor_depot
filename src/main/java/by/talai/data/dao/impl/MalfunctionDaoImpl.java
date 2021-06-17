@@ -4,6 +4,7 @@ import by.talai.data.dao.AutomobileDao;
 import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.MalfunctionDao;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.stock.Malfunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,14 +48,14 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
                 connectionPool.returnConnectionToPool(connection, preparedStatement);
             } catch (SQLException e) {
                 logger.error("Sql exception in createMalfunction() method");
-                throw new SQLException("exception in createMalfunction() method", e);
+                throw new DaoException("exception in createMalfunction() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createMalfunction() method");
-            throw new ConnectionPoolException("exception in createMalfunction() method", e);
+            throw new DaoException("exception in createMalfunction() method", e);
         } catch (Exception e) {
             logger.error("Exception in createMalfunction() method");
-            throw new Exception("exception in createMalfunction() method", e);
+            throw new DaoException("exception in createMalfunction() method", e);
         }
     }
 
@@ -82,14 +83,14 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getMalfunction() method");
-                throw new SQLException("exception in getMalfunction() method", e);
+                throw new DaoException("exception in getMalfunction() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getMalfunction() method");
-            throw new ConnectionPoolException("exception in getMalfunction() method", e);
+            throw new DaoException("exception in getMalfunction() method", e);
         } catch (Exception e) {
             logger.error("Exception in getMalfunction() method");
-            throw new Exception("exception in getMalfunction() method", e);
+            throw new DaoException("exception in getMalfunction() method", e);
         }
         return malfunction;
     }
@@ -123,14 +124,14 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllMalfunctions() method");
-                throw new SQLException("exception in getAllMalfunctions() method", e);
+                throw new DaoException("exception in getAllMalfunctions() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllMalfunctions() method");
-            throw new ConnectionPoolException("exception in getAllMalfunctions() method", e);
+            throw new DaoException("exception in getAllMalfunctions() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllMalfunctions() method");
-            throw new Exception("exception in getAllMalfunctions() method", e);
+            throw new DaoException("exception in getAllMalfunctions() method", e);
         }
         return malfunctions;
     }
@@ -159,14 +160,14 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateMalfunction() method");
-                throw new SQLException("exception in updateMalfunction() method", e);
+                throw new DaoException("exception in updateMalfunction() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateMalfunction() method");
-            throw new ConnectionPoolException("exception in updateMalfunction() method", e);
+            throw new DaoException("exception in updateMalfunction() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateMalfunction() method");
-            throw new Exception("exception in updateMalfunction() method", e);
+            throw new DaoException("exception in updateMalfunction() method", e);
         }
     }
 
@@ -201,14 +202,14 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addOrUpdateMalfunction() method");
-                throw new SQLException("exception in addOrUpdateMalfunction() method", e);
+                throw new DaoException("exception in addOrUpdateMalfunction() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in addOrUpdateMalfunction() method");
-            throw new ConnectionPoolException("exception in addOrUpdateMalfunction() method", e);
+            throw new DaoException("exception in addOrUpdateMalfunction() method", e);
         } catch (Exception e) {
             logger.error("Exception in addOrUpdateMalfunction() method");
-            throw new Exception("exception in addOrUpdateMalfunction() method", e);
+            throw new DaoException("exception in addOrUpdateMalfunction() method", e);
         }
     }
 
@@ -228,14 +229,14 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteMalfunction() method");
-                throw new SQLException("exception in deleteMalfunction() method", e);
+                throw new DaoException("exception in deleteMalfunction() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteMalfunction() method");
-            throw new ConnectionPoolException("exception in deleteMalfunction() method", e);
+            throw new DaoException("exception in deleteMalfunction() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteMalfunction() method");
-            throw new Exception("exception in deleteMalfunction() method", e);
+            throw new DaoException("exception in deleteMalfunction() method", e);
         }
     }
 

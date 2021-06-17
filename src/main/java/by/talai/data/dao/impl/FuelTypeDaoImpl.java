@@ -3,6 +3,7 @@ package by.talai.data.dao.impl;
 import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.FuelTypeDao;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.FuelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,14 +43,14 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createFuelType() method");
-                throw new SQLException("exception in createFuelType() method", e);
+                throw new DaoException("exception in createFuelType() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createFuelType() method");
-            throw new ConnectionPoolException("exception in createFuelType() method", e);
+            throw new DaoException("exception in createFuelType() method", e);
         } catch (Exception e) {
             logger.error("Exception in createFuelType() method");
-            throw new Exception("exception in createFuelType() method", e);
+            throw new DaoException("exception in createFuelType() method", e);
         }
     }
 
@@ -71,14 +72,14 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findFuelType() method");
-                throw new SQLException("exception in findFuelType() method", e);
+                throw new DaoException("exception in findFuelType() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findFuelType() method");
-            throw new ConnectionPoolException("exception in findFuelType() method", e);
+            throw new DaoException("exception in findFuelType() method", e);
         } catch (Exception e) {
             logger.error("Exception in findFuelType() method");
-            throw new Exception("exception in findFuelType() method", e);
+            throw new DaoException("exception in findFuelType() method", e);
         }
         return fuelType;
     }
@@ -106,14 +107,14 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findAllFuelTypes() method");
-                throw new SQLException("exception in findAllFuelTypes() method", e);
+                throw new DaoException("exception in findAllFuelTypes() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in findAllFuelTypes() method");
-            throw new ConnectionPoolException("exception in findAllFuelTypes() method", e);
+            throw new DaoException("exception in findAllFuelTypes() method", e);
         } catch (Exception e) {
             logger.error("Exception in findAllFuelTypes() method");
-            throw new Exception("exception in findAllFuelTypes() method", e);
+            throw new DaoException("exception in findAllFuelTypes() method", e);
         }
         return fuelTypes;
     }
@@ -138,14 +139,14 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateFuelType() method");
-                throw new SQLException("exception in updateFuelType() method", e);
+                throw new DaoException("exception in updateFuelType() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateFuelType() method");
-            throw new ConnectionPoolException("exception in updateFuelType() method", e);
+            throw new DaoException("exception in updateFuelType() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateFuelType() method");
-            throw new Exception("exception in updateFuelType() method", e);
+            throw new DaoException("exception in updateFuelType() method", e);
         }
     }
 
@@ -166,14 +167,14 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteFuelType() method");
-                throw new SQLException("exception in deleteFuelType() method", e);
+                throw new DaoException("exception in deleteFuelType() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteFuelType() method");
-            throw new ConnectionPoolException("exception in deleteFuelType() method", e);
+            throw new DaoException("exception in deleteFuelType() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteFuelType() method");
-            throw new Exception("exception in deleteFuelType() method", e);
+            throw new DaoException("exception in deleteFuelType() method", e);
         }
     }
 }

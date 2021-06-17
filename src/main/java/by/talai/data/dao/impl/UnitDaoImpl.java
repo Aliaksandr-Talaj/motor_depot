@@ -3,6 +3,7 @@ package by.talai.data.dao.impl;
 import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.UnitDao;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,14 +48,14 @@ public class UnitDaoImpl implements UnitDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createUnit() method");
-                throw new SQLException("exception in createUnit() method", e);
+                throw new DaoException("exception in createUnit() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createUnit() method");
-            throw new ConnectionPoolException("exception in createUnit() method", e);
+            throw new DaoException("exception in createUnit() method", e);
         } catch (Exception e) {
             logger.error("Exception in createUnit() method");
-            throw new Exception("exception in createUnit() method", e);
+            throw new DaoException("exception in createUnit() method", e);
         }
     }
 
@@ -80,14 +81,14 @@ public class UnitDaoImpl implements UnitDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getUnit() method");
-                throw new SQLException("exception in getUnit() method", e);
+                throw new DaoException("exception in getUnit() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getUnit() method");
-            throw new ConnectionPoolException("exception in getUnit() method", e);
+            throw new DaoException("exception in getUnit() method", e);
         } catch (Exception e) {
             logger.error("Exception in getUnit() method");
-            throw new Exception("exception in getUnit() method", e);
+            throw new DaoException("exception in getUnit() method", e);
         }
         return unit;
     }
@@ -120,14 +121,14 @@ public class UnitDaoImpl implements UnitDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllUnits() method");
-                throw new SQLException("exception in getAllUnits() method", e);
+                throw new DaoException("exception in getAllUnits() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllUnits() method");
-            throw new ConnectionPoolException("exception in getAllUnits() method", e);
+            throw new DaoException("exception in getAllUnits() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllUnits() method");
-            throw new Exception("exception in getAllUnits() method", e);
+            throw new DaoException("exception in getAllUnits() method", e);
         }
         return unitList;
     }
@@ -159,14 +160,14 @@ public class UnitDaoImpl implements UnitDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateUnit() method");
-                throw new SQLException("exception in updateUnit() method", e);
+                throw new DaoException("exception in updateUnit() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateUnit() method");
-            throw new ConnectionPoolException("exception in updateUnit() method", e);
+            throw new DaoException("exception in updateUnit() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateUnit() method");
-            throw new Exception("exception in updateUnit() method", e);
+            throw new DaoException("exception in updateUnit() method", e);
         }
 
     }
@@ -188,14 +189,14 @@ public class UnitDaoImpl implements UnitDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteUnit() method");
-                throw new SQLException("exception in deleteUnit() method", e);
+                throw new DaoException("exception in deleteUnit() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteUnit() method");
-            throw new ConnectionPoolException("exception in deleteUnit() method", e);
+            throw new DaoException("exception in deleteUnit() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteUnit() method");
-            throw new Exception("exception in deleteUnit() method", e);
+            throw new DaoException("exception in deleteUnit() method", e);
         }
     }
 }

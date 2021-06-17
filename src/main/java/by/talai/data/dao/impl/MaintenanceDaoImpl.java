@@ -4,6 +4,7 @@ import by.talai.data.dao.AutomobileDao;
 import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.MaintenanceDao;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.stock.Maintenance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,14 +48,14 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
                 connectionPool.returnConnectionToPool(connection, preparedStatement);
             } catch (SQLException e) {
                 logger.error("Sql exception in createMaintenance() method");
-                throw new SQLException("exception in createMaintenance() method", e);
+                throw new DaoException("exception in createMaintenance() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createMaintenance() method");
-            throw new ConnectionPoolException("exception in createMaintenance() method", e);
+            throw new DaoException("exception in createMaintenance() method", e);
         } catch (Exception e) {
             logger.error("Exception in createMaintenance() method");
-            throw new Exception("exception in createMaintenance() method", e);
+            throw new DaoException("exception in createMaintenance() method", e);
         }
     }
 
@@ -82,14 +83,14 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getMaintenance() method");
-                throw new SQLException("exception in getMaintenance() method", e);
+                throw new DaoException("exception in getMaintenance() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getMaintenance() method");
-            throw new ConnectionPoolException("exception in getMaintenance() method", e);
+            throw new DaoException("exception in getMaintenance() method", e);
         } catch (Exception e) {
             logger.error("Exception in getMaintenance() method");
-            throw new Exception("exception in getMaintenance() method", e);
+            throw new DaoException("exception in getMaintenance() method", e);
         }
         return maintenance;
     }
@@ -123,14 +124,14 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllMaintenance() method");
-                throw new SQLException("exception in getAllMaintenance() method", e);
+                throw new DaoException("exception in getAllMaintenance() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllMaintenance() method");
-            throw new ConnectionPoolException("exception in getAllMaintenance() method", e);
+            throw new DaoException("exception in getAllMaintenance() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllMaintenance() method");
-            throw new Exception("exception in getAllMaintenance() method", e);
+            throw new DaoException("exception in getAllMaintenance() method", e);
         }
         return maintenanceList;
     }
@@ -159,14 +160,14 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateMaintenance() method");
-                throw new SQLException("exception in updateMaintenance() method", e);
+                throw new DaoException("exception in updateMaintenance() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateMaintenance() method");
-            throw new ConnectionPoolException("exception in updateMaintenance() method", e);
+            throw new DaoException("exception in updateMaintenance() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateMaintenance() method");
-            throw new Exception("exception in updateMaintenance() method", e);
+            throw new DaoException("exception in updateMaintenance() method", e);
         }
     }
 
@@ -201,14 +202,14 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addOrUpdateMaintenance() method");
-                throw new SQLException("exception in addOrUpdateMaintenance() method", e);
+                throw new DaoException("exception in addOrUpdateMaintenance() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in addOrUpdateMaintenance() method");
-            throw new ConnectionPoolException("exception in addOrUpdateMaintenance() method", e);
+            throw new DaoException("exception in addOrUpdateMaintenance() method", e);
         } catch (Exception e) {
             logger.error("Exception in addOrUpdateMaintenance() method");
-            throw new Exception("exception in addOrUpdateMaintenance() method", e);
+            throw new DaoException("exception in addOrUpdateMaintenance() method", e);
         }
     }
 
@@ -228,14 +229,14 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteMaintenance() method");
-                throw new SQLException("exception in deleteMaintenance() method", e);
+                throw new DaoException("exception in deleteMaintenance() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteMaintenance() method");
-            throw new ConnectionPoolException("exception in deleteMaintenance() method", e);
+            throw new DaoException("exception in deleteMaintenance() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteMaintenance() method");
-            throw new Exception("exception in deleteMaintenance() method", e);
+            throw new DaoException("exception in deleteMaintenance() method", e);
         }
     }
 

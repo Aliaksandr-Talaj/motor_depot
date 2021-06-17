@@ -2,6 +2,7 @@ package by.talai.data.dao.impl;
 
 import by.talai.data.dao.*;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.Delivery;
 import by.talai.model.Request;
 import org.slf4j.Logger;
@@ -55,14 +56,14 @@ public class RequestDaoImpl implements RequestDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createRequest() method");
-                throw new SQLException("exception in createRequest() method", e);
+                throw new DaoException("exception in createRequest() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createRequest() method");
-            throw new ConnectionPoolException("exception in createRequest() method", e);
+            throw new DaoException("exception in createRequest() method", e);
         } catch (Exception e) {
             logger.error("Exception in createRequest() method");
-            throw new Exception("exception in createRequest() method", e);
+            throw new DaoException("exception in createRequest() method", e);
         }
     }
 
@@ -100,14 +101,14 @@ public class RequestDaoImpl implements RequestDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getRequest() method");
-                throw new SQLException("exception in getRequest() method", e);
+                throw new DaoException("exception in getRequest() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getRequest() method");
-            throw new ConnectionPoolException("exception in getRequest() method", e);
+            throw new DaoException("exception in getRequest() method", e);
         } catch (Exception e) {
             logger.error("Exception in getRequest() method");
-            throw new Exception("exception in getRequest() method", e);
+            throw new DaoException("exception in getRequest() method", e);
         }
         return request;
     }
@@ -152,14 +153,14 @@ public class RequestDaoImpl implements RequestDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllRequests() method");
-                throw new SQLException("exception in getAllRequests() method", e);
+                throw new DaoException("exception in getAllRequests() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllRequests() method");
-            throw new ConnectionPoolException("exception in getAllRequests() method", e);
+            throw new DaoException("exception in getAllRequests() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllRequests() method");
-            throw new Exception("exception in getAllRequests() method", e);
+            throw new DaoException("exception in getAllRequests() method", e);
         }
         return requestList;
     }
@@ -198,14 +199,14 @@ public class RequestDaoImpl implements RequestDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateRequest() method");
-                throw new SQLException("exception in updateRequest() method", e);
+                throw new DaoException("exception in updateRequest() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateRequest() method");
-            throw new ConnectionPoolException("exception in updateRequest() method", e);
+            throw new DaoException("exception in updateRequest() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateRequest() method");
-            throw new Exception("exception in updateRequest() method", e);
+            throw new DaoException("exception in updateRequest() method", e);
         }
     }
 
@@ -226,14 +227,14 @@ public class RequestDaoImpl implements RequestDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteRequest() method");
-                throw new SQLException("exception in deleteRequest() method", e);
+                throw new DaoException("exception in deleteRequest() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteRequest() method");
-            throw new ConnectionPoolException("exception in deleteRequest() method", e);
+            throw new DaoException("exception in deleteRequest() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteRequest() method");
-            throw new Exception("exception in deleteRequest() method", e);
+            throw new DaoException("exception in deleteRequest() method", e);
         }
     }
 }

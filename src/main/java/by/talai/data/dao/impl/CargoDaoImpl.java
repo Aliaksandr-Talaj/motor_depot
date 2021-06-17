@@ -2,6 +2,7 @@ package by.talai.data.dao.impl;
 
 import by.talai.data.dao.*;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
 import by.talai.model.Cargo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,14 +51,14 @@ public class CargoDaoImpl implements CargoDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createCargo() method");
-                throw new SQLException("exception in createCargo() method", e);
+                throw new DaoException("exception in createCargo() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in createCargo() method");
-            throw new ConnectionPoolException("exception in createCargo() method", e);
+            throw new DaoException("exception in createCargo() method", e);
         } catch (Exception e) {
             logger.error("Exception in createCargo() method");
-            throw new Exception("exception in createCargo() method", e);
+            throw new DaoException("exception in createCargo() method", e);
         }
     }
 
@@ -90,14 +91,14 @@ public class CargoDaoImpl implements CargoDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getCargo() method");
-                throw new SQLException("exception in getCargo() method", e);
+                throw new DaoException("exception in getCargo() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getCargo() method");
-            throw new ConnectionPoolException("exception in getCargo() method", e);
+            throw new DaoException("exception in getCargo() method", e);
         } catch (Exception e) {
             logger.error("Exception in getCargo() method");
-            throw new Exception("exception in getCargo() method", e);
+            throw new DaoException("exception in getCargo() method", e);
         }
         return cargo;
     }
@@ -135,14 +136,14 @@ public class CargoDaoImpl implements CargoDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllCargos() method");
-                throw new SQLException("exception in getAllCargos() method", e);
+                throw new DaoException("exception in getAllCargos() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllCargos() method");
-            throw new ConnectionPoolException("exception in getAllCargos() method", e);
+            throw new DaoException("exception in getAllCargos() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllCargos() method");
-            throw new Exception("exception in getAllCargos() method", e);
+            throw new DaoException("exception in getAllCargos() method", e);
         }
         return cargos;
     }
@@ -172,14 +173,14 @@ public class CargoDaoImpl implements CargoDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateCargo() method");
-                throw new SQLException("exception in updateCargo() method", e);
+                throw new DaoException("exception in updateCargo() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in updateCargo() method");
-            throw new ConnectionPoolException("exception in updateCargo() method", e);
+            throw new DaoException("exception in updateCargo() method", e);
         } catch (Exception e) {
             logger.error("Exception in updateCargo() method");
-            throw new Exception("exception in updateCargo() method", e);
+            throw new DaoException("exception in updateCargo() method", e);
         }
     }
 
@@ -200,14 +201,14 @@ public class CargoDaoImpl implements CargoDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteCargo() method");
-                throw new SQLException("exception in deleteCargo() method", e);
+                throw new DaoException("exception in deleteCargo() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in deleteCargo() method");
-            throw new ConnectionPoolException("exception in deleteCargo() method", e);
+            throw new DaoException("exception in deleteCargo() method", e);
         } catch (Exception e) {
             logger.error("Exception in deleteCargo() method");
-            throw new Exception("exception in deleteCargo() method", e);
+            throw new DaoException("exception in deleteCargo() method", e);
         }
 
     }
@@ -246,14 +247,14 @@ public class CargoDaoImpl implements CargoDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllCargosOfRide() method");
-                throw new SQLException("exception in getAllCargosOfRide() method", e);
+                throw new DaoException("exception in getAllCargosOfRide() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllCargosOfRide() method");
-            throw new ConnectionPoolException("exception in getAllCargosOfRide() method", e);
+            throw new DaoException("exception in getAllCargosOfRide() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllCargosOfRide() method");
-            throw new Exception("exception in getAllCargosOfRide() method", e);
+            throw new DaoException("exception in getAllCargosOfRide() method", e);
         }
         return cargos;
     }
@@ -292,14 +293,14 @@ public class CargoDaoImpl implements CargoDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllCargosOfDelivery() method");
-                throw new SQLException("exception in getAllCargosOfDelivery() method", e);
+                throw new DaoException("exception in getAllCargosOfDelivery() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getAllCargosOfDelivery() method");
-            throw new ConnectionPoolException("exception in getAllCargosOfDelivery() method", e);
+            throw new DaoException("exception in getAllCargosOfDelivery() method", e);
         } catch (Exception e) {
             logger.error("Exception in getAllCargosOfDelivery() method");
-            throw new Exception("exception in getAllCargosOfDelivery() method", e);
+            throw new DaoException("exception in getAllCargosOfDelivery() method", e);
         }
         return cargos;
     }
@@ -340,14 +341,14 @@ public class CargoDaoImpl implements CargoDao {
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addOrUpdateCargo() method");
-                throw new SQLException("exception in addOrUpdateCargo() method", e);
+                throw new DaoException("exception in addOrUpdateCargo() method", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in addOrUpdateCargo() method");
-            throw new ConnectionPoolException("exception in addOrUpdateCargo() method", e);
+            throw new DaoException("exception in addOrUpdateCargo() method", e);
         } catch (Exception e) {
             logger.error("Exception in addOrUpdateCargo() method");
-            throw new Exception("exception in addOrUpdateCargo() method", e);
+            throw new DaoException("exception in addOrUpdateCargo() method", e);
         }
     }
 
