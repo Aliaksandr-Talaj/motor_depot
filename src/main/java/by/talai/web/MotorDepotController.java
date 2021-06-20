@@ -1,15 +1,10 @@
 package by.talai.web;
 
-import by.talai.service.AutomobileService;
-import by.talai.service.RequestService;
-import by.talai.service.RideService;
-import by.talai.service.UserService;
+import by.talai.model.personnel.User;
+import by.talai.service.*;
 import by.talai.service.dto.AutomobilesDto;
 import by.talai.service.dto.UsersDto;
-import by.talai.service.impl.AutomobileServiceImpl;
-import by.talai.service.impl.RequestServiceImpl;
-import by.talai.service.impl.RideServiceImpl;
-import by.talai.service.impl.UserServiceImpl;
+import by.talai.service.impl.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,8 +16,10 @@ import java.io.IOException;
 public class MotorDepotController extends HttpServlet {
 
     private final AutomobileService automobileService = new AutomobileServiceImpl();
-//    private final RideService rideService = new RideServiceImpl();
+    //    private final RideService rideService = new RideServiceImpl();
     private final UserService userService = new UserServiceImpl();
+//    private final RoleService roleService = new RoleServiceImpl();
+
 //    private final RequestService requestService = new RequestServiceImpl();
 
     public MotorDepotController() throws Exception {
@@ -36,7 +33,7 @@ public class MotorDepotController extends HttpServlet {
         }
 
 
-        request.getSession(true).setAttribute("role", "admin");
+        request.getSession(true).setAttribute("role", "dispatcher");
 
 
         String action = request.getServletPath();
@@ -56,6 +53,9 @@ public class MotorDepotController extends HttpServlet {
                         break;
                     case "/admin/users":
                         goListUsers(request, response);
+                        break;
+                    case "/admin/add_user":
+                        goAddUser(request, response);
                         break;
                     case "/admin/users/c_status":
                         changeUserStatus(request, response);
@@ -107,6 +107,18 @@ public class MotorDepotController extends HttpServlet {
             }
         }
 
+    }
+
+    private void goAddUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String name = request.getParameter("name");
+        String surname = request.getParameter("surname");
+        String login = request.getParameter("login");
+        String password = request.getParameter("password");
+        int roleId = Integer.parseInt(request.getParameter("roleId"));
+        int statusId = Integer.parseInt(request.getParameter("statusId"));
+        userService.addUser(name, surname, login, password, roleId, statusId);
+
+        response.sendRedirect("/motor_depot/admin/users");
     }
 
     private void changeUserStatus(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -223,7 +235,6 @@ public class MotorDepotController extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
         dispatcher.forward(request, response);
     }
-
 
 
 }

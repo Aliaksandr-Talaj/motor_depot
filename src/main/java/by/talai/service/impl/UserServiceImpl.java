@@ -37,6 +37,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void addUser(String name, String surname, String login, String password, int roleId, int statusId) throws ServiceException {
+        try {
+            userDao.createUser(name, surname, login, password, roleId, statusId);
+        } catch (Exception e) {
+            logger.error("Sql exception in addUser() method");
+            throw new ServiceException("Sql exception in addUser() method", e);
+        }
+    }
+
+    @Override
     public User findUser(int userId) throws Exception {
         User user;
         try {

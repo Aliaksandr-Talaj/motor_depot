@@ -17,7 +17,7 @@
     <fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button"/>
     <fmt:message bundle="${loc}" key="local.login.btn" var="login_button"/>
     <fmt:message bundle="${loc}" key="local.logout.btn" var="logout_button"/>
-    <fmt:message bundle="${loc}" key="local.show.btn" var="show_button"/>
+    <fmt:message bundle="${loc}" key="local.menu.btn" var="menu_button"/>
     <fmt:message bundle="${loc}" key="local.registration" var="registration_mp"/>
     <fmt:message bundle="${loc}" key="local.users.mp" var="users_mp"/>
 
@@ -29,7 +29,10 @@
     <fmt:message bundle="${loc}" key="local.autos.mp" var="autos_mp"/>
     <fmt:message bundle="${loc}" key="local.charterers.mp" var="charterers_mp"/>
     <fmt:message bundle="${loc}" key="local.drivers.mp" var="drivers_mp"/>
-
+    <fmt:message bundle="${loc}" key="local.add.repair" var="add_repair_request"/>
+    <fmt:message bundle="${loc}" key="local.add.request" var="add_request"/>
+    <fmt:message bundle="${loc}" key="local.add.auto" var="add_auto"/>
+    <fmt:message bundle="${loc}" key="local.add.charterer" var="add_charterer"/>
 
     <!--TEST-->
     <c:set var="sessionScope.role" value="admin"/>
@@ -82,7 +85,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <c:out value="${show_button}"/>
+                        <c:out value="${menu_button}"/>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 
@@ -92,9 +95,6 @@
                         <li><a class="dropdown-item" href="/motor_depot/user/rides"><c:out value="${rides_mp}"/></a>
                         </li>
 
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
 
                         <!-- DRIVERS MENU -->
 
@@ -103,7 +103,10 @@
                             <li><a class="dropdown-item" href="#"><c:out value="${my_auto_mp}"/></a></li>
 
                             <li><a class="dropdown-item" href="#"><c:out value="${my_rides_mp}"/></a></li>
-
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#"><c:out value="${add_repair_request}"/></a></li>
                         </c:if>
 
                         <!-- DISPATCHERS MENU -->
@@ -115,7 +118,14 @@
                             <li><a class="dropdown-item" href="#"><c:out value="${drivers_mp}"/></a></li>
 
                             <li><a class="dropdown-item" href="#"><c:out value="${charterers_mp}"/></a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#"><c:out value="${add_request}"/></a></li>
 
+                            <li><a class="dropdown-item" href="#"><c:out value="${add_auto}"/></a></li>
+
+                            <li><a class="dropdown-item" href="#"><c:out value="${add_charterer}"/></a></li>
                         </c:if>
 
                     </ul>

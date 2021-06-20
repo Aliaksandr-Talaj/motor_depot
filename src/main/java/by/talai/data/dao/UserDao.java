@@ -30,4 +30,6 @@ public interface UserDao {
     int countAllUsers() throws DaoException;
 
     int countAllUsersWithRole(int roleId) throws DaoException;
+
+    void createUser(String name, String surname, String login, String password, int roleId, int statusId) throws DaoException;
 }

@@ -40,11 +40,11 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0" metadata-comple
 
   <filter-mapping>
     <filter-name>Charset Filter</filter-name>
-    <url-pattern>/</url-pattern>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
 
   <error-page>
-    <exception-automobileType>java.lang.Exception</exception-automobileType>
+    <exception-type>java.lang.Exception</exception-type>
     <location>/WEB-INF/jsp/error.jsp</location>
   </error-page>
 

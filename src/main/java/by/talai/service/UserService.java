@@ -19,4 +19,6 @@ public interface UserService {
     void changeUserStatus(int userId, int statusId) throws Exception;
 
     UsersDto getAllUsersDto() throws Exception;
+
+    void addUser(String name, String surname, String login, String password, int roleId, int statusId) throws ServiceException;
 }

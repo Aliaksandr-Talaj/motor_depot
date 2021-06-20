@@ -369,5 +369,38 @@ public class UserDaoImpl implements UserDao {
         return result;
     }
 
+    @Override
+    public void createUser(String name, String surname, String login, String password, int roleId, int statusId) throws DaoException {
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(CREATE_USER_SQL);
+
+            preparedStatement.setString(1, null);
+            preparedStatement.setString(2, name);
+
+            preparedStatement.setString(3, surname);
+            preparedStatement.setString(4, login);
+            preparedStatement.setString(5, password);
+            preparedStatement.setInt(6, roleId);
+            preparedStatement.setInt(7, statusId);
+
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in createUser() method");
+                throw new DaoException("exception in createUser() method", e);
+            }
+        } catch (ConnectionPoolException e) {
+            logger.error("Connection pool exception in createUser() method");
+            throw new DaoException("exception in createUser() method", e);
+        } catch (Exception e) {
+            logger.error("Exception in createUser() method");
+            throw new DaoException("exception in createUser() method", e);
+        }
+    }
+
 
 }
