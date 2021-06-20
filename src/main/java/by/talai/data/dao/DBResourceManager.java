@@ -6,7 +6,7 @@ public class DBResourceManager {
 
     private final static DBResourceManager instance = new DBResourceManager();
 
-    private ResourceBundle bundle = ResourceBundle.getBundle("by.talai.datasource");
+    private ResourceBundle bundle = ResourceBundle.getBundle("datasource");
 
     public static DBResourceManager getInstance() {
         return instance;

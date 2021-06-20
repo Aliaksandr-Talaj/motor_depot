@@ -46,7 +46,6 @@ public class ChartererDaoImpl implements ChartererDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createCharterer() method");
@@ -73,12 +72,12 @@ public class ChartererDaoImpl implements ChartererDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 charterer.setId(id);
+                resultSet.next();
                 charterer.setName(resultSet.getString("name"));
 
                 int ownAddressId = resultSet.getInt("own_address_id");
                 charterer.setOwnAddress(addressDao.getAddress(ownAddressId));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getCharterer() method");
@@ -115,7 +114,6 @@ public class ChartererDaoImpl implements ChartererDao {
                     charterers.add(charterer);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllCharterers() method");
@@ -149,7 +147,6 @@ public class ChartererDaoImpl implements ChartererDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateCharterer() method");
@@ -177,7 +174,6 @@ public class ChartererDaoImpl implements ChartererDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteCharterer() method");
@@ -207,7 +203,6 @@ public class ChartererDaoImpl implements ChartererDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addAddressToCharterer() method");
@@ -249,7 +244,6 @@ public class ChartererDaoImpl implements ChartererDao {
                     addresses.add(address);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findUsedAddresses() method");
@@ -280,7 +274,6 @@ public class ChartererDaoImpl implements ChartererDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteUsageOfAddress() method");

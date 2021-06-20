@@ -39,7 +39,6 @@ public class LoadingTypeDaoImpl implements LoadingTypeDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createLoadingType() method");
@@ -66,9 +65,9 @@ public class LoadingTypeDaoImpl implements LoadingTypeDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 loadingType.setId(loadingTypeId);
+                resultSet.next();
                 loadingType.setType(resultSet.getString("loading_type"));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getLoadingType() method");
@@ -103,7 +102,6 @@ public class LoadingTypeDaoImpl implements LoadingTypeDao {
                     loadingTypes.add(loadingType);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllLoadingTypes() method");
@@ -136,7 +134,6 @@ public class LoadingTypeDaoImpl implements LoadingTypeDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateLoadingType() method");
@@ -164,7 +161,6 @@ public class LoadingTypeDaoImpl implements LoadingTypeDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteLoadingType() method");

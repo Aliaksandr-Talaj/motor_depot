@@ -39,7 +39,6 @@ public class RoleDaoImpl implements RoleDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createRole() method");
@@ -66,17 +65,18 @@ public class RoleDaoImpl implements RoleDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 role.setId(id);
+
+                resultSet.next();
                 role.setName(resultSet.getString("name"));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getRole() method");
-                throw new DaoException("exception in getRole() method", e);
+                throw new DaoException("", e);
             }
         } catch (ConnectionPoolException e) {
             logger.error("Connection pool exception in getRole() method");
-            throw new DaoException("exception in getRole() method", e);
+            throw new DaoException("", e);
         } catch (Exception e) {
             logger.error("Exception in getRole() method");
             throw new DaoException("exception in getRole() method", e);
@@ -103,7 +103,6 @@ public class RoleDaoImpl implements RoleDao {
                     roles.add(role);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllRoles() method");
@@ -135,7 +134,6 @@ public class RoleDaoImpl implements RoleDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateRole() method");
@@ -164,7 +162,6 @@ public class RoleDaoImpl implements RoleDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteRole() method");

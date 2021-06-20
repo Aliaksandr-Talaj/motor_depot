@@ -45,7 +45,6 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
             } catch (SQLException e) {
                 logger.error("Sql exception in createMalfunction() method");
                 throw new DaoException("exception in createMalfunction() method", e);
@@ -71,6 +70,7 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 malfunction.setId(id);
+                resultSet.next();
                 malfunction.setProblem(resultSet.getString("problem"));
 
                 malfunction.setDetectionTime(resultSet.getDate("detection_time"));
@@ -79,7 +79,6 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
                 String automobileId = resultSet.getString("automobile_id");
                 malfunction.setAutomobile(automobileDao.getAutomobile(automobileId));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getMalfunction() method");
@@ -120,7 +119,6 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
                     malfunctions.add(malfunction);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllMalfunctions() method");
@@ -156,7 +154,6 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateMalfunction() method");
@@ -198,7 +195,6 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addOrUpdateMalfunction() method");
@@ -225,7 +221,6 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteMalfunction() method");

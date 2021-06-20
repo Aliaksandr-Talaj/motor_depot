@@ -40,7 +40,6 @@ public class ExecutionStatusDaoImpl implements StatusDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createExecutionStatus() method");
@@ -67,9 +66,9 @@ public class ExecutionStatusDaoImpl implements StatusDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 executionStatus.setId(id);
+                resultSet.next();
                 executionStatus.setStatus(resultSet.getString("status"));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findExecutionStatus() method");
@@ -104,7 +103,6 @@ public class ExecutionStatusDaoImpl implements StatusDao {
                     executionStatusSet.add(executionStatus);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findAllExecutionStatuses() method");
@@ -136,7 +134,6 @@ public class ExecutionStatusDaoImpl implements StatusDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateExecutionStatus() method");
@@ -166,7 +163,6 @@ public class ExecutionStatusDaoImpl implements StatusDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteExecutionStatus() method");

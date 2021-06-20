@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="root">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS `motor_depot` DEFAULT CHARACTER SET utf8 ;
+            USE `motor_depot` ;
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`address` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `country` VARCHAR(45) NULL DEFAULT NULL,
+            `region` VARCHAR(45) NULL DEFAULT NULL,
+            `locality` VARCHAR(45) NULL DEFAULT NULL,
+            `street` VARCHAR(45) NULL DEFAULT NULL,
+            `building` VARCHAR(45) NULL DEFAULT NULL,
+            `apartment` VARCHAR(45) NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+    <changeSet id="3" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`automobile_type` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `type` VARCHAR(45) NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="4" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`fuel` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `type` VARCHAR(45) NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="5" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`technical_status` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `status` VARCHAR(125) NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+            ENGINE = InnoDB
+            AUTO_INCREMENT = 4
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="6" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`automobile` (
+            `id` VARCHAR(12) NOT NULL,
+            `brand` VARCHAR(45) NOT NULL,
+            `model` VARCHAR(45) NOT NULL,
+            `type_id` INT(11) NOT NULL,
+            `fuel_type_id` INT(11) NOT NULL,
+            `carrying` INT(11) NULL DEFAULT NULL,
+            `platform_length` INT(11) NULL DEFAULT NULL,
+            `platform_width` INT(11) NULL DEFAULT NULL,
+            `cargo_height_limit` DECIMAL(10,0) NULL DEFAULT NULL,
+            `cargo_volume_limit` DECIMAL(10,0) NULL DEFAULT NULL,
+            `technical_status_id` INT(11) NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+            INDEX `fk_automobile_fuel1_idx` (`fuel_type_id` ASC) ,
+            INDEX `fk_automobile_automobile_type1_idx` (`type_id` ASC) ,
+            INDEX `fk_automobile_technical_status1_idx` (`technical_status_id` ASC) ,
+            CONSTRAINT `fk_automobile_automobile_type1`
+            FOREIGN KEY (`type_id`)
+            REFERENCES `motor_depot`.`automobile_type` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_automobile_fuel1`
+            FOREIGN KEY (`fuel_type_id`)
+            REFERENCES `motor_depot`.`fuel` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_automobile_technical_status1`
+            FOREIGN KEY (`technical_status_id`)
+            REFERENCES `motor_depot`.`technical_status` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="7" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`role` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `name` VARCHAR(45) NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+            ENGINE = InnoDB
+            AUTO_INCREMENT = 4
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="8" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`user_status` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `status` VARCHAR(45) NOT NULL,
+            PRIMARY KEY (`id`))
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="9" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`user` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `name` VARCHAR(125) NOT NULL,
+            `surname` VARCHAR(125) NOT NULL,
+            `login` VARCHAR(45) NOT NULL,
+            `password` VARCHAR(45) NOT NULL,
+            `role_id` INT(11) NOT NULL,
+            `status_id` INT(11) NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+            INDEX `fk_user_role1_idx` (`role_id` ASC) ,
+            INDEX `fk_user_status_idx` (`status_id` ASC) ,
+            CONSTRAINT `fk_user_role1`
+            FOREIGN KEY (`role_id`)
+            REFERENCES `motor_depot`.`role` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_user_status`
+            FOREIGN KEY (`status_id`)
+            REFERENCES `motor_depot`.`user_status` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="10" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`automobile_attachment` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `automobile_id` VARCHAR(12) NOT NULL,
+            `driver_id` INT(11) NOT NULL,
+            `date_of_attachment` DATE NOT NULL,
+            `date_of_detachment` DATE NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            INDEX `fk_automobile_attachment_automobile1_idx` (`automobile_id` ASC) ,
+            INDEX `fk_automobile_attachment_user1_idx` (`driver_id` ASC) ,
+            CONSTRAINT `fk_automobile_attachment_automobile1`
+            FOREIGN KEY (`automobile_id`)
+            REFERENCES `motor_depot`.`automobile` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_automobile_attachment_user1`
+            FOREIGN KEY (`driver_id`)
+            REFERENCES `motor_depot`.`user` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            AUTO_INCREMENT = 3
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="11" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`equipment` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `name` VARCHAR(125) NULL DEFAULT NULL,
+            `description` VARCHAR(250) NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+            ENGINE = InnoDB
+            AUTO_INCREMENT = 4
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="12" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`automobile_has_equipment` (
+            `equipment_id` INT(11) NOT NULL,
+            `automobile_id` VARCHAR(12) NOT NULL,
+            PRIMARY KEY (`equipment_id`, `automobile_id`),
+            INDEX `fk_equipment_has_automobile_automobile1_idx` (`automobile_id` ASC) ,
+            INDEX `fk_equipment_has_automobile_equipment1_idx` (`equipment_id` ASC) ,
+            CONSTRAINT `fk_equipment_has_automobile_automobile1`
+            FOREIGN KEY (`automobile_id`)
+            REFERENCES `motor_depot`.`automobile` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_equipment_has_automobile_equipment1`
+            FOREIGN KEY (`equipment_id`)
+            REFERENCES `motor_depot`.`equipment` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="13" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`loading_type` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `loading_type` VARCHAR(45) NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+            ENGINE = InnoDB
+            AUTO_INCREMENT = 4
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="14" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`automobile_has_loading_type` (
+            `automobile_id` VARCHAR(12) NOT NULL,
+            `loading_type_id` INT(11) NOT NULL,
+            PRIMARY KEY (`automobile_id`, `loading_type_id`),
+            INDEX `fk_automobile_has_loading_type_loading_type1_idx` (`loading_type_id` ASC) ,
+            INDEX `fk_automobile_has_loading_type_automobile1_idx` (`automobile_id` ASC) ,
+            CONSTRAINT `fk_automobile_has_loading_type_automobile1`
+            FOREIGN KEY (`automobile_id`)
+            REFERENCES `motor_depot`.`automobile` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_automobile_has_loading_type_loading_type1`
+            FOREIGN KEY (`loading_type_id`)
+            REFERENCES `motor_depot`.`loading_type` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="15" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`charterer` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `name` VARCHAR(125) NULL DEFAULT NULL,
+            `own_address_id` INT(11) NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+            INDEX `fk_charterer_address1_idx` (`own_address_id` ASC) ,
+            CONSTRAINT `fk_charterer_address1`
+            FOREIGN KEY (`own_address_id`)
+            REFERENCES `motor_depot`.`address` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="16" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`execution_status` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `name` VARCHAR(45) NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="17" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`request` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `filling_date` DATE NOT NULL,
+            `charterer_id` INT(11) NOT NULL,
+            `required_automobile_type_id` INT(11) NULL DEFAULT NULL,
+            `required_loading_type_id` INT(11) NULL DEFAULT NULL,
+            `status_id` INT(11) NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+            INDEX `fk_request_loading_type1_idx` (`required_loading_type_id` ASC) ,
+            INDEX `fk_request_automobile_type1_idx` (`required_automobile_type_id` ASC) ,
+            INDEX `fk_request_status1_idx` (`status_id` ASC) ,
+            INDEX `fk_request_charterer_idx` (`charterer_id` ASC) ,
+            CONSTRAINT `fk_request_automobile_type1`
+            FOREIGN KEY (`required_automobile_type_id`)
+            REFERENCES `motor_depot`.`automobile_type` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_request_charterer`
+            FOREIGN KEY (`charterer_id`)
+            REFERENCES `motor_depot`.`charterer` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_request_loading_type1`
+            FOREIGN KEY (`required_loading_type_id`)
+            REFERENCES `motor_depot`.`loading_type` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_request_status1`
+            FOREIGN KEY (`status_id`)
+            REFERENCES `motor_depot`.`execution_status` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="18" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`delivery` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `loading_place_id` INT(11) NOT NULL,
+            `loading_date` DATE NULL DEFAULT NULL,
+            `destination_id` INT(11) NOT NULL,
+            `term` DATE NULL DEFAULT NULL,
+            `request_id` INT(11) NULL DEFAULT NULL,
+            `status_id` INT(11) NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+            INDEX `request_id` (`request_id` ASC) ,
+            INDEX `fk_delivery_status1_idx` (`status_id` ASC) ,
+            INDEX `fk_delivery_address1_idx` (`loading_place_id` ASC) ,
+            INDEX `fk_delivery_address2_idx` (`destination_id` ASC) ,
+            CONSTRAINT `delivery_ibfk_1`
+            FOREIGN KEY (`request_id`)
+            REFERENCES `motor_depot`.`request` (`id`),
+            CONSTRAINT `fk_delivery_address1`
+            FOREIGN KEY (`loading_place_id`)
+            REFERENCES `motor_depot`.`address` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_delivery_address2`
+            FOREIGN KEY (`destination_id`)
+            REFERENCES `motor_depot`.`address` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_delivery_status1`
+            FOREIGN KEY (`status_id`)
+            REFERENCES `motor_depot`.`execution_status` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="19" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`ride` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `date` DATE NULL DEFAULT NULL,
+            `request_id` INT(11) NULL DEFAULT NULL,
+            `dispatcher_id` INT(11) NOT NULL,
+            `automobile_id` VARCHAR(12) NULL DEFAULT NULL,
+            `loading_place_id` INT(11) NOT NULL,
+            `loading_date` DATE NULL DEFAULT NULL,
+            `destination_id` INT(11) NOT NULL,
+            `term` DATE NULL DEFAULT NULL,
+            `status_id` INT(11) NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+            INDEX `automobile_id` (`automobile_id` ASC) ,
+            INDEX `fk_ride_user1_idx` (`dispatcher_id` ASC) ,
+            INDEX `fk_ride_status1_idx` (`status_id` ASC) ,
+            INDEX `fk_ride_address1_idx` (`loading_place_id` ASC) ,
+            INDEX `fk_ride_address2_idx` (`destination_id` ASC) ,
+            CONSTRAINT `fk_ride_address1`
+            FOREIGN KEY (`loading_place_id`)
+            REFERENCES `motor_depot`.`address` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_ride_address2`
+            FOREIGN KEY (`destination_id`)
+            REFERENCES `motor_depot`.`address` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_ride_status1`
+            FOREIGN KEY (`status_id`)
+            REFERENCES `motor_depot`.`execution_status` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_ride_user1`
+            FOREIGN KEY (`dispatcher_id`)
+            REFERENCES `motor_depot`.`user` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `ride_ibfk_2`
+            FOREIGN KEY (`automobile_id`)
+            REFERENCES `motor_depot`.`automobile` (`id`))
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="20" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`unit` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `type` VARCHAR(125) NULL DEFAULT NULL,
+            `length` INT(11) NULL DEFAULT NULL,
+            `width` INT(11) NULL DEFAULT NULL,
+            `height` DECIMAL(10,0) NULL DEFAULT NULL,
+            `weight` DECIMAL(10,0) NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+            ENGINE = InnoDB
+            AUTO_INCREMENT = 2
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="21" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`cargo` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `name` VARCHAR(125) NOT NULL,
+            `unit_id` INT(11) NOT NULL,
+            `delivery_id` INT(11) NULL DEFAULT NULL,
+            `ride_id` INT(11) NULL DEFAULT NULL,
+            `quantity` DECIMAL(10,0) NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+            INDEX `delivery_id` (`delivery_id` ASC) ,
+            INDEX `fk_cargo_unit1_idx` (`unit_id` ASC) ,
+            INDEX `fk_cargo_ride1_idx` (`ride_id` ASC) ,
+            CONSTRAINT `cargo_ibfk_1`
+            FOREIGN KEY (`delivery_id`)
+            REFERENCES `motor_depot`.`delivery` (`id`),
+            CONSTRAINT `fk_cargo_ride1`
+            FOREIGN KEY (`ride_id`)
+            REFERENCES `motor_depot`.`ride` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_cargo_unit1`
+            FOREIGN KEY (`unit_id`)
+            REFERENCES `motor_depot`.`unit` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            AUTO_INCREMENT = 2
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="22" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`charterer_use_address` (
+            `charterer_id` INT(11) NOT NULL,
+            `address_id` INT(11) NOT NULL,
+            PRIMARY KEY (`charterer_id`, `address_id`),
+            INDEX `fk_charterer_has_address_address1_idx` (`address_id` ASC) ,
+            INDEX `fk_charterer_has_address_charterer1_idx` (`charterer_id` ASC) ,
+            CONSTRAINT `fk_charterer_has_address_address1`
+            FOREIGN KEY (`address_id`)
+            REFERENCES `motor_depot`.`address` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_charterer_has_address_charterer1`
+            FOREIGN KEY (`charterer_id`)
+            REFERENCES `motor_depot`.`charterer` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="23" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`maintenance` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `type` VARCHAR(125) NOT NULL,
+            `start_time` DATE NULL DEFAULT NULL,
+            `finish_time` DATE NULL DEFAULT NULL,
+            `automobile_id` VARCHAR(12) NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+            INDEX `fk_maintenance_automobile1_idx` (`automobile_id` ASC) ,
+            CONSTRAINT `fk_maintenance_automobile1`
+            FOREIGN KEY (`automobile_id`)
+            REFERENCES `motor_depot`.`automobile` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="24" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`malfunction` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `problem` VARCHAR(225) NOT NULL,
+            `detection_time` DATE NULL DEFAULT NULL,
+            `fix_time` DATE NULL DEFAULT NULL,
+            `automobile_id` VARCHAR(12) NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+            INDEX `fk_malfunction_automobile1_idx` (`automobile_id` ASC) ,
+            CONSTRAINT `fk_malfunction_automobile1`
+            FOREIGN KEY (`automobile_id`)
+            REFERENCES `motor_depot`.`automobile` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="25" author="root">
+        <sql>
+            CREATE TABLE IF NOT EXISTS `motor_depot`.`request_has_required_equipment` (
+            `request_id` INT(11) NOT NULL,
+            `equipment_id` INT(11) NOT NULL,
+            PRIMARY KEY (`request_id`, `equipment_id`),
+            INDEX `fk_request_has_equipment_equipment1_idx` (`equipment_id` ASC) ,
+            INDEX `fk_request_has_equipment_request1_idx` (`request_id` ASC) ,
+            CONSTRAINT `fk_request_has_equipment_equipment1`
+            FOREIGN KEY (`equipment_id`)
+            REFERENCES `motor_depot`.`equipment` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION,
+            CONSTRAINT `fk_request_has_equipment_request1`
+            FOREIGN KEY (`request_id`)
+            REFERENCES `motor_depot`.`request` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="26" author="root">
+        <sql>
+            ALTER SCHEMA `motor_depot` CHARACTER SET utf8;
+            INSERT INTO `motor_depot`.`role` (`id`, `name`) VALUES ('1', 'admin');
+            INSERT INTO `motor_depot`.`role` (`id`, `name`) VALUES ('2', 'dispatcher');
+            INSERT INTO `motor_depot`.`role` (`id`, `name`) VALUES ('3', 'driver');
+        </sql>
+    </changeSet>
+
+    <changeSet id="27" author="root">
+        <sql>
+            INSERT INTO `motor_depot`.`user_status` (`id`, `status`) VALUES ('1', 'active');
+            INSERT INTO `motor_depot`.`user_status` (`id`, `status`) VALUES ('2', 'blocked');
+        </sql>
+    </changeSet>
+
+    <changeSet id="28" author="root">
+        <sql>
+            ALTER SCHEMA `motor_depot` CHARACTER SET = utf8;
+            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES ('Виктор', 'Бирюков', 'v_birukov', 'sezam1', '1', '1');
+            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES ('Клим', 'Герасимов', 'k_gerasimov', 'mumu(', '1', '1');
+            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES ('Изот', 'Мясников', 'i_miasnokov', '123456', '2', '1');
+            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES ('Афанасий', 'Русаков', 'a_rusakov', '123456', '2', '1');
+            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES ('Глафира', 'Лихачёва', 'g_likhacheva', '123456', '2', '1');
+            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES ('Антонина', 'Нестерова', 'a_nesterova', '123456', '3', '1');
+            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES ('Милослав', 'Кузьмин', 'm_kuzmin', '123456', '3', '1');
+            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES ('Наум', 'Самсонов', 'n_samsonov', '123456', '3', '1');
+            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES ('Валерьян', 'Зуев', 'v_zuev', '123456', '2', '1');
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="29" author="root">
+        <sql>
+            INSERT INTO `motor_depot`.`automobile_type` (`id`, `type`) VALUES ('1', 'тентованный');
+            INSERT INTO `motor_depot`.`automobile_type` (`id`, `type`) VALUES ('2', 'фургон');
+            INSERT INTO `motor_depot`.`automobile_type` (`id`, `type`) VALUES ('3', 'открытый бортовой');
+            INSERT INTO `motor_depot`.`automobile_type` (`id`, `type`) VALUES ('4', 'самосвал');
+        </sql>
+    </changeSet>
+
+    <changeSet id="30" author="root">
+        <sql>
+            ALTER SCHEMA `motor_depot` DEFAULT CHARACTER SET = utf8;
+            INSERT INTO `motor_depot`.`fuel` (`id`, `type`) VALUES ('1', 'бензин');
+            INSERT INTO `motor_depot`.`fuel` (`id`, `type`) VALUES ('2', 'ДТ');
+            INSERT INTO `motor_depot`.`fuel` (`id`, `type`) VALUES ('3', 'газ/бензин');
+        </sql>
+    </changeSet>
+
+    <changeSet id="31" author="root">
+        <sql>
+            ALTER SCHEMA `motor_depot` DEFAULT CHARACTER SET = utf8;
+            INSERT INTO `motor_depot`.`technical_status` (`id`, `status`) VALUES ('1', 'исправен');
+            INSERT INTO `motor_depot`.`technical_status` (`id`, `status`) VALUES ('2', 'есть неисправность');
+            INSERT INTO `motor_depot`.`technical_status` (`id`, `status`) VALUES ('3', 'вышел из строя');
+            INSERT INTO `motor_depot`.`technical_status` (`id`, `status`) VALUES ('4', 'на обслуживании');
+        </sql>
+    </changeSet>
+
+    <changeSet id="32" author="root">
+        <sql>
+            ALTER SCHEMA `motor_depot` DEFAULT CHARACTER SET = utf8;
+            INSERT INTO `motor_depot`.`automobile` (`id`, `brand`, `model`, `type_id`, `fuel_type_id`, `carrying`,
+            `platform_length`, `platform_width`, `cargo_height_limit`, `cargo_volume_limit`, `technical_status_id`)
+            VALUES ('1285', 'ГАЗ', 'газель', '2', '1', '1445', '3145', '2030', '1930', '12.3', '1');
+            INSERT INTO `motor_depot`.`automobile` (`id`, `brand`, `model`, `type_id`, `fuel_type_id`, `carrying`,
+            `platform_length`, `platform_width`, `cargo_height_limit`, `cargo_volume_limit`, `technical_status_id`)
+            VALUES ('5345', 'ГАЗ', 'газель', '1', '1', '1090', '3745', '2030', '1930', '14.6', '1');
+            INSERT INTO `motor_depot`.`automobile` (`id`, `brand`, `model`, `type_id`, `fuel_type_id`, `carrying`,
+            `platform_length`, `platform_width`, `cargo_height_limit`, `cargo_volume_limit`, `technical_status_id`)
+            VALUES ('8261', 'ГАЗ', 'газель', '2', '1', '1240', '3045', '2030', '1930', '15.6', '1');
+            INSERT INTO `motor_depot`.`automobile` (`id`, `brand`, `model`, `type_id`, `fuel_type_id`, `carrying`,
+            `platform_length`, `platform_width`, `technical_status_id`) VALUES ('5117', 'ГАЗ', 'газель', '3', '1',
+            '1545', '3145', '2030', '1');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

@@ -44,7 +44,6 @@ public class UnitDaoImpl implements UnitDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createUnit() method");
@@ -71,13 +70,13 @@ public class UnitDaoImpl implements UnitDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 unit.setId(id);
+                resultSet.next();
                 unit.setType(resultSet.getString("type"));
                 unit.setLength(resultSet.getInt("length"));
                 unit.setWidth(resultSet.getInt("width"));
                 unit.setHeight(resultSet.getDouble("height"));
                 unit.setWeight(resultSet.getDouble("weight"));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getUnit() method");
@@ -117,7 +116,6 @@ public class UnitDaoImpl implements UnitDao {
                     unitList.add(unit);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllUnits() method");
@@ -156,7 +154,6 @@ public class UnitDaoImpl implements UnitDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateUnit() method");
@@ -185,7 +182,6 @@ public class UnitDaoImpl implements UnitDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteUnit() method");

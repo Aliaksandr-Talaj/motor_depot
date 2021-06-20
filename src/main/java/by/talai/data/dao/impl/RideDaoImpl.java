@@ -56,7 +56,6 @@ public class RideDaoImpl implements RideDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createRide() method");
@@ -83,7 +82,7 @@ public class RideDaoImpl implements RideDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 ride.setId(rideId);
-
+                resultSet.next();
                 ride.setDate(resultSet.getDate("date"));
 
                 int requestId = resultSet.getInt("request_id");
@@ -110,7 +109,6 @@ public class RideDaoImpl implements RideDao {
 
                 ride.setCargoList(cargoDao.getAllCargosOfRide(rideId));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getRide() method");
@@ -170,7 +168,6 @@ public class RideDaoImpl implements RideDao {
                     rides.add(ride);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllRides() method");
@@ -214,7 +211,6 @@ public class RideDaoImpl implements RideDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateRide() method");
@@ -242,7 +238,6 @@ public class RideDaoImpl implements RideDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteRide() method");

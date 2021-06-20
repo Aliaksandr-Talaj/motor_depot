@@ -43,7 +43,6 @@ public class EquipmentDaoImpl implements EquipmentDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createEquipment() method");
@@ -70,10 +69,10 @@ public class EquipmentDaoImpl implements EquipmentDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 equipment.setId(id);
+                resultSet.next();
                 equipment.setName(resultSet.getString("name"));
                 equipment.setDescription(resultSet.getString("description"));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getEquipment() method");
@@ -109,7 +108,6 @@ public class EquipmentDaoImpl implements EquipmentDao {
                     equipmentList.add(equipment);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllEquipment() method");
@@ -143,7 +141,6 @@ public class EquipmentDaoImpl implements EquipmentDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateEquipment() method");
@@ -171,7 +168,6 @@ public class EquipmentDaoImpl implements EquipmentDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteEquipment() method");
@@ -202,7 +198,6 @@ public class EquipmentDaoImpl implements EquipmentDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addEquipmentToRequest() method");
@@ -239,7 +234,6 @@ public class EquipmentDaoImpl implements EquipmentDao {
                     equipmentList.add(equipment);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllEquipmentOfRequest() method");
@@ -269,7 +263,6 @@ public class EquipmentDaoImpl implements EquipmentDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in removeEquipmentFromRequest() method");

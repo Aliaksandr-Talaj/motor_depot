@@ -85,7 +85,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createAutomobile() method");
@@ -115,12 +114,12 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 automobile.setBrand(resultSet.getString("brand"));
                 automobile.setModel(resultSet.getString("model"));
 
-                int fuelTypeId = resultSet.getInt("fuel");
+                int fuelTypeId = resultSet.getInt("fuel_type_id");
                 automobile.setFuelType(fuelTypeDao.findFuelType(fuelTypeId));
 
                 automobile.setCarrying(resultSet.getInt("carrying"));
 
-                int typeId = resultSet.getInt("type");
+                int typeId = resultSet.getInt("type_id");
                 automobile.setType(automobileTypeDao.findAutomobileType(typeId));
 
                 automobile.setPlatformLength(resultSet.getInt("platform_length"));
@@ -140,7 +139,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 int technicalStatusId = resultSet.getInt("technical_status");
                 automobile.setTechnicalStatus(technicalStatusDao.findStatus(technicalStatusId));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAutomobile() method");
@@ -173,12 +171,12 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     automobile.setBrand(resultSet.getString("brand"));
                     automobile.setModel(resultSet.getString("model"));
 
-                    int fuelTypeId = resultSet.getInt("fuel");
+                    int fuelTypeId = resultSet.getInt("fuel_type_id");
                     automobile.setFuelType(fuelTypeDao.findFuelType(fuelTypeId));
 
                     automobile.setCarrying(resultSet.getInt("carrying"));
 
-                    int typeId = resultSet.getInt("type");
+                    int typeId = resultSet.getInt("type_id");
                     automobile.setType(automobileTypeDao.findAutomobileType(typeId));
 
                     automobile.setPlatformLength(resultSet.getInt("platform_length"));
@@ -195,13 +193,12 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     List<Malfunction> malfunctions = getMalfunctionsOfAutomobile(automobile);
                     automobile.setMalfunctions(malfunctions);
 
-                    int technicalStatusId = resultSet.getInt("technical_status");
+                    int technicalStatusId = resultSet.getInt("technical_status_id");
                     automobile.setTechnicalStatus(technicalStatusDao.findStatus(technicalStatusId));
 
                     automobiles.add(automobile);
 
                 }
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllAutomobiles() method");
@@ -261,7 +258,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateAutomobile() method");
@@ -290,7 +286,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteAutomobile() method");
@@ -322,7 +317,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addEquipmentToAutomobile() method");
@@ -362,7 +356,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     equipmentSet.add(equipment);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllEquipmentOnAutomobile() method");
@@ -393,7 +386,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in removeEquipmentFromAutomobile() method");
@@ -424,7 +416,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addLoadingTypeToAutomobile() method");
@@ -462,7 +453,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     loadingTypeSet.add(loadingType);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllLoadingTypesOfAutomobile() method");
@@ -492,7 +482,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in removeLoadingTypeFromAutomobile() method");
@@ -534,7 +523,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     malfunctions.add(malfunction);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getMalfunctionsOfAutomobile() method");
@@ -576,7 +564,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     maintenanceList.add(maintenance);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getMaintenanceOfAutomobile() method");
@@ -623,7 +610,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     automobileAttachments.add(automobileAttachment);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findAutomobileAttachments() method");

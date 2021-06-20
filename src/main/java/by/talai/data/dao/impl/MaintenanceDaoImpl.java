@@ -45,7 +45,6 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
             } catch (SQLException e) {
                 logger.error("Sql exception in createMaintenance() method");
                 throw new DaoException("exception in createMaintenance() method", e);
@@ -71,6 +70,7 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 maintenance.setId(id);
+                resultSet.next();
                 maintenance.setType(resultSet.getString("type"));
 
                 maintenance.setStartTime(resultSet.getDate("start_time"));
@@ -79,7 +79,6 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
                 String automobileId = resultSet.getString("automobile_id");
                 maintenance.setAutomobile(automobileDao.getAutomobile(automobileId));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getMaintenance() method");
@@ -120,7 +119,6 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
                     maintenanceList.add(maintenance);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllMaintenance() method");
@@ -156,7 +154,6 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateMaintenance() method");
@@ -198,7 +195,6 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addOrUpdateMaintenance() method");
@@ -225,7 +221,6 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteMaintenance() method");

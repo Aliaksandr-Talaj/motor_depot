@@ -48,7 +48,6 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createAttachment() method");
@@ -92,7 +91,6 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
                     automobileAttachments.add(automobileAttachment);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findAllAutomobileAttachments() method");
@@ -130,7 +128,6 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateAutomobileAttachment() method");
@@ -158,7 +155,6 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteAutomobileAttachment() method");

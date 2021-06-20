@@ -39,7 +39,6 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createAutomobileType() method");
@@ -66,9 +65,9 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 automobileType.setId(id);
+                resultSet.next();
                 automobileType.setType(resultSet.getString("type"));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findAutomobileType() method");
@@ -103,7 +102,6 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
                     automobileTypeSet.add(automobileType);
 
                 }
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findAllAutomobileTypes() method");
@@ -134,7 +132,6 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateAutomobileType() method");
@@ -162,7 +159,6 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteAutomobileType() method");

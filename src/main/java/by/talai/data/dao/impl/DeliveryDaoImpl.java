@@ -59,7 +59,6 @@ public class DeliveryDaoImpl implements DeliveryDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createDelivery() method");
@@ -86,6 +85,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 delivery.setId(deliveryId);
+                resultSet.next();
 
                 int loadingPlaceId = resultSet.getInt("loading_place_id");
                 delivery.setLoadingPlace(addressDao.getAddress(loadingPlaceId));
@@ -105,7 +105,6 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
                 delivery.setCargoList(cargoDao.getAllCargosOfDelivery(deliveryId));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getDelivery() method");
@@ -158,7 +157,6 @@ public class DeliveryDaoImpl implements DeliveryDao {
                     deliveries.add(delivery);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllDeliveries() method");
@@ -204,7 +202,6 @@ public class DeliveryDaoImpl implements DeliveryDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateDelivery() method");
@@ -232,7 +229,6 @@ public class DeliveryDaoImpl implements DeliveryDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteDelivery() method");
@@ -284,7 +280,6 @@ public class DeliveryDaoImpl implements DeliveryDao {
                     deliveries.add(delivery);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllDeliveriesOfRequest() method");
@@ -345,7 +340,6 @@ public class DeliveryDaoImpl implements DeliveryDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addOrUpdateDelivery() method");

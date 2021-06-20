@@ -39,7 +39,6 @@ public class TechnicalStatusDaoImpl implements StatusDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createTechnicalStatus() method");
@@ -66,9 +65,9 @@ public class TechnicalStatusDaoImpl implements StatusDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 technicalStatus.setId(id);
+                resultSet.next();
                 technicalStatus.setStatus(resultSet.getString("status"));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findTechnicalStatus() method");
@@ -103,7 +102,6 @@ public class TechnicalStatusDaoImpl implements StatusDao {
                     technicalStatusSet.add(technicalStatus);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findAllTechnicalStatuses() method");
@@ -135,7 +133,6 @@ public class TechnicalStatusDaoImpl implements StatusDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateTechnicalStatus() method");
@@ -165,7 +162,6 @@ public class TechnicalStatusDaoImpl implements StatusDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteTechnicalStatus() method");

@@ -38,7 +38,6 @@ public class UserStatusDaoImpl implements StatusDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createUserStatus() method");
@@ -65,9 +64,9 @@ public class UserStatusDaoImpl implements StatusDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 technicalStatus.setId(id);
+                resultSet.next();
                 technicalStatus.setStatus(resultSet.getString("status"));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findUserStatus() method");
@@ -102,7 +101,6 @@ public class UserStatusDaoImpl implements StatusDao {
                     technicalStatusSet.add(technicalStatus);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findAllUserStatuses() method");
@@ -134,7 +132,6 @@ public class UserStatusDaoImpl implements StatusDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateUserStatus() method");
@@ -164,7 +161,6 @@ public class UserStatusDaoImpl implements StatusDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteUserStatus() method");

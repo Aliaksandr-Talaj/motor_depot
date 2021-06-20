@@ -4,32 +4,58 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0" metadata-complete="true">
 
   <servlet>
-    <servlet-name>ControllerServlet</servlet-name>
-    <servlet-class>by.talai.web.MotorDepotControllerServlet</servlet-class>
+    <servlet-name>Controller</servlet-name>
+    <servlet-class>by.talai.web.MotorDepotController</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>ControllerServlet</servlet-name>
+    <servlet-name>Controller</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>Controller</servlet-name>
+    <url-pattern>/admin</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Controller</servlet-name>
+    <url-pattern>/dispatcher</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Controller</servlet-name>
+    <url-pattern>/driver</url-pattern>
+  </servlet-mapping>
+
   <filter>
+<display-name>Charset Filter</display-name>
     <filter-name>Charset Filter</filter-name>
-    <filter-class>CharsetFilter</filter-class>
+    <filter-class>by.talai.web.CharsetFilter</filter-class>
     <init-param>
-      <param-name>requestEncoding</param-name>
+      <param-name>charsetEncoding</param-name>
       <param-value>UTF-8</param-value>
     </init-param>
   </filter>
 
   <filter-mapping>
     <filter-name>Charset Filter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/</url-pattern>
   </filter-mapping>
 
   <error-page>
     <exception-automobileType>java.lang.Exception</exception-automobileType>
-    <location>/jsp/error.jsp</location>
+    <location>/WEB-INF/jsp/error.jsp</location>
   </error-page>
+
+
+<jsp-config>
+  <taglib>
+  <taglib-uri>customTag</taglib-uri>
+  <taglib-location>/WEB-INF/customTagLib.tld</taglib-location>
+</taglib>
+</jsp-config>
+
+
 
 </web-app>

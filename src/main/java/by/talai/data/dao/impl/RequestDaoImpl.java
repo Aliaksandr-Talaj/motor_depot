@@ -52,7 +52,6 @@ public class RequestDaoImpl implements RequestDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createRequest() method");
@@ -79,6 +78,7 @@ public class RequestDaoImpl implements RequestDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 request.setId(id);
+                resultSet.next();
                 request.setFillingDate(resultSet.getDate("filling_date"));
 
                 int chartererId = resultSet.getInt("charterer_id");
@@ -97,7 +97,6 @@ public class RequestDaoImpl implements RequestDao {
                 List<Delivery> deliveryList = deliveryDao.getAllDeliveriesOfRequest(request);
                 request.setDeliveryList(deliveryList);
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getRequest() method");
@@ -149,7 +148,6 @@ public class RequestDaoImpl implements RequestDao {
                     requestList.add(request);
 
                 }
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllRequests() method");
@@ -195,7 +193,6 @@ public class RequestDaoImpl implements RequestDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateRequest() method");
@@ -223,7 +220,6 @@ public class RequestDaoImpl implements RequestDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteRequest() method");

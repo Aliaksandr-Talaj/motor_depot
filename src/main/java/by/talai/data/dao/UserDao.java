@@ -1,5 +1,6 @@
 package by.talai.data.dao;
 
+import by.talai.data.exception.DaoException;
 import by.talai.model.personnel.User;
 
 import java.util.List;
@@ -12,10 +13,10 @@ public interface UserDao {
     // get user by id
     User getUser(int id) throws Exception;
 
-    // get all users
+    // get all users.jsp
     List<User> getAllUsers() throws Exception;
 
-    // get all users with role
+    // get all users.jsp with role
     List<User> getAllUsersWithRole(int roleId) throws Exception;
 
     //update user
@@ -24,4 +25,9 @@ public interface UserDao {
     // delete user
     void deleteUser(int id) throws Exception;
 
+    List<User> getAllUsersOnPage(int pageNum, int pageSize) throws Exception;
+
+    int countAllUsers() throws DaoException;
+
+    int countAllUsersWithRole(int roleId) throws DaoException;
 }

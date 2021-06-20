@@ -47,7 +47,6 @@ public class CargoDaoImpl implements CargoDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createCargo() method");
@@ -74,6 +73,7 @@ public class CargoDaoImpl implements CargoDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 cargo.setId(id);
+                resultSet.next();
                 cargo.setName(resultSet.getString("name"));
 
                 int unitId = resultSet.getInt("unit_id");
@@ -87,7 +87,6 @@ public class CargoDaoImpl implements CargoDao {
 
                 cargo.setQuantity(resultSet.getDouble("quantity"));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getCargo() method");
@@ -132,7 +131,6 @@ public class CargoDaoImpl implements CargoDao {
                     cargos.add(cargo);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllCargos() method");
@@ -169,7 +167,6 @@ public class CargoDaoImpl implements CargoDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateCargo() method");
@@ -197,7 +194,6 @@ public class CargoDaoImpl implements CargoDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteCargo() method");
@@ -243,7 +239,6 @@ public class CargoDaoImpl implements CargoDao {
                     cargos.add(cargo);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllCargosOfRide() method");
@@ -289,7 +284,6 @@ public class CargoDaoImpl implements CargoDao {
                     cargos.add(cargo);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAllCargosOfDelivery() method");
@@ -337,7 +331,6 @@ public class CargoDaoImpl implements CargoDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in addOrUpdateCargo() method");

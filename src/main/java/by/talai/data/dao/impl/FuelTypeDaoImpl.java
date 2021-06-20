@@ -39,7 +39,6 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createFuelType() method");
@@ -66,9 +65,9 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 fuelType.setId(id);
+                resultSet.next();
                 fuelType.setType(resultSet.getString("type"));
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findFuelType() method");
@@ -103,7 +102,6 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
                     fuelTypes.add(fuelType);
                 }
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement, resultSet);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findAllFuelTypes() method");
@@ -135,7 +133,6 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in updateFuelType() method");
@@ -163,7 +160,6 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-                connectionPool.returnConnectionToPool(connection, preparedStatement);
 
             } catch (SQLException e) {
                 logger.error("Sql exception in deleteFuelType() method");
