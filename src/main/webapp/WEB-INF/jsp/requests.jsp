@@ -5,7 +5,7 @@
 <jsp:include page="header.jsp"/>
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.users" var="page_name"/>
+<fmt:message bundle="${loc}" key="local.requests.mp" var="page_name"/>
 <!--<fmt:message bundle="${loc}" key="local.request.number" var="r_number"/>
 <fmt:message bundle="${loc}" key="local.request.filling.date" var="r_filling_date"/>
 <fmt:message bundle="${loc}" key="local.request.charterer" var="r_charterer"/>

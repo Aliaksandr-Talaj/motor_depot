@@ -261,6 +261,7 @@
             CREATE TABLE IF NOT EXISTS `motor_depot`.`charterer` (
             `id` INT(11) NOT NULL AUTO_INCREMENT,
             `name` VARCHAR(125) NULL DEFAULT NULL,
+            `surname` VARCHAR(125) NULL DEFAULT NULL,
             `own_address_id` INT(11) NOT NULL,
             PRIMARY KEY (`id`),
             UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
@@ -638,5 +639,20 @@
             '1545', '3145', '2030', '1');
         </sql>
     </changeSet>
-
+    <changeSet id="33" author="root">
+        <sql>
+            INSERT INTO `motor_depot`.`loading_type` (`id`, `loading_type`) VALUES ('1', 'Верхняя загрузка');
+            INSERT INTO `motor_depot`.`loading_type` (`id`, `loading_type`) VALUES ('2', 'Задняя загрузка');
+            INSERT INTO `motor_depot`.`loading_type` (`id`, `loading_type`) VALUES ('3', 'Бортовая загрузка');
+        </sql>
+    </changeSet>
+    <changeSet id="34" author="root">
+        <sql>
+            INSERT INTO `motor_depot`.`execution_status` (`id`, `name`) VALUES ('1', 'Ожидает обработки');
+            INSERT INTO `motor_depot`.`execution_status` (`id`, `name`) VALUES ('2', 'В процессе выполнения');
+            INSERT INTO `motor_depot`.`execution_status` (`id`, `name`) VALUES ('3', 'Выполнено');
+            INSERT INTO `motor_depot`.`execution_status` (`id`, `name`) VALUES ('4', 'Отменено');
+            INSERT INTO `motor_depot`.`execution_status` (`id`, `name`) VALUES ('5', 'Просрочено');
+        </sql>
+    </changeSet>
 </databaseChangeLog>

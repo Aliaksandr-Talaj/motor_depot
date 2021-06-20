@@ -20,13 +20,15 @@ public class AddressDaoImpl implements AddressDao {
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     static final String CREATE_ADDRESS_SQL = "INSERT INTO motor_depot.address" +
-            " (id, country, region, locality, street, building, apartment)" +
-            " VALUES (?, ?, ?, ?, ?, ?, ?);";
+            " (id, country, region, locality, street, building, apartment) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    static final String CREATE_ADDRESS_SQL_NO_ID = "INSERT INTO motor_depot.address" +
+            " (country, region, locality, street, building, apartment) VALUES (?, ?, ?, ?, ?, ?);";
     static final String GET_ADDRESS_SQL = "SELECT * FROM motor_depot.address WHERE id = ?;";
     static final String GET_ALL_ADDRESSES = "SELECT * FROM motor_depot.address; ";
     static final String UPDATE_ADDRESS = "UPDATE motor_depot.address " +
             "SET country = ?, region = ?, locality = ?, street = ?, building = ?, apartment = ? WHERE (id = ?);";
     static final String DELETE_ADDRESS = "DELETE FROM motor_depot.address WHERE (id = ?);";
+    static final String GET_LAST_INSERT_ID = "SELECT last_insert_id();";
 
     static final Logger logger = LoggerFactory.getLogger(AddressDaoImpl.class);
 
@@ -34,23 +36,45 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     @Override
-    public void createAddress(Address address) throws Exception {
-
+    public int createAddress(Address address) throws Exception {
+        int id = address.getId();
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(CREATE_ADDRESS_SQL);
+            PreparedStatement preparedStatement;
+            if (id == 0) {
+                preparedStatement = connection.prepareStatement(CREATE_ADDRESS_SQL_NO_ID);
 
-            preparedStatement.setInt(1, address.getId());
-            preparedStatement.setString(2, address.getCountry());
-            preparedStatement.setString(3, address.getRegion());
-            preparedStatement.setString(4, address.getLocality());
-            preparedStatement.setString(5, address.getStreet());
-            preparedStatement.setString(6, address.getBuilding());
-            preparedStatement.setString(7, address.getApartment());
+                preparedStatement.setString(1, address.getCountry());
+                preparedStatement.setString(2, address.getRegion());
+                preparedStatement.setString(3, address.getLocality());
+                preparedStatement.setString(4, address.getStreet());
+                preparedStatement.setString(5, address.getBuilding());
+                preparedStatement.setString(6, address.getApartment());
+            } else {
+                preparedStatement = connection.prepareStatement(CREATE_ADDRESS_SQL);
+
+                preparedStatement.setString(2, address.getCountry());
+                preparedStatement.setString(3, address.getRegion());
+                preparedStatement.setString(4, address.getLocality());
+                preparedStatement.setString(5, address.getStreet());
+                preparedStatement.setString(6, address.getBuilding());
+                preparedStatement.setString(7, address.getApartment());
+            }
 
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();
                 connection.commit();
+
+                if (id == 0) {
+                    try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID);
+                         ResultSet resultSet = preparedStatementForId.executeQuery()) {
+                        resultSet.next();
+                        id = resultSet.getInt(1);
+                    } catch (SQLException e) {
+                        logger.error("Sql exception in createAddress() method");
+                        throw new DaoException("exception in createAddress() method", e);
+                    }
+                }
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createAddress() method");
@@ -63,6 +87,7 @@ public class AddressDaoImpl implements AddressDao {
             logger.error("Exception in createAddress() method");
             throw new DaoException("exception in createAddress() method", e);
         }
+        return id;
     }
 
     @Override
@@ -198,6 +223,51 @@ public class AddressDaoImpl implements AddressDao {
             logger.error("Exception in deleteAddress() method");
             throw new DaoException("exception in deleteAddress() method", e);
         }
+    }
+
+    @Override
+    public int createAddress(String country, String region, String locality, String street,
+                             String building, String apartment) throws DaoException {
+        int id;
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement;
+
+            preparedStatement = connection.prepareStatement(CREATE_ADDRESS_SQL_NO_ID);
+
+            preparedStatement.setString(1, country);
+            preparedStatement.setString(2, region);
+            preparedStatement.setString(3, locality);
+            preparedStatement.setString(4, street);
+            preparedStatement.setString(5, building);
+            preparedStatement.setString(6, apartment);
+
+
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
+
+                try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID);
+                     ResultSet resultSet = preparedStatementForId.executeQuery()) {
+                    resultSet.next();
+                    id = resultSet.getInt(1);
+                } catch (SQLException e) {
+                    logger.error("Sql exception in createAddress() method");
+                    throw new DaoException("exception in createAddress() method", e);
+                }
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in createAddress() method");
+                throw new DaoException("exception in createAddress() method", e);
+            }
+        } catch (ConnectionPoolException e) {
+            logger.error("Connection pool exception in createAddress() method");
+            throw new DaoException("exception in createAddress() method", e);
+        } catch (Exception e) {
+            logger.error("Exception in createAddress() method");
+            throw new DaoException("exception in createAddress() method", e);
+        }
+        return id;
     }
 
 

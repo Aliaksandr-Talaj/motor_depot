@@ -1,10 +1,14 @@
 package by.talai.web;
 
-import by.talai.model.personnel.User;
-import by.talai.service.*;
+import by.talai.data.exception.DaoException;
+import by.talai.service.AutomobileService;
+import by.talai.service.ChartererService;
+import by.talai.service.UserService;
 import by.talai.service.dto.AutomobilesDto;
 import by.talai.service.dto.UsersDto;
-import by.talai.service.impl.*;
+import by.talai.service.impl.AutomobileServiceImpl;
+import by.talai.service.impl.ChartererServiceImpl;
+import by.talai.service.impl.UserServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,6 +22,7 @@ public class MotorDepotController extends HttpServlet {
     private final AutomobileService automobileService = new AutomobileServiceImpl();
     //    private final RideService rideService = new RideServiceImpl();
     private final UserService userService = new UserServiceImpl();
+    private final ChartererService chartererService = new ChartererServiceImpl();
 //    private final RoleService roleService = new RoleServiceImpl();
 
 //    private final RequestService requestService = new RequestServiceImpl();
@@ -75,6 +80,9 @@ public class MotorDepotController extends HttpServlet {
                     case "/user/dispatcher/charterer-form":
                         goChartererForm(request, response);
                         break;
+                    case "/user/dispatcher/add-charterer":
+                        addCharterer(request, response);
+                        break;
                     case "/user/dispatcher/charterers":
                         goCharterers(request, response);
                         break;
@@ -107,6 +115,20 @@ public class MotorDepotController extends HttpServlet {
             }
         }
 
+    }
+
+    private void addCharterer(HttpServletRequest request, HttpServletResponse response) throws IOException, DaoException {
+        String name = request.getParameter("name");
+        String surname = request.getParameter("surname");
+        String country = request.getParameter("country");
+        String region = request.getParameter("region");
+        String locality = request.getParameter("locality");
+        String street = request.getParameter("street");
+        String building = request.getParameter("building");
+        String apartment = request.getParameter("apartment");
+        chartererService.addCharterer(name, surname, country, region, locality, street,
+                building, apartment);
+        response.sendRedirect("/motor_depot/user/dispatcher/charterers");
     }
 
     private void goAddUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -172,22 +194,27 @@ public class MotorDepotController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void goCharterers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void goCharterers(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/charterers.jsp");
         dispatcher.forward(request, response);
     }
 
-    private void goChartererForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void goChartererForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/charterer-form.jsp");
         dispatcher.forward(request, response);
     }
 
-    private void goAutomobileForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void goAutomobileForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/auto-form.jsp");
         dispatcher.forward(request, response);
     }
 
-    private void goListAutomobiles(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void goListAutomobiles(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
 
 
         AutomobilesDto automobilesDto = automobileService.getAllAutomobilesDto();

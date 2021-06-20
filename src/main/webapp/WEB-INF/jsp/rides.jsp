@@ -5,7 +5,7 @@
 <jsp:include page="header.jsp"/>
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.users" var="page_name"/>
+<fmt:message bundle="${loc}" key="local.rides.mp" var="page_name"/>
 
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">

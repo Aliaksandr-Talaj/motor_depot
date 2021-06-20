@@ -1,5 +1,6 @@
 package by.talai.data.dao;
 
+import by.talai.data.exception.DaoException;
 import by.talai.model.Address;
 import by.talai.model.Charterer;
 
@@ -33,4 +34,8 @@ public interface ChartererDao {
     // delete the usage of the address
     void deleteUsageOfAddress(int addressId, int chartererId) throws Exception;
 
+    int createCharterer(String name, String surname, Address address) throws DaoException;
+
+    int createCharterer(String name, String surname, String country, String region,
+                        String locality,String street, String building, String apartment) throws DaoException;
 }

@@ -113,19 +113,25 @@
 
                         <c:if test="${sessionScope.role eq 'dispatcher'}">
 
-                            <li><a class="dropdown-item" href="#"><c:out value="${autos_mp}"/></a></li>
+                            <li><a class="dropdown-item" href="/motor_depot/user/dispatcher/autos"><c:out
+                                    value="${autos_mp}"/></a></li>
 
-                            <li><a class="dropdown-item" href="#"><c:out value="${drivers_mp}"/></a></li>
+                            <li><a class="dropdown-item" href="/motor_depot/user/dispatcher/drivers"><c:out
+                                    value="${drivers_mp}"/></a></li>
 
-                            <li><a class="dropdown-item" href="#"><c:out value="${charterers_mp}"/></a></li>
+                            <li><a class="dropdown-item" href="/motor_depot/user/dispatcher/charterers"><c:out
+                                    value="${charterers_mp}"/></a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#"><c:out value="${add_request}"/></a></li>
+                            <li><a class="dropdown-item" href="/motor_depot/user/dispatcher/request-form"><c:out
+                                    value="${add_request}"/></a></li>
 
-                            <li><a class="dropdown-item" href="#"><c:out value="${add_auto}"/></a></li>
+                            <li><a class="dropdown-item" href="/motor_depot/user/dispatcher/auto-form"><c:out
+                                    value="${add_auto}"/></a></li>
 
-                            <li><a class="dropdown-item" href="#"><c:out value="${add_charterer}"/></a></li>
+                            <li><a class="dropdown-item" href="/motor_depot/user/dispatcher/charterer-form"><c:out
+                                    value="${add_charterer}"/></a></li>
                         </c:if>
 
                     </ul>
