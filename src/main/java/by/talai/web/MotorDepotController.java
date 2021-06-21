@@ -37,9 +37,7 @@ public class MotorDepotController extends HttpServlet {
         if (request.getParameter("local") != null) {
             request.getSession(true).setAttribute("local", request.getParameter("local"));
         }
-//        test user role
-        request.getSession(true).setAttribute("role", "dispatcher");
-//
+
         String role = (String) request.getSession(true).getAttribute("role");
 
         String action = request.getServletPath();
