@@ -15,7 +15,11 @@
 </nav>
 
 <!--FORM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
+
 <form action="/motor_depot/admin/add_user" method="post">
+  <jsp:useBean id="requestBean" class="by.talai.model.Request" type="by.talai.model.Request" scope="session"/>
+
   <div class="container">
     <br class="row g-3 needs-validation" novalidate>
     <div class="col-md-2">

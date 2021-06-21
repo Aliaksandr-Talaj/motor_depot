@@ -52,32 +52,32 @@
             <label for="validationCustom02" class="form-label">${OWN_ADDRESS}</label>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="validationCustom02" class="form-label">${COUNTRY}</label>
             <input type="text" name="country" class="form-control"
                    PLACEHOLDER="${ENTER_COUNTRY}" required>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="validationCustom02" class="form-label">${REGION}</label>
             <input type="text" name="region" class="form-control"
                    PLACEHOLDER="${ENTER_REGION}" required>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="validationCustom02" class="form-label">${LOCALITY}</label>
             <input type="text" name="locality" class="form-control"
                     PLACEHOLDER="${ENTER_LOCALITY}" required>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="validationCustom02" class="form-label">${STREET}</label>
             <input type="text" name="street" class="form-control"
                     PLACEHOLDER="${ENTER_STREET}" required>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="validationCustom02" class="form-label">${BUILDING}</label>
             <input type="text" name="building" class="form-control"
                    PLACEHOLDER="${ENTER_BUILDING_NUMBER}" required>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="validationCustom02" class="form-label">${APARTMENT}</label>
             <input type="text" name="apartment" class="form-control"
                    PLACEHOLDER="${ENTER_APARTMENT}" required>

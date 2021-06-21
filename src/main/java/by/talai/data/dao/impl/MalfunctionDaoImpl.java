@@ -70,14 +70,16 @@ public class MalfunctionDaoImpl implements MalfunctionDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 malfunction.setId(id);
-                resultSet.next();
-                malfunction.setProblem(resultSet.getString("problem"));
 
-                malfunction.setDetectionTime(resultSet.getDate("detection_time"));
-                malfunction.setFixTime(resultSet.getDate("fix_time"));
+                if (resultSet.next()) {
+                    malfunction.setProblem(resultSet.getString("problem"));
 
-                String automobileId = resultSet.getString("automobile_id");
-                malfunction.setAutomobile(automobileDao.getAutomobile(automobileId));
+                    malfunction.setDetectionTime(resultSet.getDate("detection_time"));
+                    malfunction.setFixTime(resultSet.getDate("fix_time"));
+
+                    String automobileId = resultSet.getString("automobile_id");
+                    malfunction.setAutomobile(automobileDao.getAutomobile(automobileId));
+                }
 
 
             } catch (SQLException e) {

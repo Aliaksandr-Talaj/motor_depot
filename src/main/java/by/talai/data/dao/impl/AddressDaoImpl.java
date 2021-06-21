@@ -68,8 +68,9 @@ public class AddressDaoImpl implements AddressDao {
                 if (id == 0) {
                     try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID);
                          ResultSet resultSet = preparedStatementForId.executeQuery()) {
-                        resultSet.next();
-                        id = resultSet.getInt(1);
+                        if (resultSet.next()) {
+                            id = resultSet.getInt(1);
+                        }
                     } catch (SQLException e) {
                         logger.error("Sql exception in createAddress() method");
                         throw new DaoException("exception in createAddress() method", e);
@@ -103,14 +104,14 @@ public class AddressDaoImpl implements AddressDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 address.setId(id);
-                resultSet.next();
-                address.setCountry((resultSet.getString("country")));
-                address.setRegion(resultSet.getString("region"));
-                address.setLocality(resultSet.getString("locality"));
-                address.setStreet(resultSet.getString("street"));
-                address.setBuilding(resultSet.getString("building"));
-                address.setApartment(resultSet.getString("apartment"));
-
+                if (resultSet.next()) {
+                    address.setCountry((resultSet.getString("country")));
+                    address.setRegion(resultSet.getString("region"));
+                    address.setLocality(resultSet.getString("locality"));
+                    address.setStreet(resultSet.getString("street"));
+                    address.setBuilding(resultSet.getString("building"));
+                    address.setApartment(resultSet.getString("apartment"));
+                }
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAddress() method");
@@ -228,7 +229,7 @@ public class AddressDaoImpl implements AddressDao {
     @Override
     public int createAddress(String country, String region, String locality, String street,
                              String building, String apartment) throws DaoException {
-        int id;
+        int id=0;
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement;
@@ -249,8 +250,9 @@ public class AddressDaoImpl implements AddressDao {
 
                 try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID);
                      ResultSet resultSet = preparedStatementForId.executeQuery()) {
-                    resultSet.next();
-                    id = resultSet.getInt(1);
+                    if (resultSet.next()) {
+                        id = resultSet.getInt(1);
+                    }
                 } catch (SQLException e) {
                     logger.error("Sql exception in createAddress() method");
                     throw new DaoException("exception in createAddress() method", e);

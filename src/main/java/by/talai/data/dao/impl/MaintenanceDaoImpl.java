@@ -70,14 +70,16 @@ public class MaintenanceDaoImpl implements MaintenanceDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 maintenance.setId(id);
-                resultSet.next();
-                maintenance.setType(resultSet.getString("type"));
 
-                maintenance.setStartTime(resultSet.getDate("start_time"));
-                maintenance.setFinishTime(resultSet.getDate("finish_time"));
+                if (resultSet.next()) {
+                    maintenance.setType(resultSet.getString("type"));
 
-                String automobileId = resultSet.getString("automobile_id");
-                maintenance.setAutomobile(automobileDao.getAutomobile(automobileId));
+                    maintenance.setStartTime(resultSet.getDate("start_time"));
+                    maintenance.setFinishTime(resultSet.getDate("finish_time"));
+
+                    String automobileId = resultSet.getString("automobile_id");
+                    maintenance.setAutomobile(automobileDao.getAutomobile(automobileId));
+                }
 
 
             } catch (SQLException e) {

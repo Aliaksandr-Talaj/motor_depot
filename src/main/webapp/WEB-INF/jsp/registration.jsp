@@ -57,8 +57,8 @@
         <label for="validationCustomUsername" class="form-label"></label>
         <div class="input-group has-validation">
             <span class="input-group-text" id="inputPasswd">${PASSWORD}</span>
-            <input type="text" name="password" class="form-control" id="validationCustomPassword" aria-describedby="inputGroupPrepend"
-                   required>
+            <label for="validationCustomPassword"></label><input type="text" name="password" class="form-control" id="validationCustomPassword" aria-describedby="inputGroupPrepend"
+                                                                 required>
 
         </div>
     </div>

@@ -140,36 +140,36 @@ public class AutomobileDaoImpl implements AutomobileDao {
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                resultSet.next();
-                automobile.setId(id);
-                automobile.setBrand(resultSet.getString("brand"));
-                automobile.setModel(resultSet.getString("model"));
+                if (resultSet.next()) {
+                    automobile.setId(id);
+                    automobile.setBrand(resultSet.getString("brand"));
+                    automobile.setModel(resultSet.getString("model"));
 
-                int fuelTypeId = resultSet.getInt("fuel_type_id");
-                automobile.setFuelType(fuelTypeDao.findFuelType(fuelTypeId));
+                    int fuelTypeId = resultSet.getInt("fuel_type_id");
+                    automobile.setFuelType(fuelTypeDao.findFuelType(fuelTypeId));
 
-                automobile.setCarrying(resultSet.getInt("carrying"));
+                    automobile.setCarrying(resultSet.getInt("carrying"));
 
-                int typeId = resultSet.getInt("type_id");
-                automobile.setType(automobileTypeDao.findAutomobileType(typeId));
+                    int typeId = resultSet.getInt("type_id");
+                    automobile.setType(automobileTypeDao.findAutomobileType(typeId));
 
-                automobile.setPlatformLength(resultSet.getInt("platform_length"));
-                automobile.setPlatformWidth(resultSet.getInt("platform_width"));
-                automobile.setCargoHeightLimit(resultSet.getDouble("cargo_height_limit"));
-                automobile.setCargoVolumeLimit(resultSet.getDouble("cargo_volume_limit"));
+                    automobile.setPlatformLength(resultSet.getInt("platform_length"));
+                    automobile.setPlatformWidth(resultSet.getInt("platform_width"));
+                    automobile.setCargoHeightLimit(resultSet.getDouble("cargo_height_limit"));
+                    automobile.setCargoVolumeLimit(resultSet.getDouble("cargo_volume_limit"));
 
-                Set<Equipment> equipmentSet = getAllEquipmentOnAutomobile(id);
-                automobile.setEquipmentSet(equipmentSet);
+                    Set<Equipment> equipmentSet = getAllEquipmentOnAutomobile(id);
+                    automobile.setEquipmentSet(equipmentSet);
 
-                List<Maintenance> maintenanceList = getMaintenanceOfAutomobile(automobile);
-                automobile.setMaintenanceList(maintenanceList);
+                    List<Maintenance> maintenanceList = getMaintenanceOfAutomobile(automobile);
+                    automobile.setMaintenanceList(maintenanceList);
 
-                List<Malfunction> malfunctions = getMalfunctionsOfAutomobile(automobile);
-                automobile.setMalfunctions(malfunctions);
+                    List<Malfunction> malfunctions = getMalfunctionsOfAutomobile(automobile);
+                    automobile.setMalfunctions(malfunctions);
 
-                int technicalStatusId = resultSet.getInt("technical_status_id");
-                automobile.setTechnicalStatus(technicalStatusDao.findStatus(technicalStatusId));
-
+                    int technicalStatusId = resultSet.getInt("technical_status_id");
+                    automobile.setTechnicalStatus(technicalStatusDao.findStatus(technicalStatusId));
+                }
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getAutomobile() method");

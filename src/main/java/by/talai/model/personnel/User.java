@@ -42,8 +42,11 @@ public class User implements Serializable {
         return login;
     }
 
-    public String getPassword() {
-        return password;
+    public boolean validateUser(String password) {
+        if("".equals(password)|| password == null){
+            return false;
+        }
+        return password.equals(this.password);
     }
 
     public void setId(int id) {

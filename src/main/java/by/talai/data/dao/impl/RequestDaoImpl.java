@@ -78,24 +78,26 @@ public class RequestDaoImpl implements RequestDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 request.setId(id);
-                resultSet.next();
-                request.setFillingDate(resultSet.getDate("filling_date"));
 
-                int chartererId = resultSet.getInt("charterer_id");
-                request.setCharterer(chartererDao.getCharterer(chartererId));
+                if (resultSet.next()) {
+                    request.setFillingDate(resultSet.getDate("filling_date"));
 
-                int automobileTypeId = resultSet.getInt("required_automobile_type_id");
-                request.setRequiredAutomobileType(automobileTypeDao.findAutomobileType(automobileTypeId));
+                    int chartererId = resultSet.getInt("charterer_id");
+                    request.setCharterer(chartererDao.getCharterer(chartererId));
 
-                int loadingTypeId = resultSet.getInt("required_loading_type_id");
-                request.setRequiredLoadingType(loadingTypeDao.getLoadingType(loadingTypeId));
+                    int automobileTypeId = resultSet.getInt("required_automobile_type_id");
+                    request.setRequiredAutomobileType(automobileTypeDao.findAutomobileType(automobileTypeId));
 
-                int statusId = resultSet.getInt("status_id");
-                request.setExecutionStatus(statusDao.findStatus(statusId));
+                    int loadingTypeId = resultSet.getInt("required_loading_type_id");
+                    request.setRequiredLoadingType(loadingTypeDao.getLoadingType(loadingTypeId));
+
+                    int statusId = resultSet.getInt("status_id");
+                    request.setExecutionStatus(statusDao.findStatus(statusId));
 
 
-                List<Delivery> deliveryList = deliveryDao.getAllDeliveriesOfRequest(request);
-                request.setDeliveryList(deliveryList);
+                    List<Delivery> deliveryList = deliveryDao.getAllDeliveriesOfRequest(request);
+                    request.setDeliveryList(deliveryList);
+                }
 
 
             } catch (SQLException e) {

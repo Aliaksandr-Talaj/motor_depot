@@ -1,10 +1,8 @@
 package by.talai.web;
 
 import by.talai.data.exception.DaoException;
-import by.talai.model.Cargo;
-import by.talai.model.Charterer;
-import by.talai.model.Delivery;
-import by.talai.model.Ride;
+import by.talai.model.*;
+import by.talai.model.personnel.User;
 import by.talai.service.*;
 import by.talai.service.dto.AutomobilesDto;
 import by.talai.service.dto.UsersDto;
@@ -17,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,20 +31,25 @@ public class MotorDepotController extends HttpServlet {
     public MotorDepotController() throws Exception {
     }
 
-
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("local") != null) {
             request.getSession(true).setAttribute("local", request.getParameter("local"));
         }
-
-
+//        test user role
         request.getSession(true).setAttribute("role", "dispatcher");
+//
 
+
+        String role = (String) request.getSession(true).getAttribute("role");
 
         String action = request.getServletPath();
+
+
         if (action != null) {
             try {
+
+                //all can do
                 switch (action) {
                     case "/login":
                         login(request, response);
@@ -53,72 +57,100 @@ public class MotorDepotController extends HttpServlet {
                     case "/logout":
                         logout(request, response);
                         break;
-                    case "/admin/registration":
-                        goRegisterUser(request, response);
+                    case "/auth":
+                        goAuthorise(request, response);
                         break;
-                    case "/admin/users":
-                        goListUsers(request, response);
-                        break;
-                    case "/admin/add_user":
-                        goAddUser(request, response);
-                        break;
-                    case "/admin/users/c_status":
-                        changeUserStatus(request, response);
-                        break;
-                    case "/user/requests":
-                        goListRequests(request, response);
-                        break;
-                    case "/user/request":
-                        goGetRequest(request, response);
-                        break;
-                    case "/user/rides":
-                        goListRides(request, response);
-                        break;
-                    case "/user/cargo":
-                        goGetCargo(request, response);
-                        break;
-                    case "/user/dispatcher/autos":
-                        goListAutomobiles(request, response);
-                        break;
-                    case "/user/dispatcher/auto-form":
-                        goAutomobileForm(request, response);
-                        break;
-                    case "/user/dispatcher/charterer-form":
-                        goChartererForm(request, response);
-                        break;
-                    case "/user/dispatcher/add-charterer":
-                        addCharterer(request, response);
-                        break;
-                    case "/user/dispatcher/charterers":
-                        goCharterers(request, response);
-                        break;
-                    case "/user/dispatcher/charterer":
-                        goGetCharterer(request, response);
-                        break;
-                    case "/user/delivery":
-                        goGetDelivery(request, response);
-                        break;
-                    case "/user/dispatcher/driver-form":
-                        goDriverForm(request, response);
-                        break;
-                    case "/user/dispatcher/drivers":
-                        goListDrivers(request, response);
-                        break;
-                    case "/user/dispatcher/request-form":
-                        goRequestForm(request, response);
-                        break;
-                    case "/user/dispatcher/maintenances":
-                        goListMaintenances(request, response);
-                        break;
-                    case "/user/driver/auto":
-                        goAutomobile(request, response);
-                        break;
-                    case "/user/driver/repair-request":
-                        goRequestRepair(request, response);
-                        break;
-                    default:
-                        goHome(request, response);
-                        break;
+                }
+
+
+                //admin can do
+                if ("admin".equals(role)) {
+                    switch (action) {
+                        case "/admin/registration":
+                            goRegisterUser(request, response);
+                            break;
+                        case "/admin/users":
+                            goListUsers(request, response);
+                            break;
+                        case "/admin/add_user":
+                            goAddUser(request, response);
+                            break;
+                        case "/admin/users/c_status":
+                            changeUserStatus(request, response);
+                            break;
+                    }
+                }
+
+
+                //users can do (not admin)
+                if ("dispatcher".equals(role) || "driver".equals(role)) {
+                    switch (action) {
+                        case "/user/requests":
+                            goListRequests(request, response);
+                            break;
+                        case "/user/request":
+                            goGetRequest(request, response);
+                            break;
+                        case "/user/rides":
+                            goListRides(request, response);
+                            break;
+                        case "/user/cargo":
+                            goGetCargo(request, response);
+                            break;
+                        case "/user/delivery":
+                            goGetDelivery(request, response);
+                            break;
+                    }
+                }
+
+
+                //dispatcher can do
+                if ("dispatcher".equals(role)) {
+                    switch (action) {
+                        case "/user/dispatcher/autos":
+                            goListAutomobiles(request, response);
+                            break;
+                        case "/user/dispatcher/auto-form":
+                            goAutomobileForm(request, response);
+                            break;
+                        case "/user/dispatcher/charterer-form":
+                            goChartererForm(request, response);
+                            break;
+                        case "/user/dispatcher/add-charterer":
+                            addCharterer(request, response);
+                            break;
+                        case "/user/dispatcher/charterers":
+                            goCharterers(request, response);
+                            break;
+                        case "/user/dispatcher/charterer":
+                            goGetCharterer(request, response);
+                            break;
+                        case "/user/dispatcher/driver-form":
+                            goDriverForm(request, response);
+                            break;
+                        case "/user/dispatcher/drivers":
+                            goListDrivers(request, response);
+                            break;
+                        case "/user/dispatcher/request-form":
+                            goRequestForm(request, response);
+                            break;
+                        case "/user/dispatcher/maintenances":
+                            goListMaintenances(request, response);
+                            break;
+                    }
+                }
+
+
+                //driver can do
+                if ("driver".equals(role)) {
+                    switch (action) {
+                        case "/user/driver/auto":
+                            goAutomobile(request, response);
+                            break;
+                        case "/user/driver/repair-request":
+                            goRequestRepair(request, response);
+                            break;
+                    }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -127,7 +159,29 @@ public class MotorDepotController extends HttpServlet {
 
             }
         }
+        goHome(request, response);
+    }
 
+    private void goAuthorise(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String login = request.getParameter("username");
+        String password = request.getParameter("password");
+        boolean isValid = userService.validate(login, password);
+
+        RequestDispatcher dispatcher;
+        if (isValid) {
+            User user = userService.findUser(login);
+            Role role = user.getRole();
+            System.out.println(role);
+            System.out.println(role.getName());
+            HttpSession session = request.getSession(true);
+            session.setAttribute("role", role.getName());
+            session.setAttribute("usrId", user.getId());
+            dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/index.jsp");
+        } else {
+            dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
+        }
+
+        dispatcher.forward(request, response);
     }
 
     private void goGetCargo(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -214,7 +268,7 @@ public class MotorDepotController extends HttpServlet {
 
         RideService rideService = new RideServiceImpl();
         List<Ride> rides = rideService.getRides();
-                request.setAttribute("rides", rides);
+        request.setAttribute("rides", rides);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/rides.jsp");
         dispatcher.forward(request, response);
@@ -305,7 +359,7 @@ public class MotorDepotController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException {
+            throws ServletException, IOException {
         doGet(request, response);
     }
 

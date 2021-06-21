@@ -18,7 +18,6 @@ import java.util.Set;
 public class ExecutionStatusDaoImpl implements StatusDao {
 
 
-
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     public static final Logger logger = LoggerFactory.getLogger(ExecutionStatusDaoImpl.class);
@@ -68,9 +67,9 @@ public class ExecutionStatusDaoImpl implements StatusDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 executionStatus.setId(id);
-                resultSet.next();
-                executionStatus.setStatus(resultSet.getString("name"));
-
+                if (resultSet.next()) {
+                    executionStatus.setStatus(resultSet.getString("name"));
+                }
 
             } catch (SQLException e) {
                 logger.error("Sql exception in findExecutionStatus() method");

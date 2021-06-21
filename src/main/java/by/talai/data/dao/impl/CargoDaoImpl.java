@@ -84,21 +84,23 @@ public class CargoDaoImpl implements CargoDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 cargo.setId(id);
-                resultSet.next();
-                cargo.setName(resultSet.getString("name"));
 
-                int unitId = resultSet.getInt("unit_id");
-                cargo.setUnit(unitDao.getUnit(unitId));
+                if (resultSet.next()) {
+                    cargo.setName(resultSet.getString("name"));
 
-                int deliveryId = resultSet.getInt("delivery_id");
-                DeliveryDao deliveryDao = new DeliveryDaoImpl();
-                cargo.setDelivery(deliveryDao.getDelivery(deliveryId));
+                    int unitId = resultSet.getInt("unit_id");
+                    cargo.setUnit(unitDao.getUnit(unitId));
 
-                int rideId = resultSet.getInt("ride_id");
-                RideDao rideDao = new RideDaoImpl();
-                cargo.setRide(rideDao.getRide(rideId));
+                    int deliveryId = resultSet.getInt("delivery_id");
+                    DeliveryDao deliveryDao = new DeliveryDaoImpl();
+                    cargo.setDelivery(deliveryDao.getDelivery(deliveryId));
 
-                cargo.setQuantity(resultSet.getDouble("quantity"));
+                    int rideId = resultSet.getInt("ride_id");
+                    RideDao rideDao = new RideDaoImpl();
+                    cargo.setRide(rideDao.getRide(rideId));
+
+                    cargo.setQuantity(resultSet.getDouble("quantity"));
+                }
 
 
             } catch (SQLException e) {

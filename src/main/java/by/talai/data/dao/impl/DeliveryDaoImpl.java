@@ -45,7 +45,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
     public DeliveryDaoImpl() throws Exception {
     }
-    
+
     @Override
     public void createDelivery(Delivery delivery) throws Exception {
         try {
@@ -96,27 +96,27 @@ public class DeliveryDaoImpl implements DeliveryDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 delivery.setId(deliveryId);
-                resultSet.next();
+                if (resultSet.next()) {
 
-                int loadingPlaceId = resultSet.getInt("loading_place_id");
-                delivery.setLoadingPlace(addressDao.getAddress(loadingPlaceId));
+                    int loadingPlaceId = resultSet.getInt("loading_place_id");
+                    delivery.setLoadingPlace(addressDao.getAddress(loadingPlaceId));
 
-                delivery.setLoadingDate(resultSet.getDate("loading_date"));
+                    delivery.setLoadingDate(resultSet.getDate("loading_date"));
 
-                int destinationId = resultSet.getInt("destination_id");
-                delivery.setDestination(addressDao.getAddress(destinationId));
+                    int destinationId = resultSet.getInt("destination_id");
+                    delivery.setDestination(addressDao.getAddress(destinationId));
 
-                delivery.setTerm(resultSet.getDate("term"));
+                    delivery.setTerm(resultSet.getDate("term"));
 
-                int requestId = resultSet.getInt("request_id");
-                RequestDao requestDao = new RequestDaoImpl();
-                delivery.setRequest(requestDao.getRequest(requestId));
+                    int requestId = resultSet.getInt("request_id");
+                    RequestDao requestDao = new RequestDaoImpl();
+                    delivery.setRequest(requestDao.getRequest(requestId));
 
-                int executionStatusId = resultSet.getInt("status_id");
-                delivery.setExecutionStatus(statusDao.findStatus(executionStatusId));
+                    int executionStatusId = resultSet.getInt("status_id");
+                    delivery.setExecutionStatus(statusDao.findStatus(executionStatusId));
 
-                delivery.setCargoList(cargoDao.getAllCargosOfDelivery(deliveryId));
-
+                    delivery.setCargoList(cargoDao.getAllCargosOfDelivery(deliveryId));
+                }
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getDelivery() method");

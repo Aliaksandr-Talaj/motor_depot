@@ -26,21 +26,25 @@
 </br>
 </br>
 <center>
-    <form method="POST" action="j_security_check">
+    <form method="POST" action="/motor_depot/auth">
         <table border="0">
             <tr>
                 <td><c:out value="${login_sub}"/></td>
-                <td><input type="text" placeholder="<c:out value="${login_ph}"/>" name="j_username"></td>
+                <td><label>
+                    <input type="text" placeholder="<c:out value="${login_ph}"/>" name="username">
+                </label></td>
             </tr>
             <tr>
                 <td><c:out value="${password_sub}"/></td>
-                <td><input type="password" placeholder="<c:out value="${password_ph}"/>" name="j_password"></td>
+                <td><label>
+                    <input type="password" placeholder="<c:out value="${password_ph}"/>" name="password">
+                </label></td>
             </tr>
         </table>
         <div class="row">
             <div class="row">
                 <div class="col">
-                    <button type="button" class="btn btn-success"><c:out value="${login_btn}"/></button>
+                    <button type="submit" class="btn btn-success"><c:out value="${login_btn}"/></button>
                 </div>
             </div>
         </div>

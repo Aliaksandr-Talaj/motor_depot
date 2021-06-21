@@ -82,32 +82,34 @@ public class RideDaoImpl implements RideDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 ride.setId(rideId);
-                resultSet.next();
-                ride.setDate(resultSet.getDate("date"));
 
-                int requestId = resultSet.getInt("request_id");
-                ride.setRequest(requestDao.getRequest(requestId));
+                if (resultSet.next()) {
+                    ride.setDate(resultSet.getDate("date"));
 
-                int dispatcherId = resultSet.getInt("dispatcher_id");
-                ride.setDispatcher(userDao.getUser(dispatcherId));
+                    int requestId = resultSet.getInt("request_id");
+                    ride.setRequest(requestDao.getRequest(requestId));
 
-                String automobileId = resultSet.getString("automobile_id");
-                ride.setAutomobile(automobileDao.getAutomobile(automobileId));
+                    int dispatcherId = resultSet.getInt("dispatcher_id");
+                    ride.setDispatcher(userDao.getUser(dispatcherId));
 
-                int loadingPlaceId = resultSet.getInt("loading_place_id");
-                ride.setLoadingPlace(addressDao.getAddress(loadingPlaceId));
+                    String automobileId = resultSet.getString("automobile_id");
+                    ride.setAutomobile(automobileDao.getAutomobile(automobileId));
 
-                ride.setLoadingDate(resultSet.getDate("loading_date"));
+                    int loadingPlaceId = resultSet.getInt("loading_place_id");
+                    ride.setLoadingPlace(addressDao.getAddress(loadingPlaceId));
 
-                int destinationId = resultSet.getInt("destination_id");
-                ride.setDestination(addressDao.getAddress(destinationId));
+                    ride.setLoadingDate(resultSet.getDate("loading_date"));
 
-                ride.setTerm(resultSet.getDate("term"));
+                    int destinationId = resultSet.getInt("destination_id");
+                    ride.setDestination(addressDao.getAddress(destinationId));
 
-                int executionStatusId = resultSet.getInt("status_id");
-                ride.setExecutionStatus(statusDao.findStatus(executionStatusId));
+                    ride.setTerm(resultSet.getDate("term"));
 
-                ride.setCargoList(cargoDao.getAllCargosOfRide(rideId));
+                    int executionStatusId = resultSet.getInt("status_id");
+                    ride.setExecutionStatus(statusDao.findStatus(executionStatusId));
+
+                    ride.setCargoList(cargoDao.getAllCargosOfRide(rideId));
+                }
 
 
             } catch (SQLException e) {

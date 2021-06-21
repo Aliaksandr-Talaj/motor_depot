@@ -39,24 +39,24 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
 
     @Override
     public int createAttachment(AutomobileAttachment automobileAttachment) throws Exception {
-        int id;
+        int id=0;
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement(CREATE_ATTACHMENT_SQL);
 
-            preparedStatement.setString(2, automobileAttachment.getAutomobile().getId());
-            preparedStatement.setInt(3, automobileAttachment.getDriver().getId());
-            preparedStatement.setDate(4, automobileAttachment.getDateOfAttachment());
-            preparedStatement.setDate(5, automobileAttachment.getDateOfDetachment());
+            preparedStatement.setString(1, automobileAttachment.getAutomobile().getId());
+            preparedStatement.setInt(2, automobileAttachment.getDriver().getId());
+            preparedStatement.setDate(3, automobileAttachment.getDateOfAttachment());
+            preparedStatement.setDate(4, automobileAttachment.getDateOfDetachment());
 
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();
                 connection.commit();
                 try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID);
                      ResultSet resultSet = preparedStatementForId.executeQuery()) {
-                    resultSet.next();
-                    id = resultSet.getInt(1);
+                    if(resultSet.next()){
+                    id = resultSet.getInt(1);}
                 } catch (SQLException e) {
                     logger.error("Sql exception in createAttachment() method");
                     throw new DaoException("exception in createAttachment() method", e);

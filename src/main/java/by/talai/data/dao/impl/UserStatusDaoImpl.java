@@ -64,8 +64,10 @@ public class UserStatusDaoImpl implements StatusDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 technicalStatus.setId(id);
-                resultSet.next();
-                technicalStatus.setStatus(resultSet.getString("status"));
+
+                if (resultSet.next()) {
+                    technicalStatus.setStatus(resultSet.getString("status"));
+                }
 
 
             } catch (SQLException e) {

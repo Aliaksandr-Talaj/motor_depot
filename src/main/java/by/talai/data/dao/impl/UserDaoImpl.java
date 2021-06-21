@@ -27,10 +27,11 @@ public class UserDaoImpl implements UserDao {
     static final String CREATE_USER_SQL = "INSERT INTO motor_depot.user " +
             "(id, name, surname, login, password, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?);";
     static final String GET_USER_SQL = "SELECT * FROM motor_depot.user WHERE id = ?;";
+    static final String GET_USER_BY_LOGIN_SQL = "SELECT * FROM motor_depot.user WHERE login = ?;";
     static final String GET_ALL_USERS_SQL = "SELECT * FROM motor_depot.user ORDER BY id; ";
     static final String GET_ALL_USERS_WITH_ROLE_SQL = "SELECT * FROM motor_depot.user WHERE role_id = ? ORDER BY id; ";
     static final String UPDATE_USER_SQL = "UPDATE motor_depot.user " +
-            "SET name = ?, surname = ?, login = ?, password = ?, role_id = ?, status_id = ? WHERE (id = ?);";
+            "SET name = ?, surname = ?, login = ?, role_id = ?, status_id = ? WHERE (id = ?);";
     static final String DELETE_USER_SQL = "DELETE FROM motor_depot.user WHERE (id = ?);";
     static final String COUNT_ALL_USERS_SQL = "SELECT COUNT(id) FROM motor_depot.user;";
     static final String COUNT_ALL_USERS_WITH_ROLE_SQL = "SELECT COUNT(id) FROM motor_depot.user WHERE role_id = ?;";
@@ -41,7 +42,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void createUser(User user) throws Exception {
+    public void createUser(User user, String password) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
@@ -51,7 +52,7 @@ public class UserDaoImpl implements UserDao {
 
             preparedStatement.setString(3, user.getSurname());
             preparedStatement.setString(4, user.getLogin());
-            preparedStatement.setString(5, user.getPassword());
+            preparedStatement.setString(5, password);
             preparedStatement.setInt(6, user.getRole().getId());
             preparedStatement.setInt(7, user.getStatus().getId());
 
@@ -84,16 +85,19 @@ public class UserDaoImpl implements UserDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 user.setId(id);
-                resultSet.next();
-                user.setName(resultSet.getString("name"));
-                user.setSurname(resultSet.getString("surname"));
-                user.setLogin(resultSet.getString("login"));
-                user.setPassword(resultSet.getString("password"));
 
-                int roleId = resultSet.getInt("role_id");
-                user.setRole(roleDao.getRole(roleId));
-                int statusId = resultSet.getInt("status_id");
-                user.setStatus(statusDao.findStatus(statusId));
+                if (resultSet.next()) {
+                    user.setName(resultSet.getString("name"));
+                    user.setSurname(resultSet.getString("surname"));
+                    user.setLogin(resultSet.getString("login"));
+
+//                user.setPassword(resultSet.getString("password"));
+
+                    int roleId = resultSet.getInt("role_id");
+                    user.setRole(roleDao.getRole(roleId));
+                    int statusId = resultSet.getInt("status_id");
+                    user.setStatus(statusDao.findStatus(statusId));
+                }
 
 
             } catch (SQLException e) {
@@ -206,11 +210,11 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getSurname());
             preparedStatement.setString(3, user.getLogin());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setInt(5, user.getRole().getId());
-            preparedStatement.setInt(6, user.getStatus().getId());
 
-            preparedStatement.setInt(7, user.getId());
+            preparedStatement.setInt(4, user.getRole().getId());
+            preparedStatement.setInt(5, user.getStatus().getId());
+
+            preparedStatement.setInt(6, user.getId());
 
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();
@@ -317,7 +321,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int countAllUsers() throws DaoException {
-        int result;
+        int result = 0;
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
@@ -325,8 +329,10 @@ public class UserDaoImpl implements UserDao {
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                resultSet.next();
-                result = resultSet.getInt(1);
+
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1);
+                }
 
             } catch (SQLException e) {
                 logger.error("Sql exception in countAllUsers() method");
@@ -344,7 +350,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int countAllUsersWithRole(int roleId) throws DaoException {
-        int result;
+        int result=0;
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ALL_USERS_WITH_ROLE_SQL);
@@ -352,8 +358,10 @@ public class UserDaoImpl implements UserDao {
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                resultSet.next();
-                result = resultSet.getInt(1);
+
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1);
+                }
 
             } catch (SQLException e) {
                 logger.error("Sql exception in countAllUsersWithRole() method");
@@ -400,6 +408,47 @@ public class UserDaoImpl implements UserDao {
             logger.error("Exception in createUser() method");
             throw new DaoException("exception in createUser() method", e);
         }
+    }
+
+    @Override
+    public User getUser(String login) throws Exception {
+        User user = new User();
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(GET_USER_BY_LOGIN_SQL);
+            preparedStatement.setString(1, login);
+
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                user.setLogin(login);
+
+                if (resultSet.next()) {
+                    user.setName(resultSet.getString("name"));
+                    user.setSurname(resultSet.getString("surname"));
+                    user.setId(resultSet.getInt("id"));
+
+                    user.setPassword(resultSet.getString("password"));
+
+                    int roleId = resultSet.getInt("role_id");
+                    user.setRole(roleDao.getRole(roleId));
+                    int statusId = resultSet.getInt("status_id");
+                    user.setStatus(statusDao.findStatus(statusId));
+                }
+
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in getUser() method");
+                throw new DaoException("exception in getUser() method", e);
+            }
+        } catch (ConnectionPoolException e) {
+            logger.error("Connection pool exception in getUser() method");
+            throw new DaoException("exception in getUser() method", e);
+        } catch (Exception e) {
+            logger.error("Exception in getUser() method");
+            throw new DaoException("exception in getUser() method", e);
+        }
+        return user;
     }
 
 

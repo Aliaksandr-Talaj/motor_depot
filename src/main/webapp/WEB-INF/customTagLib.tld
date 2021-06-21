@@ -6,16 +6,13 @@
 
     <tlib-version>1.0</tlib-version>
     <jsp-version>2.0</jsp-version>
-    <short-name>nameSurname</short-name>
-    <uri>http://nameSurname.by</uri>
+    <short-name>rptr</short-name>
+    <uri>https://role-printer</uri>
 
 
     <tag>
-        <name>customTag</name>
+        <name>printRole</name>
         <tag-class>by.talai.web.CustomTag</tag-class>
-        <attribute>
-            <name>user</name>
-        </attribute>
     </tag>
 
 

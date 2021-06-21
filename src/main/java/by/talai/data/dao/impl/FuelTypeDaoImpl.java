@@ -65,8 +65,10 @@ public class FuelTypeDaoImpl implements FuelTypeDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 fuelType.setId(id);
-                resultSet.next();
-                fuelType.setType(resultSet.getString("type"));
+
+                if (resultSet.next()) {
+                    fuelType.setType(resultSet.getString("type"));
+                }
 
 
             } catch (SQLException e) {

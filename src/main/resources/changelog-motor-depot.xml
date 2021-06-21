@@ -153,6 +153,8 @@
             ON UPDATE NO ACTION)
             ENGINE = InnoDB
             DEFAULT CHARACTER SET = utf8;
+            ALTER TABLE `motor_depot`.`user`
+            ADD UNIQUE INDEX `login_UNIQUE` (`login` ASC);
         </sql>
     </changeSet>
 

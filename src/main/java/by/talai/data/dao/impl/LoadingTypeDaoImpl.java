@@ -65,8 +65,10 @@ public class LoadingTypeDaoImpl implements LoadingTypeDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 loadingType.setId(loadingTypeId);
-                resultSet.next();
-                loadingType.setType(resultSet.getString("loading_type"));
+
+                if (resultSet.next()) {
+                    loadingType.setType(resultSet.getString("loading_type"));
+                }
 
 
             } catch (SQLException e) {

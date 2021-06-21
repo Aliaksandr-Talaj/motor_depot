@@ -70,12 +70,14 @@ public class UnitDaoImpl implements UnitDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 unit.setId(id);
-                resultSet.next();
-                unit.setType(resultSet.getString("type"));
-                unit.setLength(resultSet.getInt("length"));
-                unit.setWidth(resultSet.getInt("width"));
-                unit.setHeight(resultSet.getDouble("height"));
-                unit.setWeight(resultSet.getDouble("weight"));
+
+                if (resultSet.next()) {
+                    unit.setType(resultSet.getString("type"));
+                    unit.setLength(resultSet.getInt("length"));
+                    unit.setWidth(resultSet.getInt("width"));
+                    unit.setHeight(resultSet.getDouble("height"));
+                    unit.setWeight(resultSet.getDouble("weight"));
+                }
 
 
             } catch (SQLException e) {

@@ -66,8 +66,10 @@ public class RoleDaoImpl implements RoleDao {
 
                 role.setId(id);
 
-                resultSet.next();
-                role.setName(resultSet.getString("name"));
+
+                if (resultSet.next()) {
+                    role.setName(resultSet.getString("name"));
+                }
 
 
             } catch (SQLException e) {

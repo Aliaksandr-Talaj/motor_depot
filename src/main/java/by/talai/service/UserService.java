@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface UserService {
 
-    void addUser(User user) throws Exception;
+    void addUser(User user, String password) throws Exception;
 
     User findUser(int userId) throws Exception;
+
+    User findUser(String login) throws Exception;
 
     List<User> findAllUsers() throws Exception;
 
@@ -21,4 +23,6 @@ public interface UserService {
     UsersDto getAllUsersDto() throws Exception;
 
     void addUser(String name, String surname, String login, String password, int roleId, int statusId) throws ServiceException;
+
+    boolean validate(String login, String password) throws Exception;
 }

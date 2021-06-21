@@ -69,9 +69,11 @@ public class EquipmentDaoImpl implements EquipmentDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 equipment.setId(id);
-                resultSet.next();
-                equipment.setName(resultSet.getString("name"));
-                equipment.setDescription(resultSet.getString("description"));
+
+                if (resultSet.next()) {
+                    equipment.setName(resultSet.getString("name"));
+                    equipment.setDescription(resultSet.getString("description"));
+                }
 
 
             } catch (SQLException e) {

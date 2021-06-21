@@ -73,8 +73,9 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 automobileType.setId(id);
-                resultSet.next();
-                automobileType.setType(resultSet.getString("type"));
+                if (resultSet.next()) {
+                    automobileType.setType(resultSet.getString("type"));
+                }
 
 
             } catch (SQLException e) {

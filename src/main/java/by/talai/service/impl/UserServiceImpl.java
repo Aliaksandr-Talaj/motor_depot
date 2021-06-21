@@ -27,9 +27,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(User user) throws Exception {
+    public void addUser(User user, String password) throws Exception {
         try {
-            userDao.createUser(user);
+            userDao.createUser(user, password);
         } catch (Exception e) {
             logger.error("Sql exception in addUser() method");
             throw new ServiceException("Sql exception in addUser() method", e);
@@ -57,6 +57,19 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    @Override
+    public User findUser(String login) throws Exception {
+        User user;
+        try {
+            user = userDao.getUser(login);
+        } catch (Exception e) {
+            logger.error("Sql exception in findUser() method");
+            throw new ServiceException("Sql exception in findUser() method", e);
+        }
+        return user;
+    }
+
 
     @Override
     public List<User> findAllUsers() throws Exception {
@@ -105,4 +118,10 @@ public class UserServiceImpl implements UserService {
         return usersDto;
     }
 
+    @Override
+    public boolean validate(String login, String password) throws Exception {
+        User user = userDao.getUser(login);
+        return user.validateUser(password);
+
+    }
 }
