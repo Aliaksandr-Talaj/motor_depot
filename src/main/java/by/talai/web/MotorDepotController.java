@@ -1,18 +1,14 @@
 package by.talai.web;
 
 import by.talai.data.exception.DaoException;
+import by.talai.model.Cargo;
 import by.talai.model.Charterer;
 import by.talai.model.Delivery;
-import by.talai.service.AutomobileService;
-import by.talai.service.ChartererService;
-import by.talai.service.DeliveryService;
-import by.talai.service.UserService;
+import by.talai.model.Ride;
+import by.talai.service.*;
 import by.talai.service.dto.AutomobilesDto;
 import by.talai.service.dto.UsersDto;
-import by.talai.service.impl.AutomobileServiceImpl;
-import by.talai.service.impl.ChartererServiceImpl;
-import by.talai.service.impl.DeliveryServiceImpl;
-import by.talai.service.impl.UserServiceImpl;
+import by.talai.service.impl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public class MotorDepotController extends HttpServlet {
 
@@ -71,8 +68,14 @@ public class MotorDepotController extends HttpServlet {
                     case "/user/requests":
                         goListRequests(request, response);
                         break;
+                    case "/user/request":
+                        goGetRequest(request, response);
+                        break;
                     case "/user/rides":
                         goListRides(request, response);
+                        break;
+                    case "/user/cargo":
+                        goGetCargo(request, response);
                         break;
                     case "/user/dispatcher/autos":
                         goListAutomobiles(request, response);
@@ -125,6 +128,22 @@ public class MotorDepotController extends HttpServlet {
             }
         }
 
+    }
+
+    private void goGetCargo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        CargoService cargoService = new CargoServiceImpl();
+        Cargo cargo = cargoService.getCargo(id);
+
+        request.setAttribute("cargo", cargo);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/delivery.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void goGetRequest(HttpServletRequest request, HttpServletResponse response) {
+        //TODO
     }
 
     private void goGetDelivery(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -191,7 +210,12 @@ public class MotorDepotController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void goListRides(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void goListRides(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        RideService rideService = new RideServiceImpl();
+        List<Ride> rides = rideService.getRides();
+                request.setAttribute("rides", rides);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/rides.jsp");
         dispatcher.forward(request, response);
     }
@@ -257,7 +281,9 @@ public class MotorDepotController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void goListRequests(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void goListRequests(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        RequestService requestService = new RequestServiceImpl();
+        request.setAttribute("requests", requestService.getAllRequests());
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/requests.jsp");
         dispatcher.forward(request, response);
     }

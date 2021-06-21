@@ -140,6 +140,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
+                resultSet.next();
                 automobile.setId(id);
                 automobile.setBrand(resultSet.getString("brand"));
                 automobile.setModel(resultSet.getString("model"));
@@ -166,7 +167,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 List<Malfunction> malfunctions = getMalfunctionsOfAutomobile(automobile);
                 automobile.setMalfunctions(malfunctions);
 
-                int technicalStatusId = resultSet.getInt("technical_status");
+                int technicalStatusId = resultSet.getInt("technical_status_id");
                 automobile.setTechnicalStatus(technicalStatusDao.findStatus(technicalStatusId));
 
 

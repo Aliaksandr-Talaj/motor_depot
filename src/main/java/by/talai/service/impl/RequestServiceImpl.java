@@ -48,4 +48,15 @@ public class RequestServiceImpl implements RequestService {
         }
     }
 
+    @Override
+    public Request getRequest(int id) throws Exception {
+        return requestDao.getRequest(id);
+    }
+
+    @Override
+    public List<Request> getAllRequests() throws Exception {
+        return requestDao.getAllRequests();
+    }
+
+
 }

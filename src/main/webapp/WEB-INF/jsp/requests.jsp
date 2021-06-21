@@ -13,7 +13,7 @@
 <fmt:message bundle="${loc}" key="local.request.required.loading.type" var="r_req_loading_type"/>
 <fmt:message bundle="${loc}" key="local.request.status" var="r_status"/>
 <fmt:message bundle="${loc}" key="local.request.deliveries" var="r_deliveries"/>
-<fmt:message bundle="${loc}" key="local.delivery.number" var="DELIVERY_NUMBER"/>
+<fmt:message bundle="${loc}" key="local.delivery" var="DELIVERY"/>
 
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">
@@ -37,20 +37,20 @@
     <tbody>
     <c:forEach items="${requests}" var="req">
         <tr>
-        <td>${req.id}</td>
-        <td>${req.fillingDate}</td>
-        <td>
-            <a href="motor-depot//user/dispatcher/charterer?id=${req.charterer.id}">${req.charterer.name} ${req.charterer.surname}</a>
-        </td>
-        <td>${req.requiredAutomobileType.type}</td>
-        <td>${req.requiredLoadingType.type}</td>
-        <td><c:forEach items="${req.deliveryList}" var="delivery">
-        <tr>
-            <c:out value="${DELIVERY_NUMBER}"/><a href="motor-depot/user/delivery">${'#'+ delivery.id}</a>
-        </tr>
-    </c:forEach>
-        </td>
-        <td>${req.executionStatus}</td>
+            <td>${req.id}</td>
+            <td>${req.fillingDate}</td>
+            <td>
+                <a href="motor-depot/user/dispatcher/charterer?id=${req.charterer.id}">${req.charterer.name} ${req.charterer.surname}</a>
+            </td>
+            <td>${req.requiredAutomobileType.type}</td>
+            <td>${req.requiredLoadingType.type}</td>
+            <td><c:forEach items="${req.deliveryList}" var="delivery">
+
+                <c:out value="${DELIVERY}"/><a href="motor-depot/user/delivery"> #${delivery.id}</a><br/>
+
+            </c:forEach>
+            </td>
+            <td>${req.executionStatus.status}</td>
         </tr>
     </c:forEach>
     </tbody>

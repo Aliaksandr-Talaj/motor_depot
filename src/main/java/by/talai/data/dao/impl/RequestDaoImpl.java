@@ -125,8 +125,7 @@ public class RequestDaoImpl implements RequestDao {
 
                 while (resultSet.next()) {
                     Request request = new Request();
-
-                    String id = resultSet.getString("id");
+                    request.setId(resultSet.getInt("id"));
                     request.setFillingDate(resultSet.getDate("filling_date"));
 
                     int chartererId = resultSet.getInt("charterer_id");
