@@ -17,7 +17,9 @@ import java.util.Set;
 
 public class ExecutionStatusDaoImpl implements StatusDao {
 
-    ConnectionPool connectionPool = ConnectionPool.getInstance();
+
+
+    private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     public static final Logger logger = LoggerFactory.getLogger(ExecutionStatusDaoImpl.class);
 
@@ -31,7 +33,7 @@ public class ExecutionStatusDaoImpl implements StatusDao {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement("INSERT INTO " +
-                            "motor_depot.execution_status (id, status)" +
+                            "motor_depot.execution_status (id, name)" +
                             " VALUES (?, ?);");
             preparedStatement.setInt(1, executionStatus.getId());
             preparedStatement.setString(2, executionStatus.getStatus());
@@ -67,7 +69,7 @@ public class ExecutionStatusDaoImpl implements StatusDao {
 
                 executionStatus.setId(id);
                 resultSet.next();
-                executionStatus.setStatus(resultSet.getString("status"));
+                executionStatus.setStatus(resultSet.getString("name"));
 
 
             } catch (SQLException e) {
@@ -98,7 +100,7 @@ public class ExecutionStatusDaoImpl implements StatusDao {
                     Status executionStatus = new Status();
 
                     executionStatus.setId(resultSet.getInt("id"));
-                    executionStatus.setStatus(resultSet.getString("status"));
+                    executionStatus.setStatus(resultSet.getString("name"));
 
                     executionStatusSet.add(executionStatus);
                 }
@@ -124,7 +126,7 @@ public class ExecutionStatusDaoImpl implements StatusDao {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement("UPDATE motor_depot.execution_status " +
-                            "SET status = ? WHERE (id = ?);");
+                            "SET name = ? WHERE (id = ?);");
 
 
             preparedStatement.setString(1, executionStatus.getStatus());

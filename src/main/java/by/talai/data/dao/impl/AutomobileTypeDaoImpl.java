@@ -17,6 +17,14 @@ import java.util.Set;
 
 public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
 
+    static final String CREATE_AUTOMOBILE_TYPE_SQL =
+            "INSERT INTO motor_depot.automobile_type (id, type) VALUES (?, ?);";
+    static final String FIND_AUTOMOBILE_TYPE_SQL = "SELECT * FROM motor_depot.automobile_type WHERE id=?;";
+    static final String FIND_ALL_AUTOMOBILE_TYPES_SQL = "SELECT * FROM motor_depot.automobile_type; ";
+    static final String UPDATE_AUTOMOBILE_TYPE_SQL =
+            "UPDATE motor_depot.automobile_type SET type = ? WHERE (id = ?);";
+    static final String DELETE_AUTOMOBILE_TYPE_SQL = "DELETE FROM motor_depot.automobile_type WHERE (id = ?);";
+
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     public static final Logger logger = LoggerFactory.getLogger(AutomobileTypeDaoImpl.class);
@@ -59,7 +67,7 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.automobile_type WHERE id=?;");
+                    .prepareStatement(FIND_AUTOMOBILE_TYPE_SQL);
             preparedStatement.setInt(1, id);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -89,7 +97,7 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.automobile_type; ");
+                    .prepareStatement(FIND_ALL_AUTOMOBILE_TYPES_SQL);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -122,8 +130,7 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE motor_depot.automobile_type " +
-                            "SET type = ? WHERE (id = ?);");
+                    .prepareStatement(UPDATE_AUTOMOBILE_TYPE_SQL);
 
             preparedStatement.setString(1, automobileType.getType());
             preparedStatement.setInt(2, automobileType.getId());
@@ -151,7 +158,7 @@ public class AutomobileTypeDaoImpl implements AutomobileTypeDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM motor_depot.automobile_type WHERE (id = ?);");
+                    .prepareStatement(DELETE_AUTOMOBILE_TYPE_SQL);
 
             preparedStatement.setInt(1, id);
 

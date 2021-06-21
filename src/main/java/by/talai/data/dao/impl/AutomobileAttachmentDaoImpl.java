@@ -20,10 +20,17 @@ import java.util.List;
 
 public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
 
-    private final ConnectionPool connectionPool = ConnectionPool.getInstance();
+    static final String CREATE_ATTACHMENT_SQL = "INSERT INTO motor_depot.automobile_attachment " +
+            "(automobile_id, driver_id, date_of_attachment, date_of_detachment) VALUES (?, ?, ?, ?);";
+    static final String FIND_ALL_AUTOMOBILE_ATTACHMENTS_SQL = "SELECT * FROM motor_depot.automobile_attachment; ";
+    static final String UPDATE_AUTOMOBILE_ATTACHMENT_SQL =
+            "UPDATE motor_depot.automobile_attachment SET automobile_id = ?, driver_id = ?," +
+                    " date_of_attachment = ?, date_of_detachment = ? WHERE (id = ?);";
+    static final String DELETE_AUTOMOBILE_ATTACHMENT_SQL =
+            "DELETE FROM motor_depot.automobile_attachment WHERE (id = ?);";
+    static final String GET_LAST_INSERT_ID = "SELECT last_insert_id();";
 
-    private final AutomobileDao automobileDao = new AutomobileDaoImpl();
-    private final UserDao userDao = new UserDaoImpl();
+    private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     public static final Logger logger = LoggerFactory.getLogger(AutomobileAttachmentDaoImpl.class);
 
@@ -31,14 +38,13 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
     }
 
     @Override
-    public void createAttachment(AutomobileAttachment automobileAttachment) throws Exception {
+    public int createAttachment(AutomobileAttachment automobileAttachment) throws Exception {
+        int id;
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO motor_depot.automobile_attachment " +
-                            "(id, automobile_id, driver_id, date_of_attachment, date_of_detachment) " +
-                            "VALUES (?, ?, ?, ?);");
-            preparedStatement.setInt(1, automobileAttachment.getId());
+                    .prepareStatement(CREATE_ATTACHMENT_SQL);
+
             preparedStatement.setString(2, automobileAttachment.getAutomobile().getId());
             preparedStatement.setInt(3, automobileAttachment.getDriver().getId());
             preparedStatement.setDate(4, automobileAttachment.getDateOfAttachment());
@@ -47,7 +53,14 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();
                 connection.commit();
-
+                try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID);
+                     ResultSet resultSet = preparedStatementForId.executeQuery()) {
+                    resultSet.next();
+                    id = resultSet.getInt(1);
+                } catch (SQLException e) {
+                    logger.error("Sql exception in createAttachment() method");
+                    throw new DaoException("exception in createAttachment() method", e);
+                }
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createAttachment() method");
@@ -60,6 +73,7 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
             logger.error("Exception in createAttachment() method");
             throw new DaoException("exception in createAttachment() method", e);
         }
+        return id;
     }
 
     @Override
@@ -68,7 +82,7 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.automobile_attachment; ");
+                    .prepareStatement(FIND_ALL_AUTOMOBILE_ATTACHMENTS_SQL);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -78,9 +92,11 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
                     automobileAttachment.setId(resultSet.getInt("id"));
 
                     String automobileId = resultSet.getString("automobile_id");
+                    AutomobileDao automobileDao = new AutomobileDaoImpl();
                     automobileAttachment.setAutomobile(automobileDao.getAutomobile(automobileId));
 
                     int driverId = resultSet.getInt("driver_id");
+                    UserDao userDao = new UserDaoImpl();
                     Driver driver = (Driver) userDao.getUser(driverId);
                     driver.setAutomobileAttachments(automobileAttachments);
                     automobileAttachment.setDriver(driver);
@@ -112,10 +128,7 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE motor_depot.automobile_attachment " +
-                            "SET automobile_id = ?, driver_id = ?, " +
-                            "date_of_attachment = ?, date_of_detachment = ? " +
-                            "WHERE (id = ?);");
+                    .prepareStatement(UPDATE_AUTOMOBILE_ATTACHMENT_SQL);
 
             preparedStatement.setString(1, automobileAttachment.getAutomobile().getId());
             preparedStatement.setInt(2, automobileAttachment.getDriver().getId());
@@ -147,7 +160,7 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM motor_depot.automobile_attachment WHERE (id = ?);");
+                    .prepareStatement(DELETE_AUTOMOBILE_ATTACHMENT_SQL);
 
             preparedStatement.setInt(1, id);
 

@@ -4,6 +4,7 @@ import by.talai.data.dao.ChartererDao;
 import by.talai.data.dao.impl.ChartererDaoImpl;
 import by.talai.data.exception.ConnectionPoolException;
 import by.talai.data.exception.DaoException;
+import by.talai.model.Charterer;
 import by.talai.service.ChartererService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,5 +24,10 @@ public class ChartererServiceImpl implements ChartererService {
                              String locality, String street, String building, String apartment) throws DaoException {
         chartererDao.createCharterer(name, surname, country, region,
                 locality, street, building, apartment);
+    }
+
+    @Override
+    public Charterer getCharterer(int id) throws Exception {
+        return chartererDao.getCharterer(id);
     }
 }

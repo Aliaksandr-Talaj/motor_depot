@@ -51,38 +51,38 @@
         </tr>
       </thead>
       <tbody>
-<%--      <c:forEach items="${autosDto.automobiles}" var="auto">--%>
-<%--        <tr>--%>
-<%--          <td>${auto.id}</td>--%>
-<%--          <td>${auto.brand}</td>--%>
-<%--          <td>${auto.model}</td>--%>
-<%--          <td>${auto.fuelType}</td>--%>
-<%--          <td>${auto.carrying}</td>--%>
-<%--          <td>${auto.automobileType}</td>--%>
-<%--          <td>${auto.equipmentSet}</td>--%>
-<%--          <td>${auto.loadingTypes}</td>--%>
-<%--          <td>${auto.platformLength}</td>--%>
-<%--          <td>${auto.platformWidth}</td>--%>
-<%--          <td>${auto.cargoHeightLimit}</td>--%>
-<%--          <td>${auto.cargoVolumeLimit}</td>--%>
-<%--          <td>${auto.technicalStatus}</td>--%>
-<%--          <td>${auto --%>
+      <c:forEach items="${autosDto.automobiles}" var="auto">
+        <tr>
+          <td>${auto.id}</td>
+          <td>${auto.brand}</td>
+          <td>${auto.model}</td>
+          <td>${auto.fuelType}</td>
+          <td>${auto.carrying}</td>
+          <td>${auto.automobileType}</td>
+          <td>${auto.equipmentSet}</td>
+          <td>${auto.loadingTypes}</td>
+          <td>${auto.platformLength}</td>
+          <td>${auto.platformWidth}</td>
+          <td>${auto.cargoHeightLimit}</td>
+          <td>${auto.cargoVolumeLimit}</td>
+          <td>${auto.technicalStatus}</td>
 
 
 
 
-<%--          <td>--%>
-<%--            <c:choose>--%>
-<%--                <c:when test="${user.status.status eq 'active'}">--%>
-<%--                    <a class="btn btn-primary"  href="/motor_depot/admin/users/c_status?id=<c:out value='${user.id}'/>&statusId=2" role="button"><c:out value="${u_block}"/></a>--%>
-<%--                </c:when>--%>
-<%--                <c:otherwise>--%>
-<%--                    <a class="btn btn-secondary"  href="/motor_depot/admin/users/c_status?id=<c:out value='${user.id}'/>&statusId=1" role="button"><c:out value="${u_unblock}"/></a>--%>
-<%--                </c:otherwise>--%>
-<%--            </c:choose>--%>
-<%--          </td>--%>
-<%--        </tr>--%>
-<%--      </c:forEach> --%>
+
+          <td>
+            <c:choose>
+                <c:when test="${user.status.status eq 'active'}">
+                    <a class="btn btn-primary"  href="/motor_depot/admin/users/c_status?id=<c:out value='${user.id}'/>&statusId=2" role="button"><c:out value="${u_block}"/></a>
+                </c:when>
+                <c:otherwise>
+                    <a class="btn btn-secondary"  href="/motor_depot/admin/users/c_status?id=<c:out value='${user.id}'/>&statusId=1" role="button"><c:out value="${u_unblock}"/></a>
+                </c:otherwise>
+            </c:choose>
+          </td>
+        </tr>
+      </c:forEach>
       </tbody>
     </table>
 

@@ -16,12 +16,25 @@ import java.util.List;
 
 public class CargoDaoImpl implements CargoDao {
 
+    static final String CREATE_CARGO_SQL =
+            "INSERT INTO motor_depot.cargo (id, name, unit_id, delivery_id, ride_id, quantity)" +
+                    " VALUES (?, ?, ?, ?, ?, ?);";
+    static final String GET_CARGO_SQL = "SELECT * FROM motor_depot.cargo WHERE id = ?;";
+    static final String GET_ALL_CARGOS_SQL = "SELECT * FROM motor_depot.cargo; ";
+    static final String UPDATE_CARGO_SQL = "UPDATE motor_depot.cargo " +
+            "SET name = ?, unit_id = ?, delivery_id = ?, ride_id = ?, quantity = ? WHERE (id = ?);";
+    static final String DELETE_CARGO_SQL = "DELETE FROM motor_depot.cargo WHERE (id = ?);";
+    static final String GET_ALL_CARGOS_OF_RIDE_SQL = "SELECT * FROM motor_depot.cargo WHERE ride_id = ?; ";
+    static final String GET_ALL_CARGOS_OF_DELIVERY_SQL = "SELECT * FROM motor_depot.cargo WHERE delivery_id = ?; ";
+    static final String ADD_OR_UPDATE_CARGO_SQL =
+            "INSERT INTO  motor_depot.cargo (id, name, unit_id, delivery_id, ride_id, quantity" +
+                    " VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE " +
+                    " name = ?, unit_id = ?, delivery_id = ?, ride_id = ?, quantity = ?;";
+
+
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     private final UnitDao unitDao = new UnitDaoImpl();
-    private final DeliveryDao deliveryDao = new DeliveryDaoImpl();
-    private final RideDao rideDao = new RideDaoImpl();
-
 
     public static final Logger logger = LoggerFactory.getLogger(CargoDaoImpl.class);
 
@@ -33,9 +46,7 @@ public class CargoDaoImpl implements CargoDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO " +
-                            "motor_depot.cargo (id, name, unit_id, delivery_id, ride_id, quantity)" +
-                            " VALUES (?, ?, ?, ?, ?, ?);");
+                    .prepareStatement(CREATE_CARGO_SQL);
             preparedStatement.setInt(1, cargo.getId());
             preparedStatement.setString(2, cargo.getName());
             preparedStatement.setInt(3, cargo.getUnit().getId());
@@ -67,7 +78,7 @@ public class CargoDaoImpl implements CargoDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.cargo WHERE id = ?;");
+                    .prepareStatement(GET_CARGO_SQL);
             preparedStatement.setInt(1, id);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -80,9 +91,11 @@ public class CargoDaoImpl implements CargoDao {
                 cargo.setUnit(unitDao.getUnit(unitId));
 
                 int deliveryId = resultSet.getInt("delivery_id");
+                DeliveryDao deliveryDao = new DeliveryDaoImpl();
                 cargo.setDelivery(deliveryDao.getDelivery(deliveryId));
 
                 int rideId = resultSet.getInt("ride_id");
+                RideDao rideDao = new RideDaoImpl();
                 cargo.setRide(rideDao.getRide(rideId));
 
                 cargo.setQuantity(resultSet.getDouble("quantity"));
@@ -108,7 +121,7 @@ public class CargoDaoImpl implements CargoDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.cargo; ");
+                    .prepareStatement(GET_ALL_CARGOS_SQL);
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 while (resultSet.next()) {
@@ -121,9 +134,11 @@ public class CargoDaoImpl implements CargoDao {
                     cargo.setUnit(unitDao.getUnit(unitId));
 
                     int deliveryId = resultSet.getInt("delivery_id");
+                    DeliveryDao deliveryDao = new DeliveryDaoImpl();
                     cargo.setDelivery(deliveryDao.getDelivery(deliveryId));
 
                     int rideId = resultSet.getInt("ride_id");
+                    RideDao rideDao = new RideDaoImpl();
                     cargo.setRide(rideDao.getRide(rideId));
 
                     cargo.setQuantity(resultSet.getDouble("quantity"));
@@ -151,9 +166,7 @@ public class CargoDaoImpl implements CargoDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE motor_depot.cargo " +
-                            "SET name = ?, unit_id = ?, delivery_id = ?, ride_id = ?, quantity = ? " +
-                            "WHERE (id = ?);");
+                    .prepareStatement(UPDATE_CARGO_SQL);
 
             preparedStatement.setString(1, cargo.getName());
             preparedStatement.setInt(2, cargo.getUnit().getId());
@@ -186,7 +199,7 @@ public class CargoDaoImpl implements CargoDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM motor_depot.cargo WHERE (id = ?);");
+                    .prepareStatement(DELETE_CARGO_SQL);
 
             preparedStatement.setInt(1, id);
 
@@ -215,8 +228,7 @@ public class CargoDaoImpl implements CargoDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.cargo " +
-                            "WHERE ride_id = ?; ");
+                    .prepareStatement(GET_ALL_CARGOS_OF_RIDE_SQL);
             preparedStatement.setInt(1, rideId);
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -230,8 +242,9 @@ public class CargoDaoImpl implements CargoDao {
                     cargo.setUnit(unitDao.getUnit(unitId));
 
                     int deliveryId = resultSet.getInt("delivery_id");
+                    DeliveryDao deliveryDao = new DeliveryDaoImpl();
                     cargo.setDelivery(deliveryDao.getDelivery(deliveryId));
-
+                    RideDao rideDao = new RideDaoImpl();
                     cargo.setRide(rideDao.getRide(rideId));
 
                     cargo.setQuantity(resultSet.getDouble("quantity"));
@@ -260,8 +273,7 @@ public class CargoDaoImpl implements CargoDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.cargo " +
-                            "WHERE delivery_id = ?; ");
+                    .prepareStatement(GET_ALL_CARGOS_OF_DELIVERY_SQL);
             preparedStatement.setInt(1, deliveryId);
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -273,10 +285,11 @@ public class CargoDaoImpl implements CargoDao {
 
                     int unitId = resultSet.getInt("unit_id");
                     cargo.setUnit(unitDao.getUnit(unitId));
-
+                    DeliveryDao deliveryDao = new DeliveryDaoImpl();
                     cargo.setDelivery(deliveryDao.getDelivery(deliveryId));
 
                     int rideId = resultSet.getInt("ride_id");
+                    RideDao rideDao = new RideDaoImpl();
                     cargo.setRide(rideDao.getRide(rideId));
 
                     cargo.setQuantity(resultSet.getDouble("quantity"));
@@ -304,10 +317,7 @@ public class CargoDaoImpl implements CargoDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO " +
-                            " motor_depot.cargo (id, name, unit_id, delivery_id, ride_id, quantity" +
-                            " VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE " +
-                            " name = ?, unit_id = ?, delivery_id = ?, ride_id = ?, quantity = ?;");
+                    .prepareStatement(ADD_OR_UPDATE_CARGO_SQL);
 
             preparedStatement.setInt(1, cargo.getId());
 

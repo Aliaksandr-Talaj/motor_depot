@@ -22,6 +22,7 @@ public class RequestServiceImpl implements RequestService {
     public RequestServiceImpl() throws Exception {
     }
 
+    @Override
     public void addNewRequest(Request request) throws Exception {
         requestDao.createRequest(request);
 
@@ -34,7 +35,7 @@ public class RequestServiceImpl implements RequestService {
         }
     }
 
-
+    @Override
     public void updateRequest(Request request) throws Exception {
         requestDao.updateRequest(request);
 

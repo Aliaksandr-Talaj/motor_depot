@@ -18,11 +18,26 @@ import java.util.List;
 
 public class DeliveryDaoImpl implements DeliveryDao {
 
+    static final String CREATE_DELIVERY_SQL =
+            "INSERT INTO motor_depot.delivery (id, loading_place_id, loading_date, destination_id, term, " +
+                    "request_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    static final String GET_DELIVERY_SQL = "SELECT * FROM motor_depot.delivery WHERE id = ?;";
+    static final String GET_ALL_DELIVERIES_SQL = "SELECT * FROM motor_depot.delivery; ";
+    static final String UPDATE_DELIVERY_SQL =
+            "UPDATE motor_depot.delivery SET loading_place_id = ?, loading_date_id = ?, destination_id = ?," +
+                    " term = ?, request_id = ?, status_id = ? WHERE (id = ?);";
+    static final String DELETE_DELIVERY_SQL = "DELETE FROM motor_depot.delivery WHERE (id = ?);";
+    static final String GET_ALL_DELIVERIES_OF_REQUEST_SQL = "SELECT * FROM motor_depot.delivery WHERE request_id = ?; ";
+    static final String ADD_OR_UPDATE_DELIVERY_SQL =
+            "INSERT INTO  motor_depot.delivery (id, loading_place_id, loading_date, destination_id," +
+                    " term, request_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE " +
+                    " loading_place_id = ?, loading_date = ?, destination_id = ?," +
+                    " term = ?, request_id = ?, status_id = ?;";
+
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     private final CargoDao cargoDao = new CargoDaoImpl();
     private final AddressDao addressDao = new AddressDaoImpl();
-    private final RequestDao requestDao = new RequestDaoImpl();
     private final StatusDao statusDao = new ExecutionStatusDaoImpl();
 
 
@@ -30,17 +45,13 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
     public DeliveryDaoImpl() throws Exception {
     }
-
-
+    
     @Override
     public void createDelivery(Delivery delivery) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO " +
-                            "motor_depot.delivery (id, loading_place_id, loading_date, destination_id, term, " +
-                            "request_id, status_id)" +
-                            " VALUES (?, ?, ?, ?, ?, ?, ?);");
+                    .prepareStatement(CREATE_DELIVERY_SQL);
             preparedStatement.setInt(1, delivery.getId());
             preparedStatement.setInt(2, delivery.getLoadingPlace().getId());
             preparedStatement.setDate(3, delivery.getLoadingDate());
@@ -79,7 +90,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.delivery WHERE id = ?;");
+                    .prepareStatement(GET_DELIVERY_SQL);
             preparedStatement.setInt(1, deliveryId);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -98,6 +109,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
                 delivery.setTerm(resultSet.getDate("term"));
 
                 int requestId = resultSet.getInt("request_id");
+                RequestDao requestDao = new RequestDaoImpl();
                 delivery.setRequest(requestDao.getRequest(requestId));
 
                 int executionStatusId = resultSet.getInt("status_id");
@@ -126,7 +138,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.delivery; ");
+                    .prepareStatement(GET_ALL_DELIVERIES_SQL);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -147,6 +159,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
                     delivery.setTerm(resultSet.getDate("term"));
 
                     int requestId = resultSet.getInt("request_id");
+                    RequestDao requestDao = new RequestDaoImpl();
                     delivery.setRequest(requestDao.getRequest(requestId));
 
                     int executionStatusId = resultSet.getInt("status_id");
@@ -178,9 +191,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE motor_depot.delivery " +
-                            "SET loading_place_id = ?, loading_date_id = ?, destination_id = ?, term = ?, " +
-                            "request_id = ?, status_id = ? WHERE (id = ?);");
+                    .prepareStatement(UPDATE_DELIVERY_SQL);
 
             preparedStatement.setInt(1, delivery.getLoadingPlace().getId());
             preparedStatement.setDate(2, delivery.getLoadingDate());
@@ -221,7 +232,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM motor_depot.delivery WHERE (id = ?);");
+                    .prepareStatement(DELETE_DELIVERY_SQL);
 
             preparedStatement.setInt(1, id);
 
@@ -249,11 +260,10 @@ public class DeliveryDaoImpl implements DeliveryDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.delivery" +
-                            " WHERE request_id = ?; ");
+                    .prepareStatement(GET_ALL_DELIVERIES_OF_REQUEST_SQL);
+            preparedStatement.setInt(1, request.getId());
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                preparedStatement.setInt(1, request.getId());
                 while (resultSet.next()) {
                     Delivery delivery = new Delivery();
 
@@ -300,12 +310,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO " +
-                            " motor_depot.delivery (id, loading_place_id, loading_date, destination_id," +
-                            " term, request_id, status_id)" +
-                            " VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE " +
-                            " loading_place_id = ?, loading_date = ?, destination_id = ?," +
-                            " term = ?, request_id = ?, status_id = ?;");
+                    .prepareStatement(ADD_OR_UPDATE_DELIVERY_SQL);
 
             preparedStatement.setInt(1, delivery.getId());
 

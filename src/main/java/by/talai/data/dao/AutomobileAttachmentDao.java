@@ -7,7 +7,7 @@ import java.util.List;
 public interface AutomobileAttachmentDao {
 
     //create attachment
-    void createAttachment(AutomobileAttachment automobileAttachment) throws Exception;
+    int createAttachment(AutomobileAttachment automobileAttachment) throws Exception;
 
     //find all attachments
     List<AutomobileAttachment> findAllAutomobileAttachments() throws Exception;

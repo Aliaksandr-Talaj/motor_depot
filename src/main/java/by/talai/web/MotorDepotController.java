@@ -1,14 +1,20 @@
 package by.talai.web;
 
 import by.talai.data.exception.DaoException;
+import by.talai.model.Charterer;
+import by.talai.model.Delivery;
 import by.talai.service.AutomobileService;
 import by.talai.service.ChartererService;
+import by.talai.service.DeliveryService;
 import by.talai.service.UserService;
 import by.talai.service.dto.AutomobilesDto;
 import by.talai.service.dto.UsersDto;
 import by.talai.service.impl.AutomobileServiceImpl;
 import by.talai.service.impl.ChartererServiceImpl;
+import by.talai.service.impl.DeliveryServiceImpl;
 import by.talai.service.impl.UserServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,12 +26,11 @@ import java.io.IOException;
 public class MotorDepotController extends HttpServlet {
 
     private final AutomobileService automobileService = new AutomobileServiceImpl();
-    //    private final RideService rideService = new RideServiceImpl();
     private final UserService userService = new UserServiceImpl();
     private final ChartererService chartererService = new ChartererServiceImpl();
-//    private final RoleService roleService = new RoleServiceImpl();
 
-//    private final RequestService requestService = new RequestServiceImpl();
+
+    private final Logger logger = LoggerFactory.getLogger(MotorDepotController.class);
 
     public MotorDepotController() throws Exception {
     }
@@ -42,8 +47,6 @@ public class MotorDepotController extends HttpServlet {
 
 
         String action = request.getServletPath();
-//        System.out.println("action = " + action);
-
         if (action != null) {
             try {
                 switch (action) {
@@ -86,6 +89,12 @@ public class MotorDepotController extends HttpServlet {
                     case "/user/dispatcher/charterers":
                         goCharterers(request, response);
                         break;
+                    case "/user/dispatcher/charterer":
+                        goGetCharterer(request, response);
+                        break;
+                    case "/user/delivery":
+                        goGetDelivery(request, response);
+                        break;
                     case "/user/dispatcher/driver-form":
                         goDriverForm(request, response);
                         break;
@@ -110,11 +119,34 @@ public class MotorDepotController extends HttpServlet {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+                logger.error("Exception in doGet() method", ex);
                 throw new ServletException(ex);
-                //TODO
+
             }
         }
 
+    }
+
+    private void goGetDelivery(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        DeliveryService deliveryService = new DeliveryServiceImpl();
+        Delivery delivery = deliveryService.getDelivery(id);
+
+        request.setAttribute("delivery", delivery);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/delivery.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void goGetCharterer(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Charterer charterer = chartererService.getCharterer(id);
+
+        request.setAttribute("charterer", charterer);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/charterer.jsp");
+        dispatcher.forward(request, response);
     }
 
     private void addCharterer(HttpServletRequest request, HttpServletResponse response) throws IOException, DaoException {
