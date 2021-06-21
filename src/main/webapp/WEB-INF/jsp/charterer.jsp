@@ -28,13 +28,12 @@
 <table class="table">
     <tbody>
     <tr>
-        <td scope="col">${c_number}</td>
-        <td scope="col">${charterer.id}</td>
+        <td>${c_number}</td>
+        <td>${charterer.id}</td>
     </tr>
 
-
     <tr>
-        <td>${c_named}</td>
+        <td>${c_name}</td>
         <td>${charterer.name}</td>
     </tr>
 
