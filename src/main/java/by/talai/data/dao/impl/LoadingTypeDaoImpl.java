@@ -4,7 +4,7 @@ import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.LoadingTypeDao;
 import by.talai.data.exception.ConnectionPoolException;
 import by.talai.data.exception.DaoException;
-import by.talai.model.LoadingType;
+import by.talai.model.stock.LoadingType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,7 @@
 package by.talai.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 public class Charterer implements Serializable {
@@ -61,5 +62,21 @@ public class Charterer implements Serializable {
                 ",\n ownAddress=" + ownAddress +
                 ",\n usedAddresses=" + usedAddresses +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Charterer)) return false;
+        Charterer charterer = (Charterer) o;
+        return getId() == charterer.getId() && getName().equals(charterer.getName())
+                && Objects.equals(getSurname(), charterer.getSurname())
+                && getOwnAddress().equals(charterer.getOwnAddress())
+                && Objects.equals(getUsedAddresses(), charterer.getUsedAddresses());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getSurname(), getOwnAddress(), getUsedAddresses());
     }
 }

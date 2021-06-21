@@ -1,6 +1,7 @@
 package by.talai.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Status implements Serializable {
 
@@ -33,5 +34,18 @@ public class Status implements Serializable {
                 "id=" + id +
                 ",\n status='" + status + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Status)) return false;
+        Status status1 = (Status) o;
+        return getId() == status1.getId() && getStatus().equals(status1.getStatus());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getStatus());
     }
 }

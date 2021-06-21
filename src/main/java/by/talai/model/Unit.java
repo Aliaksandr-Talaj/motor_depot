@@ -1,6 +1,7 @@
 package by.talai.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Unit implements Serializable {
 
@@ -69,5 +70,20 @@ public class Unit implements Serializable {
                 ",\n height=" + height +
                 ",\n weight=" + weight +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Unit)) return false;
+        Unit unit = (Unit) o;
+        return getId() == unit.getId() && getLength() == unit.getLength() && getWidth() == unit.getWidth()
+                && Double.compare(unit.getHeight(), getHeight()) == 0
+                && Double.compare(unit.getWeight(), getWeight()) == 0 && getType().equals(unit.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getType(), getLength(), getWidth(), getHeight(), getWeight());
     }
 }

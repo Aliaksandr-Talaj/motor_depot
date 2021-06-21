@@ -1,6 +1,6 @@
 package by.talai.data.dao;
 
-import by.talai.model.FuelType;
+import by.talai.model.stock.FuelType;
 
 import java.util.Set;
 

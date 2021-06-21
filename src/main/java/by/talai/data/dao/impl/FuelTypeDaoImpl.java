@@ -4,7 +4,7 @@ import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.FuelTypeDao;
 import by.talai.data.exception.ConnectionPoolException;
 import by.talai.data.exception.DaoException;
-import by.talai.model.FuelType;
+import by.talai.model.stock.FuelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

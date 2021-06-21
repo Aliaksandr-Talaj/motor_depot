@@ -1,16 +1,22 @@
 package by.talai.service.impl;
 
 import by.talai.data.dao.DeliveryDao;
+import by.talai.data.dao.EquipmentDao;
 import by.talai.data.dao.RequestDao;
 import by.talai.data.dao.impl.DeliveryDaoImpl;
+import by.talai.data.dao.impl.EquipmentDaoImpl;
 import by.talai.data.dao.impl.RequestDaoImpl;
 import by.talai.model.Delivery;
 import by.talai.model.Request;
+import by.talai.model.stock.Equipment;
 import by.talai.service.RequestService;
+import by.talai.service.dto.RequestDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class RequestServiceImpl implements RequestService {
 
@@ -56,6 +62,21 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<Request> getAllRequests() throws Exception {
         return requestDao.getAllRequests();
+    }
+
+    @Override
+    public List<RequestDto> getRequestDtoList() throws Exception {
+        List<RequestDto> requestDtoList = new ArrayList<>();
+        List<Request> requests = requestDao.getAllRequests();
+        EquipmentDao equipmentDao = new EquipmentDaoImpl();
+        for (Request request : requests) {
+            RequestDto requestDto = new RequestDto();
+            requestDto.setRequest(request);
+            Set<Equipment> equipmentSet = equipmentDao.getAllEquipmentOfRequest(request.getId());
+            requestDto.setEquipmentSet(equipmentSet);
+            requestDtoList.add(requestDto);
+        }
+        return requestDtoList;
     }
 
 

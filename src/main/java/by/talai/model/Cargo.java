@@ -1,6 +1,7 @@
 package by.talai.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Cargo implements Serializable {
 
@@ -72,5 +73,20 @@ public class Cargo implements Serializable {
                 ",\n delivery=" + delivery +
                 ",\n ride=" + ride +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cargo)) return false;
+        Cargo cargo = (Cargo) o;
+        return getId() == cargo.getId() && Double.compare(cargo.getQuantity(), getQuantity()) == 0
+                && getName().equals(cargo.getName()) && getUnit().equals(cargo.getUnit())
+                && Objects.equals(getDelivery(), cargo.getDelivery()) && Objects.equals(getRide(), cargo.getRide());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getUnit(), getQuantity(), getDelivery(), getRide());
     }
 }

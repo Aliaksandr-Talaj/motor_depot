@@ -657,4 +657,84 @@
             INSERT INTO `motor_depot`.`execution_status` (`id`, `name`) VALUES ('5', 'Просрочено');
         </sql>
     </changeSet>
+
+    <changeSet id="35" author="root">
+        <sql>
+            INSERT INTO `motor_depot`.`address` (`country`, `region`, `locality`, `street`, `building`, `apartment`)
+            VALUES ('Беларусь', 'Минск', 'Минск', 'Полевая', '43', '45');
+            INSERT INTO `motor_depot`.`address` (`country`, `region`, `locality`, `street`, `building`, `apartment`)
+            VALUES ('Беларусь', 'Минск', 'Минск', 'Луговая', '62', '3');
+            INSERT INTO `motor_depot`.`address` (`country`, `region`, `locality`, `street`, `building`, `apartment`)
+            VALUES ('Беларусь', 'Минск', 'Минск', 'Железнодорожная', '45', '62');
+            INSERT INTO `motor_depot`.`address` (`country`, `region`, `locality`, `street`, `building`, `apartment`)
+            VALUES ('Беларусь', 'Минск', 'Минск', 'Тихая', '45', '93');
+            INSERT INTO `motor_depot`.`address` (`country`, `region`, `locality`, `street`, `building`, `apartment`)
+            VALUES ('Беларусь', 'Минск', 'Минск', 'Сухая', '74', '5');
+            INSERT INTO `motor_depot`.`address` (`country`, `region`, `locality`, `street`, `building`, `apartment`)
+            VALUES ('Беларусь', 'Минск', 'Минск', 'Кривая', '24', '2');
+            INSERT INTO `motor_depot`.`address` (`country`, `region`, `locality`, `street`, `building`, `apartment`)
+            VALUES ('Беларусь', 'Минск', 'Минск', 'Широкая', '75', '76');
+            INSERT INTO `motor_depot`.`address` (`country`, `region`, `locality`, `street`, `building`, `apartment`)
+            VALUES ('Беларусь', 'Минск', 'Минск', 'Длинная', '42', '4');
+            INSERT INTO `motor_depot`.`address` (`country`, `region`, `locality`, `street`, `building`, `apartment`)
+            VALUES ('Беларусь', 'Минск', 'Минск', 'Лесная', '7', '2к1');
+        </sql>
+    </changeSet>
+
+    <changeSet id="36" author="root">
+        <sql>
+            INSERT INTO `motor_depot`.`charterer` (`name`, `surname`, `own_address_id`) VALUES ('Николай', 'Белоусов',
+            '1');
+            INSERT INTO `motor_depot`.`charterer` (`name`, `surname`, `own_address_id`) VALUES ('Изосим', 'Восьянов',
+            '2');
+            INSERT INTO `motor_depot`.`charterer` (`name`, `surname`, `own_address_id`) VALUES ('Мартиниан', 'Ртищев',
+            '3');
+            INSERT INTO `motor_depot`.`charterer` (`name`, `surname`, `own_address_id`) VALUES ('Егор', 'Блинов', '4');
+            INSERT INTO `motor_depot`.`charterer` (`name`, `surname`, `own_address_id`) VALUES ('Адельфий', 'Пономарёв',
+            '5');
+            INSERT INTO `motor_depot`.`charterer` (`name`, `surname`, `own_address_id`) VALUES ('Пафнутий', 'Гофман',
+            '6');
+        </sql>
+    </changeSet>
+
+    <changeSet id="37" author="root">
+        <sql>
+            INSERT INTO `motor_depot`.`automobile_attachment` (`automobile_id`, `driver_id`, `date_of_attachment`)
+            VALUES ('1285', '6', '2021-02-02');
+            INSERT INTO `motor_depot`.`automobile_attachment` (`automobile_id`, `driver_id`, `date_of_attachment`)
+            VALUES ('5117', '7', '2021-03-13');
+            INSERT INTO `motor_depot`.`automobile_attachment` (`automobile_id`, `driver_id`, `date_of_attachment`)
+            VALUES ('5345', '8', '2021-06-03');
+        </sql>
+    </changeSet>
+
+    <changeSet id="38" author="root">
+        <sql>
+            INSERT INTO `motor_depot`.`request` (`filling_date`, `charterer_id`, `required_automobile_type_id`,
+            `required_loading_type_id`, `status_id`) VALUES ('2021-06-12', '1', '3', '2', '2');
+            INSERT INTO `motor_depot`.`request` (`filling_date`, `charterer_id`, `required_automobile_type_id`,
+            `required_loading_type_id`, `status_id`) VALUES ('2021-06-12', '2', '2', '1', '3');
+            INSERT INTO `motor_depot`.`request` (`filling_date`, `charterer_id`, `required_automobile_type_id`,
+            `required_loading_type_id`, `status_id`) VALUES ('2021-06-15', '3', '1', '3', '1');
+            INSERT INTO `motor_depot`.`request` (`filling_date`, `charterer_id`, `required_automobile_type_id`,
+            `required_loading_type_id`, `status_id`) VALUES ('2021-06-18', '4', '2', '2', '2');
+            INSERT INTO `motor_depot`.`request` (`filling_date`, `charterer_id`, `required_automobile_type_id`,
+            `required_loading_type_id`, `status_id`) VALUES ('2021-06-18', '5', '3', '1', '2');
+        </sql>
+    </changeSet>
+
+    <changeSet id="39" author="root">
+        <sql>
+            INSERT INTO `motor_depot`.`equipment` (`name`) VALUES ('Рефрижераторная установка');
+            INSERT INTO `motor_depot`.`equipment` (`name`) VALUES ('Гидравлическая платформа');
+            INSERT INTO `motor_depot`.`equipment` (`name`) VALUES ('Самопогрузчик');
+        </sql>
+    </changeSet>
+
+<!--    <changeSet id="40" author="root">-->
+<!--        <sql>-->
+<!--            -->
+<!--        </sql>-->
+<!--    </changeSet>-->
+
 </databaseChangeLog>

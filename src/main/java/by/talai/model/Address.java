@@ -1,6 +1,7 @@
 package by.talai.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Address implements Serializable {
 
@@ -79,5 +80,24 @@ public class Address implements Serializable {
                 ",\n building='" + building + '\'' +
                 ",\n apartment='" + apartment + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Address)) return false;
+        Address address = (Address) o;
+        return getId() == address.getId() && getCountry().equals(address.getCountry())
+                && Objects.equals(getRegion(), address.getRegion())
+                && Objects.equals(getLocality(), address.getLocality())
+                && Objects.equals(getStreet(), address.getStreet())
+                && Objects.equals(getBuilding(), address.getBuilding())
+                && Objects.equals(getApartment(), address.getApartment());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getCountry(), getRegion(),
+                getLocality(), getStreet(), getBuilding(), getApartment());
     }
 }

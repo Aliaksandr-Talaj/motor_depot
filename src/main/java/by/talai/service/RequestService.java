@@ -1,6 +1,7 @@
 package by.talai.service;
 
 import by.talai.model.Request;
+import by.talai.service.dto.RequestDto;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface RequestService {
     Request getRequest(int id) throws Exception;
 
     List<Request> getAllRequests() throws Exception;
+
+    List<RequestDto> getRequestDtoList() throws Exception;
 }

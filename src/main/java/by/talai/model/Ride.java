@@ -6,6 +6,7 @@ import by.talai.model.stock.Automobile;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Ride implements Serializable {
 
@@ -126,5 +127,24 @@ public class Ride implements Serializable {
                 ",\n executionStatus=" + executionStatus +
                 ",\n cargoList=" + cargoList +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ride)) return false;
+        Ride ride = (Ride) o;
+        return getId() == ride.getId() && getDate().equals(ride.getDate()) && getRequest().equals(ride.getRequest())
+                && getDispatcher().equals(ride.getDispatcher()) && Objects.equals(getAutomobile(), ride.getAutomobile())
+                && getLoadingPlace().equals(ride.getLoadingPlace())
+                && Objects.equals(getLoadingDate(), ride.getLoadingDate())
+                && getDestination().equals(ride.getDestination()) && Objects.equals(getTerm(), ride.getTerm())
+                && getExecutionStatus().equals(ride.getExecutionStatus()) && getCargoList().equals(ride.getCargoList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getDate(), getRequest(), getDispatcher(), getAutomobile(), getLoadingPlace(),
+                getLoadingDate(), getDestination(), getTerm(), getExecutionStatus(), getCargoList());
     }
 }

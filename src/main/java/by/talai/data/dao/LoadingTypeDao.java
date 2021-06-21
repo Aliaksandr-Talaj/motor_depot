@@ -1,6 +1,6 @@
 package by.talai.data.dao;
 
-import by.talai.model.LoadingType;
+import by.talai.model.stock.LoadingType;
 
 import java.util.Set;
 

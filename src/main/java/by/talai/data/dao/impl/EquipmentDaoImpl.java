@@ -4,7 +4,7 @@ import by.talai.data.dao.ConnectionPool;
 import by.talai.data.dao.EquipmentDao;
 import by.talai.data.exception.ConnectionPoolException;
 import by.talai.data.exception.DaoException;
-import by.talai.model.Equipment;
+import by.talai.model.stock.Equipment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -224,6 +224,7 @@ public class EquipmentDaoImpl implements EquipmentDao {
                             " motor_depot.request_has_required_equipment AS REQ" +
                             " where (REQ.request_id = ?)" +
                             " and (REQ.equipment_id = EQ.id);");
+            preparedStatement.setInt(1, requestId);
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 while (resultSet.next()) {

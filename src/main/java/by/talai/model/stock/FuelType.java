@@ -1,16 +1,16 @@
-package by.talai.model;
+package by.talai.model.stock;
 
 import java.io.Serializable;
 
-public class AutomobileType implements Serializable {
+public class FuelType implements Serializable {
 
     private int id;
     private String type;
 
-    public AutomobileType() {
+    public FuelType() {
     }
 
-    public AutomobileType(int id, String type) {
+    public FuelType(int id, String type) {
         this.id = id;
         this.type = type;
     }
@@ -33,7 +33,7 @@ public class AutomobileType implements Serializable {
 
     @Override
     public String toString() {
-        return "Type{" +
+        return "FuelType{" +
                 "id=" + id +
                 ",\n type='" + type + '\'' +
                 '}';

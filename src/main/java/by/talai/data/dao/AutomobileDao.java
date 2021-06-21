@@ -1,8 +1,8 @@
 package by.talai.data.dao;
 
 import by.talai.model.AutomobileAttachment;
-import by.talai.model.Equipment;
-import by.talai.model.LoadingType;
+import by.talai.model.stock.Equipment;
+import by.talai.model.stock.LoadingType;
 import by.talai.model.stock.Automobile;
 import by.talai.model.stock.Maintenance;
 import by.talai.model.stock.Malfunction;

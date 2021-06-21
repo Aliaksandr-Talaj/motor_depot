@@ -1,8 +1,12 @@
 package by.talai.model;
 
+import by.talai.model.stock.AutomobileType;
+import by.talai.model.stock.LoadingType;
+
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Request implements Serializable {
 
@@ -83,5 +87,24 @@ public class Request implements Serializable {
                 ",\n executionStatus=" + executionStatus +
                 ",\n deliveryList=" + deliveryList +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Request)) return false;
+        Request request = (Request) o;
+        return getId() == request.getId() && getFillingDate().equals(request.getFillingDate())
+                && getCharterer().equals(request.getCharterer())
+                && Objects.equals(getRequiredAutomobileType(), request.getRequiredAutomobileType())
+                && Objects.equals(getRequiredLoadingType(), request.getRequiredLoadingType())
+                && getExecutionStatus().equals(request.getExecutionStatus())
+                && getDeliveryList().equals(request.getDeliveryList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getFillingDate(), getCharterer(), getRequiredAutomobileType(),
+                getRequiredLoadingType(), getExecutionStatus(), getDeliveryList());
     }
 }

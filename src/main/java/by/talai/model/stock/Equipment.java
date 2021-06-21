@@ -1,4 +1,4 @@
-package by.talai.model;
+package by.talai.model.stock;
 
 import java.io.Serializable;
 

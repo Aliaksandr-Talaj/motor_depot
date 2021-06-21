@@ -1,6 +1,6 @@
 package by.talai.data.dao;
 
-import by.talai.model.Equipment;
+import by.talai.model.stock.Equipment;
 
 import java.util.List;
 import java.util.Set;

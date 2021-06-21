@@ -1,6 +1,6 @@
 package by.talai.data.dao;
 
-import by.talai.model.AutomobileType;
+import by.talai.model.stock.AutomobileType;
 
 import java.util.Set;
 

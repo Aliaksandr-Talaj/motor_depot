@@ -3,6 +3,7 @@ package by.talai.model;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Delivery implements Serializable {
 
@@ -93,5 +94,24 @@ public class Delivery implements Serializable {
                 ",\n status=" + executionStatus +
                 ",\n cargoList=" + cargoList +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Delivery)) return false;
+        Delivery delivery = (Delivery) o;
+        return getId() == delivery.getId() && getLoadingPlace().equals(delivery.getLoadingPlace())
+                && Objects.equals(getLoadingDate(), delivery.getLoadingDate())
+                && getDestination().equals(delivery.getDestination())
+                && Objects.equals(getTerm(), delivery.getTerm()) && getRequest().equals(delivery.getRequest())
+                && getExecutionStatus().equals(delivery.getExecutionStatus())
+                && getCargoList().equals(delivery.getCargoList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getLoadingPlace(), getLoadingDate(), getDestination(), getTerm(),
+                getRequest(), getExecutionStatus(), getCargoList());
     }
 }

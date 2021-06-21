@@ -14,6 +14,9 @@
 <fmt:message bundle="${loc}" key="local.request.status" var="r_status"/>
 <fmt:message bundle="${loc}" key="local.request.deliveries" var="r_deliveries"/>
 <fmt:message bundle="${loc}" key="local.delivery" var="DELIVERY"/>
+<fmt:message bundle="${loc}" key="local.actions" var="r_actions"/>
+<fmt:message bundle="${loc}" key="local.process" var="r_process"/>
+<fmt:message bundle="${loc}" key="local.request.equipment" var="r_req_equipment"/>
 
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">
@@ -30,27 +33,42 @@
         <th scope="col">${r_charterer}</th>
         <th scope="col">${r_req_auto_type}</th>
         <th scope="col">${r_req_loading_type}</th>
+        <th scope="col">${r_req_equipment}</th>
         <th scope="col">${r_deliveries}</th>
         <th scope="col">${r_status}</th>
+        <th scope="col">${r_actions}</th>
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${requests}" var="req">
+    <c:forEach items="${requestsDto}" var="reqDto">
         <tr>
-            <td>${req.id}</td>
-            <td>${req.fillingDate}</td>
+            <td>${reqDto.request.id}</td>
+            <td>${reqDto.request.fillingDate}</td>
             <td>
-                <a href="motor-depot/user/dispatcher/charterer?id=${req.charterer.id}">${req.charterer.name} ${req.charterer.surname}</a>
+                <a href="/motor_depot/user/dispatcher/charterer?id=${reqDto.request.charterer.id}">${reqDto.request.charterer.name} ${reqDto.request.charterer.surname}</a>
             </td>
-            <td>${req.requiredAutomobileType.type}</td>
-            <td>${req.requiredLoadingType.type}</td>
-            <td><c:forEach items="${req.deliveryList}" var="delivery">
+            <td>${reqDto.request.requiredAutomobileType.type}</td>
+            <td>${reqDto.request.requiredLoadingType.type}</td>
+            <td><c:forEach items="${reqDto.equipmentSet}" var="equipment">
+                ${equipment.name}
+            </c:forEach><br/>
+            </td>
+            <td><c:forEach items="${reqDto.request.deliveryList}" var="delivery">
 
-                <c:out value="${DELIVERY}"/><a href="motor-depot/user/delivery"> #${delivery.id}</a><br/>
+                <c:out value="${DELIVERY}"/><a href="motor_depot/user/delivery"> #${delivery.id}</a><br/>
 
             </c:forEach>
             </td>
-            <td>${req.executionStatus.status}</td>
+            <td>${reqDto.request.executionStatus.status}</td>
+            <td>
+                <c:if test="${reqDto.request.executionStatus.id eq 1}">
+                    <c:if test="${sessionScope.role eq 'dispatcher'}">
+                        <a href="motor_depot/user/dispatcher/request-form?id=${reqDto.request.id}">${r_process}</a>
+                    </c:if>
+                </c:if>
+
+
+            </td>
         </tr>
     </c:forEach>
     </tbody>
