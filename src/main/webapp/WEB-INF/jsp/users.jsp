@@ -36,20 +36,20 @@
         </tr>
       </thead>
       <tbody>
-      <c:forEach items="${usersDto.users}" var="user">
+      <c:forEach items="${usersDto.users}" var="driver">
         <tr>
-          <td>${user.name}</td>
-          <td>${user.surname}</td>
-          <td>${user.login}</td>
-          <td>${user.role.name}</td>
-          <td>${user.status.status}</td>
+          <td>${driver.name}</td>
+          <td>${driver.surname}</td>
+          <td>${driver.login}</td>
+          <td>${driver.role.name}</td>
+          <td>${driver.status.status}</td>
           <td>
             <c:choose>
-                <c:when test="${user.status.status eq 'active'}">
-                    <a class="btn btn-primary"  href="/motor_depot/admin/users/c_status?id=<c:out value='${user.id}'/>&statusId=2" role="button"><c:out value="${u_block}"/></a>
+                <c:when test="${driver.status.status eq 'active'}">
+                    <a class="btn btn-primary" href="/motor_depot/admin/users/c_status?id=<c:out value='${driver.id}'/>&statusId=2" role="button"><c:out value="${u_block}"/></a>
                 </c:when>
                 <c:otherwise>
-                    <a class="btn btn-secondary"  href="/motor_depot/admin/users/c_status?id=<c:out value='${user.id}'/>&statusId=1" role="button"><c:out value="${u_unblock}"/></a>
+                    <a class="btn btn-secondary" href="/motor_depot/admin/users/c_status?id=<c:out value='${driver.id}'/>&statusId=1" role="button"><c:out value="${u_unblock}"/></a>
                 </c:otherwise>
             </c:choose>
           </td>

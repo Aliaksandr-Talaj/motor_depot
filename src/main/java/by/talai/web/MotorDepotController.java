@@ -3,8 +3,9 @@ package by.talai.web;
 import by.talai.data.exception.DaoException;
 import by.talai.model.*;
 import by.talai.model.personnel.User;
+import by.talai.model.stock.Automobile;
 import by.talai.service.*;
-import by.talai.service.dto.AutomobilesDto;
+import by.talai.service.dto.DriverDto;
 import by.talai.service.dto.RequestDto;
 import by.talai.service.dto.UsersDto;
 import by.talai.service.impl.*;
@@ -37,7 +38,6 @@ public class MotorDepotController extends HttpServlet {
         if (request.getParameter("local") != null) {
             request.getSession(true).setAttribute("local", request.getParameter("local"));
         }
-
         String role = (String) request.getSession(true).getAttribute("role");
 
         String action = request.getServletPath();
@@ -73,6 +73,19 @@ public class MotorDepotController extends HttpServlet {
                             changeUserStatus(request, response);
                         break;
 //dispatchers can do
+
+                    case "user/dispatcher/request-form2":
+                        if ("dispatcher".equals(role))
+                            goRequestForm2(request, response);
+                        break;
+                    case "user/dispatcher/create_charterer4req":
+                        if ("dispatcher".equals(role))
+                            goAddCharterer(request, response);
+                        break;
+                    case "/user/dispatcher/v_attachment":
+                        if ("dispatcher".equals(role))
+                            goViewAttachment(request, response);
+                        break;
                     case "/user/dispatcher/autos":
                         if ("dispatcher".equals(role))
                             goListAutomobiles(request, response);
@@ -160,6 +173,29 @@ public class MotorDepotController extends HttpServlet {
             }
         }
 
+    }
+
+    private void goRequestForm2(HttpServletRequest request, HttpServletResponse response) {
+
+
+    }
+
+    private void goAddCharterer(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setAttribute("for_request", 1);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/charterer-form.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void goViewAttachment(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String id = request.getParameter("id");
+        AutomobileService automobileService = new AutomobileServiceImpl();
+        Automobile automobile = automobileService.findAutomobileById(id);
+        request.setAttribute("automobile", automobile);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/auto-attachments.jsp");
+        dispatcher.forward(request, response);
     }
 
     private void goAuthorise(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -289,12 +325,17 @@ public class MotorDepotController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void goRequestForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/request-form.jsp");
+    private void goRequestForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        List<Charterer> charterers = chartererService.getCharterers();
+        request.setAttribute("new_request", 1);
+        request.setAttribute("charterers", charterers);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form1.jsp");
         dispatcher.forward(request, response);
     }
 
-    private void goListDrivers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void goListDrivers(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        List<DriverDto> drivers = userService.getAllDriversDtoList();
+        request.setAttribute("drivers", drivers);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/drivers.jsp");
         dispatcher.forward(request, response);
     }
@@ -305,7 +346,12 @@ public class MotorDepotController extends HttpServlet {
     }
 
     private void goCharterers(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws Exception {
+
+        List<Charterer> charterers = chartererService.getCharterers();
+
+        request.setAttribute("charterers", charterers);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/charterers.jsp");
         dispatcher.forward(request, response);
     }
@@ -325,11 +371,9 @@ public class MotorDepotController extends HttpServlet {
 
     private void goListAutomobiles(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+        List<Automobile> automobiles = automobileService.findAllAutomobiles();
 
-
-        AutomobilesDto automobilesDto = automobileService.getAllAutomobilesDto();
-
-        request.setAttribute("automobilesDto", automobilesDto);
+        request.setAttribute("automobiles", automobiles);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/autos.jsp");
         dispatcher.forward(request, response);

@@ -10,8 +10,8 @@ import java.util.Objects;
 public class AutomobileAttachment implements Serializable {
 
     private int id;
-    private Automobile Automobile;
-    private Driver Driver;
+    private Automobile automobile;
+    private Driver driver;
 
     private Date dateOfAttachment;
     private Date dateOfDetachment;
@@ -26,19 +26,19 @@ public class AutomobileAttachment implements Serializable {
     }
 
     public by.talai.model.stock.Automobile getAutomobile() {
-        return Automobile;
+        return automobile;
     }
 
     public void setAutomobile(by.talai.model.stock.Automobile automobile) {
-        Automobile = automobile;
+        this.automobile = automobile;
     }
 
     public by.talai.model.personnel.Driver getDriver() {
-        return Driver;
+        return driver;
     }
 
     public void setDriver(by.talai.model.personnel.Driver driver) {
-        Driver = driver;
+        this.driver = driver;
     }
 
     public Date getDateOfAttachment() {
@@ -59,13 +59,29 @@ public class AutomobileAttachment implements Serializable {
 
     @Override
     public String toString() {
-        return "AutomobileAttachment{" +
-                "id=" + id +
-                ",\n Automobile=" + Automobile +
-                ",\n Driver=" + Driver +
-                ",\n dateOfAttachment=" + dateOfAttachment +
-                ",\n dateOfDetachment=" + dateOfDetachment +
-                '}';
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("AutomobileAttachment{" +
+                "id=");
+        sb.append(id);
+        sb.append(",\n automobileId=");
+        if (automobile != null) {
+            sb.append(automobile.getId());
+        } else {
+            sb.append("null");
+        }
+        sb.append(",\n driverId=");
+        if (driver != null) {
+            sb.append(driver.getId());
+        } else {
+            sb.append("null");
+        }
+        sb.append(",\n dateOfAttachment=");
+        sb.append(dateOfAttachment);
+        sb.append(",\n dateOfDetachment=");
+        sb.append(dateOfDetachment);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override

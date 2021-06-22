@@ -227,6 +227,10 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     int technicalStatusId = resultSet.getInt("technical_status_id");
                     automobile.setTechnicalStatus(technicalStatusDao.findStatus(technicalStatusId));
 
+                    AutomobileAttachmentDao automobileAttachmentDao = new AutomobileAttachmentDaoImpl();
+                    automobile.setAutomobileAttachmentList(automobileAttachmentDao
+                            .findAttachmentsOfAutomobile(automobile));
+
                     automobiles.add(automobile);
 
                 }

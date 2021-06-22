@@ -28,7 +28,7 @@ public class ChartererDaoImpl implements ChartererDao {
     static final String CREATE_CHARTERER_DAO_SQL_NO_ID =
             "INSERT INTO motor_depot.charterer (name, surname, own_address_id) VALUES (?, ?, ?);";
     static final String GET_CHARTERER_SQL = "SELECT * FROM motor_depot.charterer WHERE id = ?;";
-    static final String GET_ALL_CHARTERERS_SQL = "SELECT * SELECT motor_depot.charterer;";
+    static final String GET_ALL_CHARTERERS_SQL = "SELECT * FROM motor_depot.charterer;";
     static final String UPDATE_CHARTERER_SQL =
             "UPDATE motor_depot.charterer SET name = ?, surname = ?, own_address_id = ? WHERE (id = ?);";
     static final String DELETE_CHARTERER_SQL = "DELETE FROM motor_depot.charterer WHERE (id = ?);";
@@ -338,8 +338,8 @@ public class ChartererDaoImpl implements ChartererDao {
     }
 
     @Override
-    public int createCharterer(String name, String surname, String country, String region, String street,
-                               String locality, String building, String apartment) throws DaoException {
+    public int createCharterer(String name, String surname, String country, String region, String locality,
+                               String street, String building, String apartment) throws DaoException {
         int id = 0;
         try {
             Connection connection = connectionPool.takeConnection();

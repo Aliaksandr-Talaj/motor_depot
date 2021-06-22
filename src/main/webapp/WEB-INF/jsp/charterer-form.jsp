@@ -33,7 +33,13 @@
     </div>
 </nav>
 
-<form action="/motor_depot/user/dispatcher/add-charterer" method="post">
+<c:set var="ref" value="/motor_depot/user/dispatcher/add-charterer"/>
+
+<c:if test="${for_request eq 1}">
+    <c:set var="ref" value="/motor_depot/user/dispatcher/request-form2"/>
+</c:if>
+
+<form action="${ref}" method="post">
     <div class="container">
         <br class="row g-3 needs-validation" novalidate>
         <div class="col-md-2">

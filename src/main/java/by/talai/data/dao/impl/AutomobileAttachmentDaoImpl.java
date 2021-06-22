@@ -8,6 +8,8 @@ import by.talai.data.exception.ConnectionPoolException;
 import by.talai.data.exception.DaoException;
 import by.talai.model.AutomobileAttachment;
 import by.talai.model.personnel.Driver;
+import by.talai.model.personnel.User;
+import by.talai.model.stock.Automobile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,10 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
     static final String CREATE_ATTACHMENT_SQL = "INSERT INTO motor_depot.automobile_attachment " +
             "(automobile_id, driver_id, date_of_attachment, date_of_detachment) VALUES (?, ?, ?, ?);";
     static final String FIND_ALL_AUTOMOBILE_ATTACHMENTS_SQL = "SELECT * FROM motor_depot.automobile_attachment; ";
+    static final String FIND_AUTOMOBILE_ATTACHMENTS_OF_DRIVER_SQL =
+            "SELECT * FROM motor_depot.automobile_attachment WHERE (driver_id = ?); ";
+    static final String FIND_AUTOMOBILE_ATTACHMENTS_OF_AUTOMOBILE_SQL =
+            "SELECT * FROM motor_depot.automobile_attachment WHERE (automobile_id = ?); ";
     static final String UPDATE_AUTOMOBILE_ATTACHMENT_SQL =
             "UPDATE motor_depot.automobile_attachment SET automobile_id = ?, driver_id = ?," +
                     " date_of_attachment = ?, date_of_detachment = ? WHERE (id = ?);";
@@ -39,7 +45,7 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
 
     @Override
     public int createAttachment(AutomobileAttachment automobileAttachment) throws Exception {
-        int id=0;
+        int id = 0;
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
@@ -55,8 +61,9 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
                 connection.commit();
                 try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID);
                      ResultSet resultSet = preparedStatementForId.executeQuery()) {
-                    if(resultSet.next()){
-                    id = resultSet.getInt(1);}
+                    if (resultSet.next()) {
+                        id = resultSet.getInt(1);
+                    }
                 } catch (SQLException e) {
                     logger.error("Sql exception in createAttachment() method");
                     throw new DaoException("exception in createAttachment() method", e);
@@ -97,7 +104,12 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
 
                     int driverId = resultSet.getInt("driver_id");
                     UserDao userDao = new UserDaoImpl();
-                    Driver driver = (Driver) userDao.getUser(driverId);
+                    Driver driver = new Driver();
+                    User user = userDao.getUser(driverId);
+                    driver.setId(user.getId());
+                    driver.setName(user.getName());
+                    driver.setSurname(user.getSurname());
+
                     driver.setAutomobileAttachments(automobileAttachments);
                     automobileAttachment.setDriver(driver);
 
@@ -181,4 +193,103 @@ public class AutomobileAttachmentDaoImpl implements AutomobileAttachmentDao {
             throw new DaoException("exception in deleteAutomobileAttachment() method", e);
         }
     }
+
+    @Override
+    public List<AutomobileAttachment> findAttachmentsOfDriver(User user) throws DaoException {
+        List<AutomobileAttachment> automobileAttachments = new ArrayList<>();
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(FIND_AUTOMOBILE_ATTACHMENTS_OF_DRIVER_SQL);
+            preparedStatement.setInt(1, user.getId());
+
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    AutomobileAttachment automobileAttachment = new AutomobileAttachment();
+
+                    automobileAttachment.setId(resultSet.getInt("id"));
+
+                    String automobileId = resultSet.getString("automobile_id");
+                    AutomobileDao automobileDao = new AutomobileDaoImpl();
+                    automobileAttachment.setAutomobile(automobileDao.getAutomobile(automobileId));
+                    int driverId = resultSet.getInt("driver_id");
+                    UserDao userDao = new UserDaoImpl();
+                    User usr = userDao.getUser(driverId);
+                    Driver driver = new Driver();
+                    driver.setId(usr.getId());
+                    driver.setName(usr.getName());
+                    driver.setSurname(usr.getSurname());
+                    driver.setAutomobileAttachments(automobileAttachments);
+                    automobileAttachment.setDriver(driver);
+
+                    automobileAttachment.setDateOfAttachment(resultSet.getDate("date_of_attachment"));
+                    automobileAttachment.setDateOfDetachment(resultSet.getDate("date_of_detachment"));
+
+                    automobileAttachments.add(automobileAttachment);
+                }
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in findAttachmentsOfDriver() method");
+                throw new DaoException("exception in findAttachmentsOfDriver() method", e);
+            }
+        } catch (ConnectionPoolException e) {
+            logger.error("Connection pool exception in findAttachmentsOfDriver() method");
+            throw new DaoException("exception in findAttachmentsOfDriver() method", e);
+        } catch (Exception e) {
+            logger.error("Exception in findAttachmentsOfDriver() method");
+            throw new DaoException("exception in findAttachmentsOfDriver() method", e);
+        }
+        return automobileAttachments;
+    }
+
+    @Override
+    public List<AutomobileAttachment> findAttachmentsOfAutomobile(Automobile automobile) throws DaoException {
+        List<AutomobileAttachment> automobileAttachments = new ArrayList<>();
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(FIND_AUTOMOBILE_ATTACHMENTS_OF_AUTOMOBILE_SQL);
+            preparedStatement.setString(1, automobile.getId());
+
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    AutomobileAttachment automobileAttachment = new AutomobileAttachment();
+
+                    automobileAttachment.setId(resultSet.getInt("id"));
+
+                    String automobileId = resultSet.getString("automobile_id");
+                    AutomobileDao automobileDao = new AutomobileDaoImpl();
+                    automobileAttachment.setAutomobile(automobileDao.getAutomobile(automobileId));
+                    int driverId = resultSet.getInt("driver_id");
+                    UserDao userDao = new UserDaoImpl();
+                    User usr = userDao.getUser(driverId);
+                    Driver driver = new Driver();
+                    driver.setId(usr.getId());
+                    driver.setName(usr.getName());
+                    driver.setSurname(usr.getSurname());
+                    driver.setAutomobileAttachments(automobileAttachments);
+                    automobileAttachment.setDriver(driver);
+
+                    automobileAttachment.setDateOfAttachment(resultSet.getDate("date_of_attachment"));
+                    automobileAttachment.setDateOfDetachment(resultSet.getDate("date_of_detachment"));
+
+                    automobileAttachments.add(automobileAttachment);
+                }
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in findAttachmentsOfAutomobile() method");
+                throw new DaoException("exception in findAttachmentsOfAutomobile() method", e);
+            }
+        } catch (ConnectionPoolException e) {
+            logger.error("Connection pool exception in findAttachmentsOfAutomobile() method");
+            throw new DaoException("exception in findAttachmentsOfAutomobile() method", e);
+        } catch (Exception e) {
+            logger.error("Exception in findAttachmentsOfAutomobile() method");
+            throw new DaoException("exception in findAttachmentsOfAutomobile() method", e);
+        }
+        return automobileAttachments;
+    }
+
 }

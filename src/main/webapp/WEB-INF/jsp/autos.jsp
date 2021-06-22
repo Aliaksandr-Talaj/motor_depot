@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <jsp:include page="header.jsp"/>
 <fmt:setLocale value="${sessionScope.local}"/>
@@ -20,77 +20,71 @@
 <fmt:message bundle="${loc}" key="local.auto.cargo.height.limit" var="auto_h_limit"/>
 <fmt:message bundle="${loc}" key="local.auto.cargo.volume.limit" var="auto_v_limit"/>
 <fmt:message bundle="${loc}" key="local.auto.status" var="auto_status"/>
-<fmt:message bundle="${loc}" key="local.auto.driver" var="auto_driver"/>
-
+<fmt:message bundle="${loc}" key="local.view.attachments" var="v_att"/>
+<fmt:message bundle="${loc}" key="local.actions" var="actions"/>
+<fmt:message bundle="${loc}" key="local.unit.weight" var="w_unit"/>
+<fmt:message bundle="${loc}" key="local.unit.length" var="l_unit"/>
+<fmt:message bundle="${loc}" key="local.unit.volume" var="v_unit"/>
 
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">
-  <div class="container-fluid">
-    <span class="navbar-brand mb-0 h1"><c:out value="${page_name}"/></span>
-  </div>
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1"><c:out value="${page_name}"/></span>
+    </div>
 </nav>
 
 <table class="table">
-      <thead>
+    <thead>
+    <tr>
+        <th scope="col">${auto_number}</th>
+        <th scope="col">${auto_brand}</th>
+        <th scope="col">${auto_model}</th>
+        <th scope="col">${auto_fuel}</th>
+        <th scope="col">${auto_carrying}<br/>${w_unit}</th>
+        <th scope="col">${auto_type}</th>
+        <th scope="col">${auto_equipment}</th>
+        <th scope="col">${auto_types}</th>
+        <th scope="col">${auto_p_length}<br/>${l_unit}</th>
+        <th scope="col">${auto_p_width}<br/>${l_unit}</th>
+        <th scope="col">${auto_h_limit}<br/>${l_unit}</th>
+        <th scope="col">${auto_v_limit}<br/>${v_unit}</th>
+        <th scope="col">${auto_status}</th>
+        <th scope="col">${actions}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach items="${automobiles}" var="auto">
         <tr>
-
-          <th scope="col">${auto_number}</th>
-          <th scope="col">${auto_brand}</th>
-          <th scope="col">${auto_model}</th>
-          <th scope="col">${auto_fuel}</th>
-          <th scope="col">${auto_carrying}</th>
-          <th scope="col">${auto_type}</th>
-          <th scope="col">${auto_equipment}</th>
-          <th scope="col">${auto_types}</th>
-          <th scope="col">${auto_p_length}</th>
-          <th scope="col">${auto_p_width}</th>
-          <th scope="col">${auto_h_limit}</th>
-          <th scope="col">${auto_v_limit}</th>
-          <th scope="col">${auto_status}</th>
-          <th scope="col">${auto_driver}</th>
+            <td>${auto.id}</td>
+            <td>${auto.brand}</td>
+            <td>${auto.model}</td>
+            <td>${auto.fuelType.type}</td>
+            <td>${auto.carrying}</td>
+            <td>${auto.automobileType.type}</td>
+            <td>
+                <c:forEach items="${auto.equipmentSet}" var="equipment">
+                    ${equipment.name}
+                </c:forEach>
+            </td>
+            <td>
+                <c:forEach items="${auto.loadingTypes}" var="l_type">
+                    ${l_type.type}
+                </c:forEach>
+                    </td>
+            <td>${auto.platformLength}</td>
+            <td>${auto.platformWidth}</td>
+            <td>${auto.cargoHeightLimit}</td>
+            <td>${auto.cargoVolumeLimit}</td>
+            <td>${auto.technicalStatus.status}</td>
+            <td>
+                <a class="btn btn-secondary"
+                   href="/motor_depot/user/dispatcher/v_attachment?id=${auto.id}"
+                   role="button">${v_att}</a>
+            </td>
         </tr>
-      </thead>
-      <tbody>
-      <c:forEach items="${autosDto.automobiles}" var="auto">
-        <tr>
-          <td>${auto.id}</td>
-          <td>${auto.brand}</td>
-          <td>${auto.model}</td>
-          <td>${auto.fuelType}</td>
-          <td>${auto.carrying}</td>
-          <td>${auto.automobileType}</td>
-          <td>${auto.equipmentSet}</td>
-          <td>${auto.loadingTypes}</td>
-          <td>${auto.platformLength}</td>
-          <td>${auto.platformWidth}</td>
-          <td>${auto.cargoHeightLimit}</td>
-          <td>${auto.cargoVolumeLimit}</td>
-          <td>${auto.technicalStatus}</td>
-
-
-
-
-
-          <td>
-            <c:choose>
-                <c:when test="${user.status.status eq 'active'}">
-                    <a class="btn btn-primary"  href="/motor_depot/admin/users/c_status?id=<c:out value='${user.id}'/>&statusId=2" role="button"><c:out value="${u_block}"/></a>
-                </c:when>
-                <c:otherwise>
-                    <a class="btn btn-secondary"  href="/motor_depot/admin/users/c_status?id=<c:out value='${user.id}'/>&statusId=1" role="button"><c:out value="${u_unblock}"/></a>
-                </c:otherwise>
-            </c:choose>
-          </td>
-        </tr>
-      </c:forEach>
-      </tbody>
-    </table>
-
-
-
-
-
-
+    </c:forEach>
+    </tbody>
+</table>
 
 
 <jsp:include page="footer.jsp"/>

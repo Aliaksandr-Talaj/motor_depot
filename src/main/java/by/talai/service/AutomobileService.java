@@ -1,5 +1,6 @@
 package by.talai.service;
 
+import by.talai.model.AutomobileAttachment;
 import by.talai.model.stock.Automobile;
 import by.talai.service.dto.AutomobilesDto;
 
@@ -16,4 +17,5 @@ public interface AutomobileService {
     void updateAutomobile(Automobile automobile) throws Exception;
 
     AutomobilesDto getAllAutomobilesDto() throws Exception;
+
 }

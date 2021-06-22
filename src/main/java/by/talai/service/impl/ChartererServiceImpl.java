@@ -9,6 +9,8 @@ import by.talai.service.ChartererService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class ChartererServiceImpl implements ChartererService {
 
     private final ChartererDao chartererDao = new ChartererDaoImpl();
@@ -29,5 +31,10 @@ public class ChartererServiceImpl implements ChartererService {
     @Override
     public Charterer getCharterer(int id) throws Exception {
         return chartererDao.getCharterer(id);
+    }
+
+    @Override
+    public List<Charterer> getCharterers() throws Exception {
+        return chartererDao.getAllCharterers();
     }
 }
