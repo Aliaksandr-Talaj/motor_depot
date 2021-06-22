@@ -22,9 +22,9 @@ public class ChartererServiceImpl implements ChartererService {
 
 
     @Override
-    public void addCharterer(String name, String surname, String country, String region,
-                             String locality, String street, String building, String apartment) throws DaoException {
-        chartererDao.createCharterer(name, surname, country, region,
+    public int addCharterer(String name, String surname, String country, String region,
+                            String locality, String street, String building, String apartment) throws DaoException {
+        return chartererDao.createCharterer(name, surname, country, region,
                 locality, street, building, apartment);
     }
 

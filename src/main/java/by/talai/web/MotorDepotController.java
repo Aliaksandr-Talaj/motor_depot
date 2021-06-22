@@ -38,6 +38,7 @@ public class MotorDepotController extends HttpServlet {
         if (request.getParameter("local") != null) {
             request.getSession(true).setAttribute("local", request.getParameter("local"));
         }
+        request.getSession(true).setAttribute("role", "dispatcher");
         String role = (String) request.getSession(true).getAttribute("role");
 
         String action = request.getServletPath();
@@ -74,11 +75,27 @@ public class MotorDepotController extends HttpServlet {
                         break;
 //dispatchers can do
 
-                    case "user/dispatcher/request-form2":
+//                    case "/user/dispatcher/address_chosen2":
+//                        if ("dispatcher".equals(role))
+//                            addChartererAndGoRequestForm3(request, response);
+//                        break;
+                    case "/user/dispatcher/address_chosen":
                         if ("dispatcher".equals(role))
-                            goRequestForm2(request, response);
+                            addChartererAndGoRequestForm3(request, response);
                         break;
-                    case "user/dispatcher/create_charterer4req":
+                    case "/user/dispatcher/request-form2":
+                        if ("dispatcher".equals(role))
+                            addChartererAndGoRequestForm2(request, response);
+                        break;
+                    case "/user/dispatcher/charterer_chosen":
+                        if ("dispatcher".equals(role))
+                            setChartererAndGoRequestForm2(request, response);
+                        break;
+                    case "/admin/add_auto":
+                        if ("dispatcher".equals(role))
+                            addNewAuto(request, response);
+                        break;
+                    case "/user/dispatcher/create_charterer4req":
                         if ("dispatcher".equals(role))
                             goAddCharterer(request, response);
                         break;
@@ -175,9 +192,68 @@ public class MotorDepotController extends HttpServlet {
 
     }
 
-    private void goRequestForm2(HttpServletRequest request, HttpServletResponse response) {
+    private void addChartererAndGoRequestForm3(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form3.jsp");
+        dispatcher.forward(request, response);
+    }
 
+    private void addChartererAndGoRequestForm2(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+        String name = request.getParameter("name");
+        String surname = request.getParameter("surname");
+        String country = request.getParameter("country");
+        String region = request.getParameter("region");
+        String locality = request.getParameter("locality");
+        String street = request.getParameter("street");
+        String building = request.getParameter("building");
+        String apartment = request.getParameter("apartment");
+        int chartererId = chartererService.addCharterer(name, surname, country, region, locality, street,
+                building, apartment);
+        goRequestForm2(request, response, chartererId);
+    }
+
+    private void goRequestForm2(HttpServletRequest request, HttpServletResponse response, int chartererId) throws Exception {
+        Request generatingRequest = (Request) request.getSession().getAttribute("generatingRequest");
+        ChartererService chartererService = new ChartererServiceImpl();
+        Charterer charterer = chartererService.getCharterer(chartererId);
+        generatingRequest.setCharterer(charterer);
+        request.getSession().setAttribute("generatingRequest", generatingRequest);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form2.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void addNewAuto(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String id = request.getParameter("id");
+        String brand = request.getParameter("brand");
+        String model = request.getParameter("model");
+        String fuel = request.getParameter("fuel");
+        String carrying = request.getParameter("carrying");
+        String type = request.getParameter("type");
+        String equipment1 = request.getParameter("equipment1");
+        String equipment2 = request.getParameter("equipment2");
+        String equipment3 = request.getParameter("equipment3");
+        String top = request.getParameter("top");
+        String rear = request.getParameter("rear");
+        String side = request.getParameter("side");
+        String platformLength = request.getParameter("p_length");
+        String platformWidth = request.getParameter("p_width");
+        String heightLimit = request.getParameter("h_limit");
+        String volumeLimit = request.getParameter("v_limit");
+//TODO check
+        automobileService.addNewAutomobile(id, brand, model, fuel, carrying, type, equipment1, equipment2, equipment3,
+                top, rear, side, platformLength, platformWidth, heightLimit, volumeLimit);
+        response.sendRedirect("/motor_depot/user/dispatcher/autos");
+    }
+
+    private void setChartererAndGoRequestForm2(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        try {
+            int chartererId = Integer.parseInt(request.getParameter("chartererId"));
+            goRequestForm2(request, response, chartererId);
+        } catch (NumberFormatException e) {
+            goRequestForm(request, response);
+        }
     }
 
     private void goAddCharterer(HttpServletRequest request, HttpServletResponse response)
@@ -258,7 +334,7 @@ public class MotorDepotController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void addCharterer(HttpServletRequest request, HttpServletResponse response) throws IOException, DaoException {
+    private void addCharterer(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String name = request.getParameter("name");
         String surname = request.getParameter("surname");
         String country = request.getParameter("country");
@@ -267,8 +343,13 @@ public class MotorDepotController extends HttpServlet {
         String street = request.getParameter("street");
         String building = request.getParameter("building");
         String apartment = request.getParameter("apartment");
-        chartererService.addCharterer(name, surname, country, region, locality, street,
+        int chartererId = chartererService.addCharterer(name, surname, country, region, locality, street,
                 building, apartment);
+
+//        int goToReq2Form = Integer.parseInt(request.getParameter("goToReq2Form"));
+//        if (goToReq2Form == 1) {
+//            goRequestForm2(request, response, chartererId);
+//        }
         response.sendRedirect("/motor_depot/user/dispatcher/charterers");
     }
 

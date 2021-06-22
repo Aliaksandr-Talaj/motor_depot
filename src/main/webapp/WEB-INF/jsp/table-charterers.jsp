@@ -21,7 +21,6 @@
 <fmt:message bundle="${loc}" key="local.choose.that" var="CHOOSE_THAT"/>
 
 
-
 <table class="table">
     <thead>
     <tr>
@@ -44,22 +43,29 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${charterers}" var="charterer">
+    <c:forEach items="${charterers}" var="address">
         <tr>
-            <td>${charterer.id}</td>
-            <td>${charterer.name}</td>
-            <td>${charterer.surname}</td>
-            <td>${charterer.ownAddress.country}</td>
-            <td>${charterer.ownAddress.region}</td>
-            <td>${charterer.ownAddress.locality}</td>
-            <td>${charterer.ownAddress.street}</td>
-            <td>${charterer.ownAddress.building}</td>
-            <td>${charterer.ownAddress.apartment}</td>
+            <td>${address.id}</td>
+            <td>${address.name}</td>
+            <td>${address.surname}</td>
+            <td>${address.ownAddress.country}</td>
+            <td>${address.ownAddress.region}</td>
+            <td>${address.ownAddress.locality}</td>
+            <td>${address.ownAddress.street}</td>
+            <td>${address.ownAddress.building}</td>
+            <td>${address.ownAddress.apartment}</td>
 
             <c:if test="${new_request eq 1}">
-            <td> <a class="btn btn-secondary"
-                   href="/motor_depot/user/dispatcher/charterer_chosen?id=${charterer.id}"
-                    role="button">${CHOOSE_THAT}</a></td>
+
+                <td>
+                    <form method="post" action="/motor_depot/user/dispatcher/charterer_chosen">
+                        <input type="hidden" value="${address.id}" name="chartererId"/>
+                        <button class="btn btn-secondary"
+
+                                role="button" type="submit" value="Save">${CHOOSE_THAT}</button>
+                    </form>
+                </td>
+
             </c:if>
         </tr>
     </c:forEach>

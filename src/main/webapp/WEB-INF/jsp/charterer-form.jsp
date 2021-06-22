@@ -71,12 +71,12 @@
         <div class="col-md-3">
             <label for="validationCustom02" class="form-label">${LOCALITY}</label>
             <input type="text" name="locality" class="form-control"
-                    PLACEHOLDER="${ENTER_LOCALITY}" required>
+                   PLACEHOLDER="${ENTER_LOCALITY}" required>
         </div>
         <div class="col-md-3">
             <label for="validationCustom02" class="form-label">${STREET}</label>
             <input type="text" name="street" class="form-control"
-                    PLACEHOLDER="${ENTER_STREET}" required>
+                   PLACEHOLDER="${ENTER_STREET}" required>
         </div>
         <div class="col-md-3">
             <label for="validationCustom02" class="form-label">${BUILDING}</label>
@@ -88,8 +88,12 @@
             <input type="text" name="apartment" class="form-control"
                    PLACEHOLDER="${ENTER_APARTMENT}" required>
         </div>
-
-
+        <c:choose>
+            <c:when test="${for_request eq 1}">
+                <input type="hidden" name="goToReq2Form" value="1"/>
+            </c:when>
+            <c:otherwise><input type="hidden" name="goToReq2Form" value="0"/></c:otherwise>
+        </c:choose>
         <div class="col-12">
             <button class="btn btn-primary" type="submit" value="Save">${SUBMIT}</button>
         </div>

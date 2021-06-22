@@ -114,7 +114,7 @@
             <label class="form-label">${EQUIPMENT}</label>
             <label>
                 <select class="form-select" name="equipment1">
-                    <option selected disabled value="">${CHOOSE}</option>
+                    <option selected disabled value="0">${CHOOSE}</option>
                     <option value="0">${NOTHING}</option>
                     <option value="1">${FRIDGE}</option>
                     <option value="2">${H_PLATFORM}</option>
@@ -123,7 +123,7 @@
             </label>
             <label>
                 <select class="form-select" name="equipment2">
-                    <option selected disabled value="">${CHOOSE}</option>
+                    <option selected disabled value="0">${CHOOSE}</option>
                     <option value="0">${NOTHING}</option>
                     <option value="1">${FRIDGE}</option>
                     <option value="2">${H_PLATFORM}</option>
@@ -132,7 +132,7 @@
             </label>
             <label>
                 <select class="form-select" name="equipment3">
-                    <option selected disabled value="">${CHOOSE}</option>
+                    <option selected disabled value="0">${CHOOSE}</option>
                     <option value="0">${NOTHING}</option>
                     <option value="1">${FRIDGE}</option>
                     <option value="2">${H_PLATFORM}</option>
@@ -146,7 +146,7 @@
 
             <label class="form-label">${L_TYPE_TOP}</label>
             <label>
-                <select class="form-select" name="upper" required>
+                <select class="form-select" name="top" required>
                     <option selected disabled value="">${CHOOSE}</option>
                     <option value="1">${YES}</option>
                     <option value="0">${NO}</option>
@@ -154,7 +154,7 @@
             </label>
             <label class="form-label">${L_TYPE_REAR}</label>
             <label>
-                <select class="form-select" name="lower" required>
+                <select class="form-select" name="rear" required>
                     <option selected disabled value="">${CHOOSE}</option>
                     <option value="1">${YES}</option>
                     <option value="0">${NO}</option>
@@ -173,28 +173,28 @@
         <div class="col-md-4">
             <label class="form-label">${P_LENGTH}</label>
             <label>
-                <input type="text" name="model" class="form-control" PLACEHOLDER="${E_P_LENGTH}" required>
+                <input type="text" name="p_length" class="form-control" PLACEHOLDER="${E_P_LENGTH}" required>
             </label>
         </div>
 
         <div class="col-md-4">
             <label class="form-label">${P_WIDTH}</label>
             <label>
-                <input type="text" name="model" class="form-control" PLACEHOLDER="${E_P_WIDTH}" required>
+                <input type="text" name="p_width" class="form-control" PLACEHOLDER="${E_P_WIDTH}" required>
             </label>
         </div>
 
         <div class="col-md-4">
             <label class="form-label">${C_H_LIMIT}</label>
             <label>
-                <input type="text" name="model" class="form-control" PLACEHOLDER="${E_C_H_LIMIT}">
+                <input type="text" name="h_limit" class="form-control" PLACEHOLDER="${E_C_H_LIMIT}">
             </label>
         </div>
 
         <div class="col-md-4">
             <label class="form-label">${C_V_LIMIT}</label>
             <label>
-                <input type="text" name="model" class="form-control" PLACEHOLDER="${E_C_V_LIMIT}">
+                <input type="text" name="v_limit" class="form-control" PLACEHOLDER="${E_C_V_LIMIT}">
             </label>
         </div>
 

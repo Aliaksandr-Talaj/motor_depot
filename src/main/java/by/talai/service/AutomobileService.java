@@ -1,6 +1,6 @@
 package by.talai.service;
 
-import by.talai.model.AutomobileAttachment;
+import by.talai.data.exception.ConnectionPoolException;
 import by.talai.model.stock.Automobile;
 import by.talai.service.dto.AutomobilesDto;
 
@@ -18,4 +18,8 @@ public interface AutomobileService {
 
     AutomobilesDto getAllAutomobilesDto() throws Exception;
 
+    void addNewAutomobile(String id, String brand, String model, String fuel, String carrying, String type,
+                          String equipment1, String equipment2, String equipment3, String top, String rear,
+                          String side, String platformLength, String platformWidth, String heightLimit,
+                          String volumeLimit) throws Exception;
 }

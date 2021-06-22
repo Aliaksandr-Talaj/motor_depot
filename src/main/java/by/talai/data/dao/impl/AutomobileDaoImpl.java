@@ -97,23 +97,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
             preparedStatement.setInt(11, automobile.getTechnicalStatus().getId());
 
             try (connection; preparedStatement) {
-                Set<Equipment> equipmentSet = automobile.getEquipmentSet();
-                if (equipmentSet != null && !equipmentSet.isEmpty()) {
-                    for (Equipment equipment : equipmentSet) {
-                        int equipmentId = equipment.getId();
-                        addEquipmentToAutomobile(equipmentId, automobileId);
-                    }
-                }
-                Set<LoadingType> loadingTypes = automobile.getLoadingTypes();
-                if (loadingTypes != null && !loadingTypes.isEmpty()) {
-                    for (LoadingType loadingType : loadingTypes) {
-                        int loadingTypeId = loadingType.getId();
-                        addLoadingTypeToAutomobile(loadingTypeId, automobileId);
-                    }
-                }
-
-                preparedStatement.executeUpdate();
-                connection.commit();
+                setEquipmentAndLoadingTypes(automobile, connection, preparedStatement, automobileId);
 
 
             } catch (SQLException e) {
@@ -127,6 +111,26 @@ public class AutomobileDaoImpl implements AutomobileDao {
             logger.error("Exception in createAutomobile() method");
             throw new DaoException("exception in createAutomobile() method", e);
         }
+    }
+
+    private void setEquipmentAndLoadingTypes(Automobile automobile, Connection connection, PreparedStatement preparedStatement, String automobileId) throws Exception {
+        Set<Equipment> equipmentSet = automobile.getEquipmentSet();
+        if (equipmentSet != null && !equipmentSet.isEmpty()) {
+            for (Equipment equipment : equipmentSet) {
+                int equipmentId = equipment.getId();
+                addEquipmentToAutomobile(equipmentId, automobileId);
+            }
+        }
+        Set<LoadingType> loadingTypes = automobile.getLoadingTypes();
+        if (loadingTypes != null && !loadingTypes.isEmpty()) {
+            for (LoadingType loadingType : loadingTypes) {
+                int loadingTypeId = loadingType.getId();
+                addLoadingTypeToAutomobile(loadingTypeId, automobileId);
+            }
+        }
+
+        preparedStatement.executeUpdate();
+        connection.commit();
     }
 
     @Override
@@ -271,23 +275,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
             preparedStatement.setString(11, automobileId);
 
             try (connection; preparedStatement) {
-                Set<Equipment> equipmentSet = automobile.getEquipmentSet();
-                if (equipmentSet != null && !equipmentSet.isEmpty()) {
-                    for (Equipment equipment : equipmentSet) {
-                        int equipmentId = equipment.getId();
-                        addEquipmentToAutomobile(equipmentId, automobileId);
-                    }
-                }
-                Set<LoadingType> loadingTypes = automobile.getLoadingTypes();
-                if (loadingTypes != null && !loadingTypes.isEmpty()) {
-                    for (LoadingType loadingType : loadingTypes) {
-                        int loadingTypeId = loadingType.getId();
-                        addLoadingTypeToAutomobile(loadingTypeId, automobileId);
-                    }
-                }
-
-                preparedStatement.executeUpdate();
-                connection.commit();
+                setEquipmentAndLoadingTypes(automobile, connection, preparedStatement, automobileId);
 
 
             } catch (SQLException e) {
