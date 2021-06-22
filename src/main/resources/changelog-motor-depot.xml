@@ -725,16 +725,16 @@
 
     <changeSet id="39" author="root">
         <sql>
-            INSERT INTO `motor_depot`.`equipment` (`name`) VALUES ('Рефрижераторная установка');
-            INSERT INTO `motor_depot`.`equipment` (`name`) VALUES ('Гидравлическая платформа');
-            INSERT INTO `motor_depot`.`equipment` (`name`) VALUES ('Самопогрузчик');
+            INSERT INTO `motor_depot`.`equipment` (`id`, `name`) VALUES (1, 'Рефрижераторная установка');
+            INSERT INTO `motor_depot`.`equipment` (`id`, `name`) VALUES (2, 'Гидравлическая платформа');
+            INSERT INTO `motor_depot`.`equipment` (`id`, `name`) VALUES (3, 'Самопогрузчик');
         </sql>
     </changeSet>
 
-<!--    <changeSet id="40" author="root">-->
-<!--        <sql>-->
-<!--            -->
-<!--        </sql>-->
-<!--    </changeSet>-->
+    <!--    <changeSet id="40" author="root">-->
+    <!--        <sql>-->
+    <!--            -->
+    <!--        </sql>-->
+    <!--    </changeSet>-->
 
 </databaseChangeLog>

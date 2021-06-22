@@ -8,12 +8,19 @@
 <fmt:setBundle basename="local" var="loc"/>
 <fmt:message bundle="${loc}" key="local.request-form" var="page_name"/>
 <fmt:message bundle="${loc}" key="local.add.new.one" var="ADD_NEW"/>
+<fmt:message bundle="${loc}" key="local.req1" var="REQUEST_PAGE_1"/>
 
 
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
         <span class="navbar-brand mb-0 h1"><c:out value="${page_name}"/></span>
+    </div>
+</nav>
+
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">${REQUEST_PAGE_1}</span>
     </div>
 </nav>
 
