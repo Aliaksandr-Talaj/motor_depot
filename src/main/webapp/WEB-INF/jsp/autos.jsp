@@ -22,8 +22,8 @@
 <fmt:message bundle="${loc}" key="local.auto.status" var="auto_status"/>
 <fmt:message bundle="${loc}" key="local.view.attachments" var="v_att"/>
 <fmt:message bundle="${loc}" key="local.actions" var="actions"/>
-<fmt:message bundle="${loc}" key="local.unit.weight" var="w_unit"/>
-<fmt:message bundle="${loc}" key="local.unit.length" var="l_unit"/>
+<fmt:message bundle="${loc}" key="local.weight.units" var="w_unit"/>
+<fmt:message bundle="${loc}" key="local.length.units" var="l_unit"/>
 <fmt:message bundle="${loc}" key="local.unit.volume" var="v_unit"/>
 
 <!--Page name -->

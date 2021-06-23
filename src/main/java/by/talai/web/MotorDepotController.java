@@ -1,5 +1,8 @@
 package by.talai.web;
 
+import by.talai.data.dao.AddressDao;
+import by.talai.data.dao.impl.AddressDaoImpl;
+import by.talai.data.exception.ConnectionPoolException;
 import by.talai.data.exception.DaoException;
 import by.talai.model.*;
 import by.talai.model.personnel.User;
@@ -19,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
 public class MotorDepotController extends HttpServlet {
@@ -74,14 +78,37 @@ public class MotorDepotController extends HttpServlet {
                             changeUserStatus(request, response);
                         break;
 //dispatchers can do
-
-//                    case "/user/dispatcher/address_chosen2":
-//                        if ("dispatcher".equals(role))
-//                            addChartererAndGoRequestForm3(request, response);
-//                        break;
+                    case "/user/dispatcher/add_cargo":
+                        if ("dispatcher".equals(role))
+                            addCargoGoRequestForm6(request, response);
+                        break;
+                    case "/user/dispatcher/dates_chosen":
+                        if ("dispatcher".equals(role))
+                            addDatesAndGoRequestForm5(request, response);
+                        break;
+                    case "/user/dispatcher/request-form4":
+                        if ("dispatcher".equals(role))
+                            addAddressAndGoRequestForm4(request, response);
+                        break;
+                    case "/user/dispatcher/create_destination_address4req":
+                        if ("dispatcher".equals(role))
+                            addAddress4Req2(request, response);
+                        break;
+                    case "/user/dispatcher/request-form3":
+                        if ("dispatcher".equals(role))
+                            addAddressAndGoRequestForm3(request, response);
+                        break;
+                    case "/user/dispatcher/create_loading_address4req":
+                        if ("dispatcher".equals(role))
+                            addAddress4Req(request, response);
+                        break;
+                    case "/user/dispatcher/address_chosen2":
+                        if ("dispatcher".equals(role))
+                            selectAddressAndGoRequestForm4(request, response);
+                        break;
                     case "/user/dispatcher/address_chosen":
                         if ("dispatcher".equals(role))
-                            addChartererAndGoRequestForm3(request, response);
+                            selectAddressAndGoRequestForm3(request, response);
                         break;
                     case "/user/dispatcher/request-form2":
                         if ("dispatcher".equals(role))
@@ -121,7 +148,7 @@ public class MotorDepotController extends HttpServlet {
                         break;
                     case "/user/dispatcher/charterers":
                         if ("dispatcher".equals(role))
-                            goCharterers(request, response);
+                            goListCharterers(request, response);
                         break;
                     case "/user/dispatcher/charterer":
                         if ("dispatcher".equals(role))
@@ -192,13 +219,141 @@ public class MotorDepotController extends HttpServlet {
 
     }
 
-    private void addChartererAndGoRequestForm3(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void addCargoGoRequestForm6(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String cargoName = request.getParameter("cargoName");
+        String unitType = request.getParameter("unitType");
+        int unitLength = Integer.parseInt(request.getParameter("unitLength"));
+        int unitWidth = Integer.parseInt(request.getParameter("unitWidth"));
+        double unitHeight = Double.parseDouble(request.getParameter("unitHeight"));
+        double unitWeight = Double.parseDouble(request.getParameter("unitWeight"));
+
+
+
+
+
+        Cargo cargo = (Cargo) request.getSession().getAttribute("generatingCargo");
+
+
+    }
+
+    private void addDatesAndGoRequestForm5(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        Date loadingDate = Date.valueOf(request.getParameter("loadingDate"));
+        Date unloadingDate = Date.valueOf(request.getParameter("unloadingDate"));
+        Request generatingRequest = (Request) request.getSession().getAttribute("generatingRequest");
+        RequestService requestService = new RequestServiceImpl();
+        boolean datesAreValid = requestService.validateDates(loadingDate, unloadingDate);
+        if (datesAreValid) {
+            Date now = new Date(new java.util.Date().getTime());
+            generatingRequest.setFillingDate(now);
+
+            Delivery generatingDelivery = (Delivery) request.getSession().getAttribute("generatingDelivery");
+            generatingDelivery.setLoadingDate(loadingDate);
+            generatingDelivery.setTerm(unloadingDate);
+            request.getSession().setAttribute("generatingDelivery", generatingDelivery);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form5.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            request.setAttribute("invalidInput", Boolean.TRUE);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form4.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    }
+
+    private void addAddress4Req2(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setAttribute("for_request", 4);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/address-form.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void selectAddressAndGoRequestForm4(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+
+        int addressId = Integer.parseInt(request.getParameter("destinationAddressId"));
+        AddressDao addressDao = new AddressDaoImpl();
+        Address address = addressDao.getAddress(addressId);
+        Delivery delivery = (Delivery) request.getSession().getAttribute("generatingDelivery");
+        delivery.setDestination(address);
+        request.getSession().setAttribute("generatingDelivery", delivery);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form4.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void addAddressAndGoRequestForm4(HttpServletRequest request, HttpServletResponse response)
+            throws ConnectionPoolException, DaoException, ServletException, IOException {
+
+        String country = request.getParameter("country");
+        String region = request.getParameter("region");
+        String locality = request.getParameter("locality");
+        String street = request.getParameter("street");
+        String building = request.getParameter("building");
+        String apartment = request.getParameter("apartment");
+        AddressService addressService = new AddressServiceImpl();
+        int addressId = addressService.addNewAddress(country, region, locality, street,
+                building, apartment);
+        Address address = new Address(addressId, country, region, locality, street,
+                building, apartment);
+        Delivery delivery = (Delivery) request.getSession().getAttribute("generatingDelivery");
+        delivery.setDestination(address);
+        request.getSession().setAttribute("generatingDelivery", delivery);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form4.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void addAddress4Req(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setAttribute("for_request", 3);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/address-form.jsp");
+        dispatcher.forward(request, response);
+
+    }
+
+    private void addAddressAndGoRequestForm3(HttpServletRequest request, HttpServletResponse response)
+            throws ConnectionPoolException, DaoException, ServletException, IOException {
+
+        String country = request.getParameter("country");
+        String region = request.getParameter("region");
+        String locality = request.getParameter("locality");
+        String street = request.getParameter("street");
+        String building = request.getParameter("building");
+        String apartment = request.getParameter("apartment");
+        AddressService addressService = new AddressServiceImpl();
+        int addressId = addressService.addNewAddress(country, region, locality, street,
+                building, apartment);
+        Address address = new Address(addressId, country, region, locality, street,
+                building, apartment);
+        Delivery delivery = (Delivery) request.getSession().getAttribute("generatingDelivery");
+        delivery.setLoadingPlace(address);
+        request.getSession().setAttribute("generatingDelivery", delivery);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form3.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void selectAddressAndGoRequestForm3(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        int addressId = Integer.parseInt(request.getParameter("loadingAddressId"));
+        AddressDao addressDao = new AddressDaoImpl();
+        Address address = addressDao.getAddress(addressId);
+        Delivery delivery = (Delivery) request.getSession().getAttribute("generatingDelivery");
+        delivery.setLoadingPlace(address);
+        request.getSession().setAttribute("generatingDelivery", delivery);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form3.jsp");
         dispatcher.forward(request, response);
     }
 
     private void addChartererAndGoRequestForm2(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+        int chartererId = createCharterer(request);
+        goRequestForm2(request, response, chartererId);
+    }
+
+    private int createCharterer(HttpServletRequest request) throws DaoException {
         String name = request.getParameter("name");
         String surname = request.getParameter("surname");
         String country = request.getParameter("country");
@@ -207,9 +362,8 @@ public class MotorDepotController extends HttpServlet {
         String street = request.getParameter("street");
         String building = request.getParameter("building");
         String apartment = request.getParameter("apartment");
-        int chartererId = chartererService.addCharterer(name, surname, country, region, locality, street,
+        return chartererService.addCharterer(name, surname, country, region, locality, street,
                 building, apartment);
-        goRequestForm2(request, response, chartererId);
     }
 
     private void goRequestForm2(HttpServletRequest request, HttpServletResponse response, int chartererId) throws Exception {
@@ -335,16 +489,7 @@ public class MotorDepotController extends HttpServlet {
     }
 
     private void addCharterer(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String name = request.getParameter("name");
-        String surname = request.getParameter("surname");
-        String country = request.getParameter("country");
-        String region = request.getParameter("region");
-        String locality = request.getParameter("locality");
-        String street = request.getParameter("street");
-        String building = request.getParameter("building");
-        String apartment = request.getParameter("apartment");
-        int chartererId = chartererService.addCharterer(name, surname, country, region, locality, street,
-                building, apartment);
+        createCharterer(request);
 
 //        int goToReq2Form = Integer.parseInt(request.getParameter("goToReq2Form"));
 //        if (goToReq2Form == 1) {
@@ -426,7 +571,7 @@ public class MotorDepotController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void goCharterers(HttpServletRequest request, HttpServletResponse response)
+    private void goListCharterers(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
 
         List<Charterer> charterers = chartererService.getCharterers();

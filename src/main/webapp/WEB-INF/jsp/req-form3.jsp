@@ -36,7 +36,6 @@
 <jsp:useBean id="generatingDelivery" class="by.talai.model.Delivery" scope="session" type="by.talai.model.Delivery"/>
 
 
-<c:set var="used_addresses" value="${generatingRequest.charterer.usedAddresses}"/>
 
 <table class="table">
     <thead>
@@ -53,11 +52,6 @@
     <tbody>
     <%--    OWN ADDRESS--%>
 
-
-
-
-
-
     <c:if test="${generatingRequest.charterer.ownAddress ne generatingDelivery.loadingPlace}">
         <tr>
             <td>${generatingRequest.charterer.ownAddress.country}</td>
@@ -68,8 +62,8 @@
             <td>${generatingRequest.charterer.ownAddress.apartment}</td>
             <td>
                 <form method="post" action="/motor_depot/user/dispatcher/address_chosen2">
-                    <input type="hidden" name="${generatingDelivery.destination}"
-                           value="${generatingRequest.charterer.ownAddress}"/>
+                    <input type="hidden" name="destinationAddressId"
+                           value="${generatingRequest.charterer.ownAddress.id}"/>
                     <button class="btn btn-secondary"
 
                             role="button" type="submit" value="Save">${CHOOSE_THAT}</button>
@@ -89,7 +83,7 @@
                 <td>${address.apartment}</td>
                 <td>
                     <form method="post" action="/motor_depot/user/dispatcher/address_chosen2">
-                        <input type="hidden" value="${address}" name="${generatingDelivery.destination}"/>
+                        <input type="hidden" value="${address}" name="destinationAddress"/>
                         <button class="btn btn-secondary"
                                 role="button" type="submit" value="Save">${CHOOSE_THAT}</button>
                     </form>

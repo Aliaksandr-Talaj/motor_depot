@@ -1,12 +1,15 @@
 package by.talai.model;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Objects;
 
 public class Cargo implements Serializable {
 
     private int id;
     private String name;
+
+  
 
     private Unit unit;
     private double quantity;

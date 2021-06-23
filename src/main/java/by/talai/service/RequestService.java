@@ -3,6 +3,7 @@ package by.talai.service;
 import by.talai.model.Request;
 import by.talai.service.dto.RequestDto;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface RequestService {
@@ -16,4 +17,6 @@ public interface RequestService {
     List<Request> getAllRequests() throws Exception;
 
     List<RequestDto> getRequestDtoList() throws Exception;
+
+    boolean validateDates(Date loadingDate, Date unloadingDate);
 }

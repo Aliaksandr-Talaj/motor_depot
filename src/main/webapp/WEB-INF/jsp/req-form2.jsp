@@ -37,6 +37,7 @@
 
 
 <c:set var="used_addresses" value="${generatingRequest.charterer.usedAddresses}"/>
+<c:set var="loadingAddressId" scope="session"/>
 
 <table class="table">
     <thead>
@@ -61,11 +62,11 @@
         <td>${generatingRequest.charterer.ownAddress.apartment}</td>
         <td>
             <form method="post" action="/motor_depot/user/dispatcher/address_chosen">
-                <input type="hidden" name="${generatingDelivery.loadingPlace}"
-                       value="${generatingRequest.charterer.ownAddress}"/>
+                <input type="hidden" name="loadingAddressId"
+                       value="${generatingRequest.charterer.ownAddress.id}"/>
                 <button class="btn btn-secondary"
 
-                        role="button" type="submit" value="Save">${CHOOSE_THAT}</button>
+                        role="button" type="submit" value="Select">${CHOOSE_THAT}</button>
             </form>
         </td>
     </tr>
@@ -81,9 +82,10 @@
             <td>${address.apartment}</td>
             <td>
                 <form method="post" action="/motor_depot/user/dispatcher/address_chosen">
-                    <input type="hidden" value="${address}" name="${generatingDelivery.loadingPlace}"/>
+                    <input type="hidden" value="${address.id}" name="loadingAddressId"/>
+
                     <button class="btn btn-secondary"
-                            role="button" type="submit" value="Save">${CHOOSE_THAT}</button>
+                            role="button" type="submit" value="Select">${CHOOSE_THAT}</button>
                 </form>
             </td>
         </tr>

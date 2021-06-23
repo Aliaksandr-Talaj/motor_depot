@@ -61,7 +61,6 @@
                     <form method="post" action="/motor_depot/user/dispatcher/charterer_chosen">
                         <input type="hidden" value="${address.id}" name="chartererId"/>
                         <button class="btn btn-secondary"
-
                                 role="button" type="submit" value="Save">${CHOOSE_THAT}</button>
                     </form>
                 </td>

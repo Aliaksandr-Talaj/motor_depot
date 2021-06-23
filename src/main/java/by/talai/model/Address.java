@@ -13,6 +13,32 @@ public class Address implements Serializable {
     private String building;
     private String apartment;
 
+    public Address(int id, String country, String region, String locality,
+                   String street, String building, String apartment) {
+        this.id = id;
+        this.country = country;
+        this.region = region;
+        this.locality = locality;
+        this.street = street;
+        this.building = building;
+        this.apartment = apartment;
+    }
+
+    public Address(String country, String region, String locality,
+                   String street, String building, String apartment) {
+
+        this.country = country;
+        this.region = region;
+        this.locality = locality;
+        this.street = street;
+        this.building = building;
+        this.apartment = apartment;
+    }
+
+    public Address() {
+
+    }
+
     public int getId() {
         return id;
     }

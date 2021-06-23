@@ -14,6 +14,7 @@ import by.talai.service.dto.RequestDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -77,6 +78,13 @@ public class RequestServiceImpl implements RequestService {
             requestDtoList.add(requestDto);
         }
         return requestDtoList;
+    }
+
+    @Override
+    public boolean validateDates(Date loadingDate, Date unloadingDate) {
+        Date now = new Date(new java.util.Date().getTime());
+        return !loadingDate.after(unloadingDate)
+                && !loadingDate.before(now);
     }
 
 
