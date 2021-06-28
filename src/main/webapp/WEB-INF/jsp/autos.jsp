@@ -68,7 +68,7 @@
             </td>
             <td>
                 <c:forEach items="${auto.loadingTypes}" var="l_type">
-                    ${l_type.type}
+                    ${l_type.type}<br/>
                 </c:forEach>
                     </td>
             <td>${auto.platformLength}</td>

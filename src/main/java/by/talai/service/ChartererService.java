@@ -1,6 +1,7 @@
 package by.talai.service;
 
 import by.talai.data.exception.DaoException;
+import by.talai.model.Address;
 import by.talai.model.Charterer;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface ChartererService {
     Charterer getCharterer(int id) throws Exception;
 
     List<Charterer> getCharterers() throws Exception;
+
+    void addNewAddressToCharterer(Address address, Charterer charterer) throws Exception;
 }

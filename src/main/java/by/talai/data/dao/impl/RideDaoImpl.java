@@ -16,6 +16,17 @@ import java.util.List;
 
 public class RideDaoImpl implements RideDao {
 
+    static final String CREATE_RIDE_SQL =
+            "INSERT INTO motor_depot.ride (id, date, request_id, dispatcher_id, automobile_id, loading_place_id, " +
+                    "loading_date, destination_id, term, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    static final String GET_RIDE_SQL = "SELECT * FROM motor_depot.ride WHERE id = ?;";
+    static final String GET_ALL_RIDES_SQL = "SELECT * FROM motor_depot.ride; ";
+    static final String UPDATE_RIDE_SQL =
+            "UPDATE motor_depot.ride SET date = ?, request_id = ?, dispatcher_id = ?, automobile_id = ?, " +
+                    "loading_place_id = ?, loading_date = ?, destination_id = ?, term = ?, status_id = ? WHERE (id = ?);";
+    static final String DELETE_RIDE_SQL = "DELETE FROM motor_depot.ride WHERE (id = ?);";
+
+
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     private final RequestDao requestDao = new RequestDaoImpl();
@@ -35,14 +46,11 @@ public class RideDaoImpl implements RideDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO " +
-                            "motor_depot.ride (id, date, request_id, dispatcher_id, automobile_id, loading_place_id, " +
-                            "loading_date, destination_id, term, status_id)" +
-                            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+                    .prepareStatement(CREATE_RIDE_SQL);
 
             preparedStatement.setInt(1, ride.getId());
             preparedStatement.setDate(2, ride.getDate());
-            preparedStatement.setInt(3, ride.getRequest().getId());
+            preparedStatement.setString(3, ride.getRequest().getId());
             preparedStatement.setInt(4, ride.getDispatcher().getId());
             preparedStatement.setString(5, ride.getAutomobile().getId());
 
@@ -76,7 +84,7 @@ public class RideDaoImpl implements RideDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.ride WHERE id = ?;");
+                    .prepareStatement(GET_RIDE_SQL);
             preparedStatement.setInt(1, rideId);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -86,7 +94,7 @@ public class RideDaoImpl implements RideDao {
                 if (resultSet.next()) {
                     ride.setDate(resultSet.getDate("date"));
 
-                    int requestId = resultSet.getInt("request_id");
+                    String requestId = resultSet.getString("request_id");
                     ride.setRequest(requestDao.getRequest(requestId));
 
                     int dispatcherId = resultSet.getInt("dispatcher_id");
@@ -132,7 +140,7 @@ public class RideDaoImpl implements RideDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.ride; ");
+                    .prepareStatement(GET_ALL_RIDES_SQL);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -143,7 +151,7 @@ public class RideDaoImpl implements RideDao {
                     ride.setId(rideId);
                     ride.setDate(resultSet.getDate("date"));
 
-                    int requestId = resultSet.getInt("request_id");
+                    String requestId = resultSet.getString("request_id");
                     ride.setRequest(requestDao.getRequest(requestId));
 
                     int dispatcherId = resultSet.getInt("dispatcher_id");
@@ -190,14 +198,11 @@ public class RideDaoImpl implements RideDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE motor_depot.ride " +
-                            "SET date = ?, request_id = ?, dispatcher_id = ?, automobile_id = ?, " +
-                            "loading_place_id = ?, loading_date_id = ?, destination_id = ?, term = ?, " +
-                            "status_id = ? WHERE (id = ?);");
+                    .prepareStatement(UPDATE_RIDE_SQL);
 
 
             preparedStatement.setDate(1, ride.getDate());
-            preparedStatement.setInt(2, ride.getRequest().getId());
+            preparedStatement.setString(2, ride.getRequest().getId());
             preparedStatement.setInt(3, ride.getDispatcher().getId());
             preparedStatement.setString(4, ride.getAutomobile().getId());
             preparedStatement.setInt(5, ride.getLoadingPlace().getId());
@@ -232,7 +237,7 @@ public class RideDaoImpl implements RideDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM motor_depot.ride WHERE (id = ?);");
+                    .prepareStatement(DELETE_RIDE_SQL);
 
             preparedStatement.setInt(1, id);
 

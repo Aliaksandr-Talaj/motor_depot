@@ -4,6 +4,7 @@ import by.talai.data.dao.AddressDao;
 import by.talai.data.dao.impl.AddressDaoImpl;
 import by.talai.data.exception.ConnectionPoolException;
 import by.talai.data.exception.DaoException;
+import by.talai.model.Address;
 import by.talai.service.AddressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,4 +24,10 @@ public class AddressServiceImpl implements AddressService {
                              String apartment) throws DaoException {
         return addressDao.createAddress(country, region, locality, street, building, apartment);
     }
+
+    @Override
+    public Address addAddressIfNew(Address address) throws DaoException {
+        return addressDao.createAddressIfNotRepeats(address);
+    }
+
 }

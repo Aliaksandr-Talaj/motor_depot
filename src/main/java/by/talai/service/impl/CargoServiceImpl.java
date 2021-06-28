@@ -28,4 +28,9 @@ public class CargoServiceImpl implements CargoService {
         return cargoDao.getCargo(id);
     }
 
+    @Override
+    public void saveCargo(Cargo cargo) throws Exception {
+        cargoDao.createCargo(cargo);
+    }
+
 }

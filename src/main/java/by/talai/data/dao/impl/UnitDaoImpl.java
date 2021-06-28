@@ -17,6 +17,18 @@ import java.util.List;
 
 public class UnitDaoImpl implements UnitDao {
 
+    static final String CREATE_UNIT_SQL = "INSERT INTO motor_depot.unit (id, type, length, width, height, weight)" +
+            " VALUES (?, ?, ?, ?, ?, ?);";
+    static final String CREATE_UNIT_SQL_NO_ID = "INSERT INTO motor_depot.unit (type, length, width, height, weight)" +
+            " VALUES (?, ?, ?, ?, ?);";
+    static final String GET_UNIT_SQL = "SELECT * FROM motor_depot.unit WHERE id = ?;";
+    static final String GET_ALL_UNITS_SQL = "SELECT * FROM motor_depot.unit; ";
+    static final String UPDATE_UNIT_SQL = "UPDATE motor_depot.unit " +
+            "SET type = ?, length = ?, width = ?, height = ?, weight = ? WHERE (id = ?);";
+    static final String DELETE_UNIT_SQL = "DELETE FROM motor_depot.unit WHERE (id = ?);";
+    static final String GET_LAST_INSERT_ID_SQL = "SELECT last_insert_id();";
+
+
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     public static final Logger logger = LoggerFactory.getLogger(UnitDaoImpl.class);
@@ -26,12 +38,11 @@ public class UnitDaoImpl implements UnitDao {
 
     @Override
     public void createUnit(Unit unit) throws Exception {
+
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO " +
-                            "motor_depot.unit (id, type, length, width, height, weight)" +
-                            " VALUES (?, ?, ?, ?, ?, ?);");
+                    .prepareStatement(CREATE_UNIT_SQL);
             preparedStatement.setInt(1, unit.getId());
             preparedStatement.setString(2, unit.getType());
 
@@ -56,6 +67,48 @@ public class UnitDaoImpl implements UnitDao {
             logger.error("Exception in createUnit() method");
             throw new DaoException("exception in createUnit() method", e);
         }
+           }
+
+    @Override
+    public int createUnitReturnId(Unit unit) throws Exception {
+        int id=0;
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(CREATE_UNIT_SQL_NO_ID);
+
+            preparedStatement.setString(1, unit.getType());
+            preparedStatement.setInt(2, unit.getLength());
+            preparedStatement.setInt(3, unit.getWidth());
+            preparedStatement.setDouble(4, unit.getHeight());
+            preparedStatement.setDouble(5, unit.getWeight());
+
+            try (connection; preparedStatement) {
+                preparedStatement.executeUpdate();
+                connection.commit();
+                try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID_SQL);
+                     ResultSet resultSet = preparedStatementForId.executeQuery()) {
+
+                    if (resultSet.next()) {
+                        id = resultSet.getInt(1);
+                    }
+                } catch (SQLException e) {
+                    logger.error("Sql exception in createUnit() method");
+                    throw new DaoException("exception in createAddress() method", e);
+                }
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in createUnit() method");
+                throw new DaoException("exception in createUnit() method", e);
+            }
+        } catch (ConnectionPoolException e) {
+            logger.error("Connection pool exception in createUnit() method");
+            throw new DaoException("exception in createUnit() method", e);
+        } catch (Exception e) {
+            logger.error("Exception in createUnit() method");
+            throw new DaoException("exception in createUnit() method", e);
+        }
+        return id;
     }
 
     @Override
@@ -64,7 +117,7 @@ public class UnitDaoImpl implements UnitDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.unit WHERE id = ?;");
+                    .prepareStatement(GET_UNIT_SQL);
             preparedStatement.setInt(1, id);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -101,7 +154,7 @@ public class UnitDaoImpl implements UnitDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.unit; ");
+                    .prepareStatement(GET_ALL_UNITS_SQL);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -139,9 +192,7 @@ public class UnitDaoImpl implements UnitDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE motor_depot.unit " +
-                            "SET type = ?, length = ?, width = ?, height = ?, weight = ? " +
-                            "WHERE (id = ?);");
+                    .prepareStatement(UPDATE_UNIT_SQL);
 
 
             preparedStatement.setString(1, unit.getType());
@@ -176,7 +227,7 @@ public class UnitDaoImpl implements UnitDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM motor_depot.unit WHERE (id = ?);");
+                    .prepareStatement(DELETE_UNIT_SQL);
 
             preparedStatement.setInt(1, id);
 

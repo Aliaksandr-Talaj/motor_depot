@@ -36,7 +36,6 @@
 <jsp:useBean id="generatingDelivery" class="by.talai.model.Delivery" scope="session" type="by.talai.model.Delivery"/>
 
 
-
 <table class="table">
     <thead>
     <tr>
@@ -72,8 +71,9 @@
         </tr>
     </c:if>
     <%--USED ADDRESSES--%>
-    <c:forEach items="${used_addresses}" var="address">
-        <c:if test="${address ne generatingDelivery.loadingPlace}">
+    <c:forEach items="${generatingRequest.charterer.usedAddresses}" var="address">
+        <c:if test="${(address ne generatingDelivery.loadingPlace)
+        and (address ne generatingRequest.charterer.ownAddress)}">
             <tr>
                 <td>${address.country}</td>
                 <td>${address.region}</td>
@@ -83,7 +83,7 @@
                 <td>${address.apartment}</td>
                 <td>
                     <form method="post" action="/motor_depot/user/dispatcher/address_chosen2">
-                        <input type="hidden" value="${address}" name="destinationAddress"/>
+                        <input type="hidden" value="${address.id}" name="destinationAddressId"/>
                         <button class="btn btn-secondary"
                                 role="button" type="submit" value="Save">${CHOOSE_THAT}</button>
                     </form>

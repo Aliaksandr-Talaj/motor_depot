@@ -293,7 +293,7 @@
     <changeSet id="17" author="root">
         <sql>
             CREATE TABLE IF NOT EXISTS `motor_depot`.`request` (
-            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `id` VARCHAR(30) NOT NULL,
             `filling_date` DATE NOT NULL,
             `charterer_id` INT(11) NOT NULL,
             `required_automobile_type_id` INT(11) NULL DEFAULT NULL,
@@ -338,7 +338,7 @@
             `loading_date` DATE NULL DEFAULT NULL,
             `destination_id` INT(11) NOT NULL,
             `term` DATE NULL DEFAULT NULL,
-            `request_id` INT(11) NULL DEFAULT NULL,
+            `request_id` VARCHAR(30) NULL DEFAULT NULL,
             `status_id` INT(11) NOT NULL,
             PRIMARY KEY (`id`),
             UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
@@ -374,7 +374,7 @@
             CREATE TABLE IF NOT EXISTS `motor_depot`.`ride` (
             `id` INT(11) NOT NULL AUTO_INCREMENT,
             `date` DATE NULL DEFAULT NULL,
-            `request_id` INT(11) NULL DEFAULT NULL,
+            `request_id` VARCHAR(30) NULL DEFAULT NULL,
             `dispatcher_id` INT(11) NOT NULL,
             `automobile_id` VARCHAR(12) NULL DEFAULT NULL,
             `loading_place_id` INT(11) NOT NULL,
@@ -535,7 +535,7 @@
     <changeSet id="25" author="root">
         <sql>
             CREATE TABLE IF NOT EXISTS `motor_depot`.`request_has_required_equipment` (
-            `request_id` INT(11) NOT NULL,
+            `request_id` VARCHAR(30) NOT NULL,
             `equipment_id` INT(11) NOT NULL,
             PRIMARY KEY (`request_id`, `equipment_id`),
             INDEX `fk_request_has_equipment_equipment1_idx` (`equipment_id` ASC) ,
@@ -574,24 +574,24 @@
     <changeSet id="28" author="root">
         <sql>
             ALTER SCHEMA `motor_depot` CHARACTER SET = utf8;
-            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
-            VALUES ('Виктор', 'Бирюков', 'v_birukov', 'sezam1', '1', '1');
-            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
-            VALUES ('Клим', 'Герасимов', 'k_gerasimov', 'mumu(', '1', '1');
-            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
-            VALUES ('Изот', 'Мясников', 'i_miasnokov', '123456', '2', '1');
-            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
-            VALUES ('Афанасий', 'Русаков', 'a_rusakov', '123456', '2', '1');
-            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
-            VALUES ('Глафира', 'Лихачёва', 'g_likhacheva', '123456', '2', '1');
-            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
-            VALUES ('Антонина', 'Нестерова', 'a_nesterova', '123456', '3', '1');
-            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
-            VALUES ('Милослав', 'Кузьмин', 'm_kuzmin', '123456', '3', '1');
-            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
-            VALUES ('Наум', 'Самсонов', 'n_samsonov', '123456', '3', '1');
-            INSERT INTO `motor_depot`.`user` (`name`, `surname`, `login`, `password`, `role_id`, `status_id`)
-            VALUES ('Валерьян', 'Зуев', 'v_zuev', '123456', '2', '1');
+            INSERT INTO `motor_depot`.`user` (`id`, `name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES (1, 'Виктор', 'Бирюков', 'v_birukov', 'sezam1', '1', '1');
+            INSERT INTO `motor_depot`.`user` (`id`, `name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES (2, 'Клим', 'Герасимов', 'k_gerasimov', 'mumu(', '1', '1');
+            INSERT INTO `motor_depot`.`user` (`id`, `name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES (3, 'Изот', 'Мясников', 'i_miasnokov', '123456', '2', '1');
+            INSERT INTO `motor_depot`.`user` (`id`, `name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES (4, 'Афанасий', 'Русаков', 'a_rusakov', '123456', '2', '1');
+            INSERT INTO `motor_depot`.`user` (`id`, `name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES (5, 'Глафира', 'Лихачёва', 'g_likhacheva', '123456', '2', '1');
+            INSERT INTO `motor_depot`.`user` (`id`, `name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES (6, 'Антонина', 'Нестерова', 'a_nesterova', '123456', '3', '1');
+            INSERT INTO `motor_depot`.`user` (`id`, `name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES (7, 'Милослав', 'Кузьмин', 'm_kuzmin', '123456', '3', '1');
+            INSERT INTO `motor_depot`.`user` (`id`, `name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES (8, 'Наум', 'Самсонов', 'n_samsonov', '123456', '3', '1');
+            INSERT INTO `motor_depot`.`user` (`id`, `name`, `surname`, `login`, `password`, `role_id`, `status_id`)
+            VALUES (9, 'Валерьян', 'Зуев', 'v_zuev', '123456', '2', '1');
 
         </sql>
     </changeSet>
@@ -710,16 +710,16 @@
 
     <changeSet id="38" author="root">
         <sql>
-            INSERT INTO `motor_depot`.`request` (`filling_date`, `charterer_id`, `required_automobile_type_id`,
-            `required_loading_type_id`, `status_id`) VALUES ('2021-06-12', '1', '3', '2', '2');
-            INSERT INTO `motor_depot`.`request` (`filling_date`, `charterer_id`, `required_automobile_type_id`,
-            `required_loading_type_id`, `status_id`) VALUES ('2021-06-12', '2', '2', '1', '3');
-            INSERT INTO `motor_depot`.`request` (`filling_date`, `charterer_id`, `required_automobile_type_id`,
-            `required_loading_type_id`, `status_id`) VALUES ('2021-06-15', '3', '1', '3', '1');
-            INSERT INTO `motor_depot`.`request` (`filling_date`, `charterer_id`, `required_automobile_type_id`,
-            `required_loading_type_id`, `status_id`) VALUES ('2021-06-18', '4', '2', '2', '2');
-            INSERT INTO `motor_depot`.`request` (`filling_date`, `charterer_id`, `required_automobile_type_id`,
-            `required_loading_type_id`, `status_id`) VALUES ('2021-06-18', '5', '3', '1', '2');
+            INSERT INTO `motor_depot`.`request` (`id`, `filling_date`, `charterer_id`, `required_automobile_type_id`,
+            `required_loading_type_id`, `status_id`) VALUES ('1624585409292-3', '2021-06-12', '1', '3', '2', '2');
+            INSERT INTO `motor_depot`.`request` (`id`, `filling_date`, `charterer_id`, `required_automobile_type_id`,
+            `required_loading_type_id`, `status_id`) VALUES ('1624585409299-4', '2021-06-12', '2', '2', '1', '3');
+            INSERT INTO `motor_depot`.`request` (`id`, `filling_date`, `charterer_id`, `required_automobile_type_id`,
+            `required_loading_type_id`, `status_id`) VALUES ('1624585409299-5', '2021-06-15', '3', '1', '3', '1');
+            INSERT INTO `motor_depot`.`request` (`id`, `filling_date`, `charterer_id`, `required_automobile_type_id`,
+            `required_loading_type_id`, `status_id`) VALUES ('1624585454910-3', '2021-06-18', '4', '2', '2', '2');
+            INSERT INTO `motor_depot`.`request` (`id`, `filling_date`, `charterer_id`, `required_automobile_type_id`,
+            `required_loading_type_id`, `status_id`) VALUES ('1624585454916-4', '2021-06-18', '5', '3', '1', '2');
         </sql>
     </changeSet>
 

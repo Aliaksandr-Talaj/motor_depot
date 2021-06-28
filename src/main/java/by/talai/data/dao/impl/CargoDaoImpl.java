@@ -17,8 +17,8 @@ import java.util.List;
 public class CargoDaoImpl implements CargoDao {
 
     static final String CREATE_CARGO_SQL =
-            "INSERT INTO motor_depot.cargo (id, name, unit_id, delivery_id, ride_id, quantity)" +
-                    " VALUES (?, ?, ?, ?, ?, ?);";
+            "INSERT INTO motor_depot.cargo (id, name, unit_id, delivery_id, quantity)" +
+                    " VALUES (?, ?, ?, ?, ?);";
     static final String GET_CARGO_SQL = "SELECT * FROM motor_depot.cargo WHERE id = ?;";
     static final String GET_ALL_CARGOS_SQL = "SELECT * FROM motor_depot.cargo; ";
     static final String UPDATE_CARGO_SQL = "UPDATE motor_depot.cargo " +
@@ -27,9 +27,13 @@ public class CargoDaoImpl implements CargoDao {
     static final String GET_ALL_CARGOS_OF_RIDE_SQL = "SELECT * FROM motor_depot.cargo WHERE ride_id = ?; ";
     static final String GET_ALL_CARGOS_OF_DELIVERY_SQL = "SELECT * FROM motor_depot.cargo WHERE delivery_id = ?; ";
     static final String ADD_OR_UPDATE_CARGO_SQL =
-            "INSERT INTO  motor_depot.cargo (id, name, unit_id, delivery_id, ride_id, quantity" +
+            "INSERT INTO  motor_depot.cargo (id, name, unit_id, delivery_id, ride_id, quantity)" +
                     " VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE " +
                     " name = ?, unit_id = ?, delivery_id = ?, ride_id = ?, quantity = ?;";
+    static final String ADD_OR_UPDATE_CARGO_WITHOUT_RIDE_SQL =
+            "INSERT INTO  motor_depot.cargo (id, name, unit_id, delivery_id, quantity)" +
+                    " VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE " +
+                    " name = ?, unit_id = ?, delivery_id = ?, quantity = ?;";
 
 
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
@@ -51,8 +55,7 @@ public class CargoDaoImpl implements CargoDao {
             preparedStatement.setString(2, cargo.getName());
             preparedStatement.setInt(3, cargo.getUnit().getId());
             preparedStatement.setInt(4, cargo.getDelivery().getId());
-            preparedStatement.setInt(5, cargo.getRide().getId());
-            preparedStatement.setDouble(6, cargo.getQuantity());
+            preparedStatement.setDouble(5, cargo.getQuantity());
 
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();
@@ -316,6 +319,10 @@ public class CargoDaoImpl implements CargoDao {
 
     @Override
     public void addOrUpdateCargo(Cargo cargo) throws Exception {
+        if(cargo.getRide()==null){
+            addOrUpdateCargoWithoutRide(cargo);
+            return;
+        }
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
@@ -357,4 +364,41 @@ public class CargoDaoImpl implements CargoDao {
         }
     }
 
+    public void addOrUpdateCargoWithoutRide(Cargo cargo) throws Exception {
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(ADD_OR_UPDATE_CARGO_WITHOUT_RIDE_SQL);
+
+            preparedStatement.setInt(1, cargo.getId());
+
+            preparedStatement.setString(2, cargo.getName());
+            preparedStatement.setString(6, cargo.getName());
+
+            preparedStatement.setInt(3, cargo.getUnit().getId());
+            preparedStatement.setInt(7, cargo.getUnit().getId());
+
+            preparedStatement.setInt(4, cargo.getDelivery().getId());
+            preparedStatement.setInt(8, cargo.getDelivery().getId());
+
+            preparedStatement.setDouble(5, cargo.getQuantity());
+            preparedStatement.setDouble(9, cargo.getQuantity());
+
+            try (connection; preparedStatement) {
+
+                preparedStatement.executeUpdate();
+                connection.commit();
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in addOrUpdateCargo() method");
+                throw new DaoException("exception in addOrUpdateCargo() method", e);
+            }
+        } catch (ConnectionPoolException e) {
+            logger.error("Connection pool exception in addOrUpdateCargo() method");
+            throw new DaoException("exception in addOrUpdateCargo() method", e);
+        } catch (Exception e) {
+            logger.error("Exception in addOrUpdateCargo() method");
+            throw new DaoException("exception in addOrUpdateCargo() method", e);
+        }
+    }
 }

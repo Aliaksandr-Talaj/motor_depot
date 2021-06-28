@@ -32,14 +32,15 @@ public class ChartererDaoImpl implements ChartererDao {
     static final String UPDATE_CHARTERER_SQL =
             "UPDATE motor_depot.charterer SET name = ?, surname = ?, own_address_id = ? WHERE (id = ?);";
     static final String DELETE_CHARTERER_SQL = "DELETE FROM motor_depot.charterer WHERE (id = ?);";
-    static final String ADD_ADDRESS_TO_CHARTERER =
-            "INSERT INTO motor_depot.charterer_use_address (charterer_id, address_id) VALUES (?, ?);";
-    static final String FIND_ALL_USERS_SQL =
+    static final String ADD_ADDRESS_TO_CHARTERER_SQL =
+            "INSERT INTO motor_depot.charterer_use_address (charterer_id, address_id) VALUES (?, ?)" +
+                    " ON DUPLICATE KEY UPDATE charterer_id = ?, address_id = ?;";
+    static final String FIND_ALL_USED_ADDRESSES_SQL =
             "SELECT * FROM motor_depot.charterer_use_address, motor_depot.address WHERE (charterer_id = ?) " +
                     "and (motor_depot.address.id = motor_depot.charterer_use_address.address_id); ";
-    static final String DELETE_USAGE_OF_ADDRESS =
+    static final String DELETE_USAGE_OF_ADDRESS_SQL =
             "DELETE FROM motor_depot.charterer_use_address WHERE (charterer_id = ?, address_id = ?);";
-    static final String GET_LAST_INSERT_ID = "SELECT last_insert_id();";
+    static final String GET_LAST_INSERT_ID_SQL = "SELECT last_insert_id();";
 
 
     private final AddressDao addressDao = new AddressDaoImpl();
@@ -96,8 +97,9 @@ public class ChartererDaoImpl implements ChartererDao {
                     charterer.setSurname(resultSet.getString("surname"));
                     int ownAddressId = resultSet.getInt("own_address_id");
                     charterer.setOwnAddress(addressDao.getAddress(ownAddressId));
+                    Set<Address> addresses = findUsedAddresses(id);
+                    charterer.setUsedAddresses(addresses);
                 }
-
 
             } catch (SQLException e) {
                 logger.error("Sql exception in getCharterer() method");
@@ -124,12 +126,14 @@ public class ChartererDaoImpl implements ChartererDao {
 
                 while (resultSet.next()) {
                     Charterer charterer = new Charterer();
-
-                    charterer.setId(resultSet.getInt("id"));
+                    int id = resultSet.getInt("id");
+                    charterer.setId(id);
                     charterer.setName(resultSet.getString("name"));
                     charterer.setSurname(resultSet.getString("surname"));
                     int ownAddressId = resultSet.getInt("own_address_id");
+                    Set<Address> addresses = findUsedAddresses(id);
                     charterer.setOwnAddress(addressDao.getAddress(ownAddressId));
+                    charterer.setUsedAddresses(addresses);
 
                     charterers.add(charterer);
                 }
@@ -165,6 +169,12 @@ public class ChartererDaoImpl implements ChartererDao {
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();
                 connection.commit();
+
+                Set<Address> newAddresses = charterer.getUsedAddresses();
+
+                for (Address address:newAddresses){
+                    addAddressToCharterer(address.getId(),charterer.getId());
+                }
 
 
             } catch (SQLException e) {
@@ -210,9 +220,11 @@ public class ChartererDaoImpl implements ChartererDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement(ADD_ADDRESS_TO_CHARTERER);
+                    .prepareStatement(ADD_ADDRESS_TO_CHARTERER_SQL);
             preparedStatement.setInt(1, chartererId);
+            preparedStatement.setInt(3, chartererId);
             preparedStatement.setInt(2, addressId);
+            preparedStatement.setInt(4, addressId);
 
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();
@@ -237,7 +249,7 @@ public class ChartererDaoImpl implements ChartererDao {
         Set<Address> addresses = new HashSet<>();
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_USERS_SQL);
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_USED_ADDRESSES_SQL);
             preparedStatement.setInt(1, chartererId);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -275,7 +287,7 @@ public class ChartererDaoImpl implements ChartererDao {
     public void deleteUsageOfAddress(int addressId, int chartererId) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USAGE_OF_ADDRESS);
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USAGE_OF_ADDRESS_SQL);
 
             preparedStatement.setInt(1, chartererId);
             preparedStatement.setInt(2, addressId);
@@ -313,7 +325,7 @@ public class ChartererDaoImpl implements ChartererDao {
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();
                 connection.commit();
-                try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID);
+                try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID_SQL);
                      ResultSet resultSet = preparedStatementForId.executeQuery()) {
 
                     if (resultSet.next()) {
@@ -321,7 +333,7 @@ public class ChartererDaoImpl implements ChartererDao {
                     }
                 } catch (SQLException e) {
                     logger.error("Sql exception in createAddress() method");
-                    throw new DaoException("exception in createAddress() method", e);
+                    throw new DaoException("exception in createCharterer() method", e);
                 }
             } catch (SQLException e) {
                 logger.error("Sql exception in createCharterer() method");
@@ -354,7 +366,7 @@ public class ChartererDaoImpl implements ChartererDao {
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();
                 connection.commit();
-                try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID);
+                try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID_SQL);
                      ResultSet resultSet = preparedStatementForId.executeQuery()) {
 
                     if (resultSet.next()) {

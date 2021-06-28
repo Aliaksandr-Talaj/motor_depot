@@ -72,24 +72,25 @@
     </tr>
     <%--USED ADDRESSES--%>
     <c:forEach items="${used_addresses}" var="address">
+        <c:if test="${address ne generatingRequest.charterer.ownAddress}">
+            <tr>
+                <td>${address.country}</td>
+                <td>${address.region}</td>
+                <td>${address.locality}</td>
+                <td>${address.street}</td>
+                <td>${address.building}</td>
+                <td>${address.apartment}</td>
+                <td>
+                    <form method="post" action="/motor_depot/user/dispatcher/address_chosen">
+                        <input type="hidden" value="${address.id}" name="loadingAddressId"/>
 
-        <tr>
-            <td>${address.country}</td>
-            <td>${address.region}</td>
-            <td>${address.locality}</td>
-            <td>${address.street}</td>
-            <td>${address.building}</td>
-            <td>${address.apartment}</td>
-            <td>
-                <form method="post" action="/motor_depot/user/dispatcher/address_chosen">
-                    <input type="hidden" value="${address.id}" name="loadingAddressId"/>
-
-                    <button class="btn btn-secondary"
-                            role="button" type="submit" value="Select">${CHOOSE_THAT}</button>
-                </form>
-            </td>
-        </tr>
-
+                        <button class="btn btn-secondary"
+                                role="button" type="submit" value="Select">${CHOOSE_THAT}</button>
+                    </form>
+                </td>
+            </tr>
+        </c:if>
+        <tr></tr>
     </c:forEach>
     </tbody>
 </table>

@@ -28,7 +28,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
     static final String CREATE_AUTOMOBILE_SQL =
             "INSERT INTO motor_depot.automobile (id, brand, model, type_id, fuel_type_id, carrying, platform_length," +
                     " platform_width, cargo_height_limit, cargo_volume_limit, technical_status_id) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ;";
     static final String GET_AUTOMOBILE_SQL = "SELECT * FROM motor_depot.automobile WHERE id=?;";
     static final String GET_ALL_AUTOMOBILES_SQL = "SELECT * FROM motor_depot.automobile; ";
     static final String UPDATE_AUTOMOBILE_SQL =
@@ -37,7 +37,8 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     " cargo_volume_limit = ?, technical_status_id = ? WHERE (id = ?);";
     static final String DELETE_AUTOMOBILE_SQL = "DELETE FROM motor_depot.automobile WHERE (id = ?);";
     static final String ADD_EQUIPMENT_TO_AUTOMOBILE_SQL =
-            "INSERT INTO motor_depot.automobile_has_equipment (equipment_id, automobile_id) VALUES (?, ?);";
+            "INSERT INTO motor_depot.automobile_has_equipment (equipment_id, automobile_id) VALUES (?, ?)" +
+                    " ON DUPLICATE KEY UPDATE equipment_id = ?, automobile_id = ?;";
     static final String GET_ALL_EQUIPMENT_ON_AUTOMOBILE_SQL =
             "SELECT * FROM motor_depot.automobile_has_equipment, motor_depot.equipment " +
                     "where (automobile_has_equipment.automobile_id = ?) " +
@@ -45,7 +46,8 @@ public class AutomobileDaoImpl implements AutomobileDao {
     static final String REMOVE_EQUIPMENT_FROM_AUTOMOBILE_SQL =
             "DELETE FROM motor_depot.automobile_has_equipment WHERE (equipment_id = ?) and (automobile_id = ?)";
     static final String ADD_LOADING_TYPE_TO_AUTOMOBILE_SQL =
-            "INSERT INTO motor_depot.automobile_has_loading_type (loading_type_id, automobile_id) VALUES (?, ?);";
+            "INSERT INTO motor_depot.automobile_has_loading_type (loading_type_id, automobile_id) VALUES (?, ?)" +
+                    " ON DUPLICATE KEY UPDATE loading_type_id = ?, automobile_id = ?;";
     static final String GET_ALL_LOADING_TYPES_OF_AUTOMOBILE_SQL =
             "SELECT * FROM motor_depot.automobile_has_loading_type, motor_depot.loading_type " +
                     "where (automobile_has_loading_type.automobile_id = ?) " +
@@ -81,11 +83,11 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     .prepareStatement(CREATE_AUTOMOBILE_SQL);
             String automobileId = automobile.getId();
             preparedStatement.setString(1, automobileId);
+
             preparedStatement.setString(2, automobile.getBrand());
             preparedStatement.setString(3, automobile.getModel());
 
             preparedStatement.setInt(4, automobile.getType().getId());
-
             preparedStatement.setInt(5, automobile.getFuelType().getId());
 
             preparedStatement.setInt(6, automobile.getCarrying());
@@ -97,7 +99,25 @@ public class AutomobileDaoImpl implements AutomobileDao {
             preparedStatement.setInt(11, automobile.getTechnicalStatus().getId());
 
             try (connection; preparedStatement) {
-                setEquipmentAndLoadingTypes(automobile, connection, preparedStatement, automobileId);
+
+
+                preparedStatement.executeUpdate();
+                connection.commit();
+
+                Set<Equipment> equipmentSet = automobile.getEquipmentSet();
+                if (equipmentSet != null && !equipmentSet.isEmpty()) {
+                    for (Equipment equipment : equipmentSet) {
+                        int equipmentId = equipment.getId();
+                        addEquipmentToAutomobile(equipmentId, automobileId);
+                    }
+                }
+                Set<LoadingType> loadingTypes = automobile.getLoadingTypes();
+                if (loadingTypes != null && !loadingTypes.isEmpty()) {
+                    for (LoadingType loadingType : loadingTypes) {
+                        int loadingTypeId = loadingType.getId();
+                        addLoadingTypeToAutomobile(loadingTypeId, automobileId);
+                    }
+                }
 
 
             } catch (SQLException e) {
@@ -113,25 +133,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
         }
     }
 
-    private void setEquipmentAndLoadingTypes(Automobile automobile, Connection connection, PreparedStatement preparedStatement, String automobileId) throws Exception {
-        Set<Equipment> equipmentSet = automobile.getEquipmentSet();
-        if (equipmentSet != null && !equipmentSet.isEmpty()) {
-            for (Equipment equipment : equipmentSet) {
-                int equipmentId = equipment.getId();
-                addEquipmentToAutomobile(equipmentId, automobileId);
-            }
-        }
-        Set<LoadingType> loadingTypes = automobile.getLoadingTypes();
-        if (loadingTypes != null && !loadingTypes.isEmpty()) {
-            for (LoadingType loadingType : loadingTypes) {
-                int loadingTypeId = loadingType.getId();
-                addLoadingTypeToAutomobile(loadingTypeId, automobileId);
-            }
-        }
 
-        preparedStatement.executeUpdate();
-        connection.commit();
-    }
 
     @Override
     public Automobile getAutomobile(String id) throws Exception {
@@ -145,34 +147,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 if (resultSet.next()) {
-                    automobile.setId(id);
-                    automobile.setBrand(resultSet.getString("brand"));
-                    automobile.setModel(resultSet.getString("model"));
-
-                    int fuelTypeId = resultSet.getInt("fuel_type_id");
-                    automobile.setFuelType(fuelTypeDao.findFuelType(fuelTypeId));
-
-                    automobile.setCarrying(resultSet.getInt("carrying"));
-
-                    int typeId = resultSet.getInt("type_id");
-                    automobile.setType(automobileTypeDao.findAutomobileType(typeId));
-
-                    automobile.setPlatformLength(resultSet.getInt("platform_length"));
-                    automobile.setPlatformWidth(resultSet.getInt("platform_width"));
-                    automobile.setCargoHeightLimit(resultSet.getDouble("cargo_height_limit"));
-                    automobile.setCargoVolumeLimit(resultSet.getDouble("cargo_volume_limit"));
-
-                    Set<Equipment> equipmentSet = getAllEquipmentOnAutomobile(id);
-                    automobile.setEquipmentSet(equipmentSet);
-
-                    List<Maintenance> maintenanceList = getMaintenanceOfAutomobile(automobile);
-                    automobile.setMaintenanceList(maintenanceList);
-
-                    List<Malfunction> malfunctions = getMalfunctionsOfAutomobile(automobile);
-                    automobile.setMalfunctions(malfunctions);
-
-                    int technicalStatusId = resultSet.getInt("technical_status_id");
-                    automobile.setTechnicalStatus(technicalStatusDao.findStatus(technicalStatusId));
+                    getAutomobileInfo(id, automobile, resultSet);
                 }
 
             } catch (SQLException e) {
@@ -189,6 +164,40 @@ public class AutomobileDaoImpl implements AutomobileDao {
         return automobile;
     }
 
+    private void getAutomobileInfo(String id, Automobile automobile, ResultSet resultSet) throws Exception {
+        automobile.setId(id);
+        automobile.setBrand(resultSet.getString("brand"));
+        automobile.setModel(resultSet.getString("model"));
+
+        int fuelTypeId = resultSet.getInt("fuel_type_id");
+        automobile.setFuelType(fuelTypeDao.findFuelType(fuelTypeId));
+
+        automobile.setCarrying(resultSet.getInt("carrying"));
+
+        int typeId = resultSet.getInt("type_id");
+        automobile.setType(automobileTypeDao.findAutomobileType(typeId));
+
+        automobile.setPlatformLength(resultSet.getInt("platform_length"));
+        automobile.setPlatformWidth(resultSet.getInt("platform_width"));
+        automobile.setCargoHeightLimit(resultSet.getDouble("cargo_height_limit"));
+        automobile.setCargoVolumeLimit(resultSet.getDouble("cargo_volume_limit"));
+
+        Set<Equipment> equipmentSet = getAllEquipmentOnAutomobile(id);
+        automobile.setEquipmentSet(equipmentSet);
+
+        Set<LoadingType> loadingTypes = getAllLoadingTypesOfAutomobile(id);
+        automobile.setLoadingTypes(loadingTypes);
+
+        List<Maintenance> maintenanceList = getMaintenanceOfAutomobile(automobile);
+        automobile.setMaintenanceList(maintenanceList);
+
+        List<Malfunction> malfunctions = getMalfunctionsOfAutomobile(automobile);
+        automobile.setMalfunctions(malfunctions);
+
+        int technicalStatusId = resultSet.getInt("technical_status_id");
+        automobile.setTechnicalStatus(technicalStatusDao.findStatus(technicalStatusId));
+    }
+
     @Override
     public List<Automobile> getAllAutomobiles() throws Exception {
         List<Automobile> automobiles = new ArrayList<>();
@@ -202,34 +211,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
                 while (resultSet.next()) {
                     Automobile automobile = new Automobile();
                     String id = resultSet.getString("id");
-                    automobile.setId(id);
-                    automobile.setBrand(resultSet.getString("brand"));
-                    automobile.setModel(resultSet.getString("model"));
-
-                    int fuelTypeId = resultSet.getInt("fuel_type_id");
-                    automobile.setFuelType(fuelTypeDao.findFuelType(fuelTypeId));
-
-                    automobile.setCarrying(resultSet.getInt("carrying"));
-
-                    int typeId = resultSet.getInt("type_id");
-                    automobile.setType(automobileTypeDao.findAutomobileType(typeId));
-
-                    automobile.setPlatformLength(resultSet.getInt("platform_length"));
-                    automobile.setPlatformWidth(resultSet.getInt("platform_width"));
-                    automobile.setCargoHeightLimit(resultSet.getDouble("cargo_height_limit"));
-                    automobile.setCargoVolumeLimit(resultSet.getDouble("cargo_volume_limit"));
-
-                    Set<Equipment> equipmentSet = getAllEquipmentOnAutomobile(id);
-                    automobile.setEquipmentSet(equipmentSet);
-
-                    List<Maintenance> maintenanceList = getMaintenanceOfAutomobile(automobile);
-                    automobile.setMaintenanceList(maintenanceList);
-
-                    List<Malfunction> malfunctions = getMalfunctionsOfAutomobile(automobile);
-                    automobile.setMalfunctions(malfunctions);
-
-                    int technicalStatusId = resultSet.getInt("technical_status_id");
-                    automobile.setTechnicalStatus(technicalStatusDao.findStatus(technicalStatusId));
+                    getAutomobileInfo(id, automobile, resultSet);
 
                     AutomobileAttachmentDao automobileAttachmentDao = new AutomobileAttachmentDaoImpl();
                     automobile.setAutomobileAttachmentList(automobileAttachmentDao
@@ -275,7 +257,23 @@ public class AutomobileDaoImpl implements AutomobileDao {
             preparedStatement.setString(11, automobileId);
 
             try (connection; preparedStatement) {
-                setEquipmentAndLoadingTypes(automobile, connection, preparedStatement, automobileId);
+                preparedStatement.executeUpdate();
+                connection.commit();
+
+                Set<Equipment> equipmentSet = automobile.getEquipmentSet();
+                if (equipmentSet != null && !equipmentSet.isEmpty()) {
+                    for (Equipment equipment : equipmentSet) {
+                        int equipmentId = equipment.getId();
+                        addEquipmentToAutomobile(equipmentId, automobileId);
+                    }
+                }
+                Set<LoadingType> loadingTypes = automobile.getLoadingTypes();
+                if (loadingTypes != null && !loadingTypes.isEmpty()) {
+                    for (LoadingType loadingType : loadingTypes) {
+                        int loadingTypeId = loadingType.getId();
+                        addLoadingTypeToAutomobile(loadingTypeId, automobileId);
+                    }
+                }
 
 
             } catch (SQLException e) {
@@ -328,7 +326,9 @@ public class AutomobileDaoImpl implements AutomobileDao {
             PreparedStatement preparedStatement = connection
                     .prepareStatement(ADD_EQUIPMENT_TO_AUTOMOBILE_SQL);
             preparedStatement.setInt(1, equipmentId);
+            preparedStatement.setInt(3, equipmentId);
             preparedStatement.setString(2, automobileId);
+            preparedStatement.setString(4, automobileId);
 
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();
@@ -421,7 +421,9 @@ public class AutomobileDaoImpl implements AutomobileDao {
             PreparedStatement preparedStatement = connection
                     .prepareStatement(ADD_LOADING_TYPE_TO_AUTOMOBILE_SQL);
             preparedStatement.setInt(1, loadingTypeId);
+            preparedStatement.setInt(3, loadingTypeId);
             preparedStatement.setString(2, automobileId);
+            preparedStatement.setString(4, automobileId);
 
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();

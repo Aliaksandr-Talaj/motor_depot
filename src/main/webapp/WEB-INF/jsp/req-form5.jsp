@@ -18,6 +18,7 @@
 <fmt:message bundle="${loc}" key="local.auto.enter.platform.length" var="L_UNITS"/>
 <fmt:message bundle="${loc}" key="local.unit.weight" var="UNIT_WEIGHT"/>
 <fmt:message bundle="${loc}" key="local.auto.enter.carrying" var="W_UNITS"/>
+<fmt:message bundle="${loc}" key="local.unit.quantity" var="UNIT_QUANTITY"/>
 <fmt:message bundle="${loc}" key="local.submit" var="SUBMIT"/>
 
 <!--Page name -->
@@ -48,14 +49,14 @@
     <div class="container">
         <br class="row g-3 needs-validation" novalidate>
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             <label class="form-label">${CARGO_NAME}</label>
             <label>
                 <input type="text" name="cargoName" class="form-control"
                        PLACEHOLDER="${CARGO_NAME_DESC}" required>
             </label>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <label class="form-label">${UNIT_TYPE}</label>
             <label>
                 <input type="text" name="unitType" class="form-control"
@@ -65,29 +66,38 @@
         <div class="col-md-3">
             <label class="form-label">${UNIT_LENGTH}</label>
             <label>
-                <input type="text" name="unitLength" class="form-control"
+                <input type="number" name="unitLength" class="form-control"
                        PLACEHOLDER="${L_UNITS}" required>
             </label>
         </div>
         <div class="col-md-3">
             <label class="form-label">${UNIT_WIDTH}</label>
             <label>
-                <input type="text" name="unitWidth" class="form-control"
+                <input type="number" name="unitWidth" class="form-control"
                        PLACEHOLDER="${L_UNITS}" required>
             </label>
         </div>
         <div class="col-md-3">
             <label class="form-label">${UNIT_HEIGHT}</label>
             <label>
-                <input type="text" name="unitHeight" class="form-control"
+                <input type="number" name="unitHeight" class="form-control"
                        PLACEHOLDER="${L_UNITS}" required>
             </label>
         </div>
         <div class="col-md-3">
             <label class="form-label">${UNIT_WEIGHT}</label>
             <label>
-                <input type="text" name="unitWeight" class="form-control"
+                <input type="number" name="unitWeight" class="form-control"
                        PLACEHOLDER="${W_UNITS}" required>
+            </label>
+        </div>
+
+
+        <div class="col-md-3">
+            <label class="form-label">${UNIT_QUANTITY}</label>
+            <label>
+                <input type="number" name="quantity" class="form-control"
+                        required>
             </label>
         </div>
 

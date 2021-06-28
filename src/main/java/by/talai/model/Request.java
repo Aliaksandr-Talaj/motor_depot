@@ -1,30 +1,33 @@
 package by.talai.model;
 
 import by.talai.model.stock.AutomobileType;
+import by.talai.model.stock.Equipment;
 import by.talai.model.stock.LoadingType;
 
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class Request implements Serializable {
 
-    private int id;
+    private String id;
     private Date fillingDate;
     private Charterer charterer;
     private AutomobileType requiredAutomobileType;
     private LoadingType requiredLoadingType;
     private Status executionStatus;
+    private Set<Equipment> equipmentSet;
 
     private List<Delivery> deliveryList;
 
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -76,6 +79,14 @@ public class Request implements Serializable {
         this.executionStatus = executionStatus;
     }
 
+    public Set<Equipment> getEquipmentSet() {
+        return equipmentSet;
+    }
+
+    public void setEquipmentSet(Set<Equipment> equipmentSet) {
+        this.equipmentSet = equipmentSet;
+    }
+
     @Override
     public String toString() {
         return "Request{" +
@@ -94,7 +105,7 @@ public class Request implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Request)) return false;
         Request request = (Request) o;
-        return getId() == request.getId() && getFillingDate().equals(request.getFillingDate())
+        return getId().equals(request.getId()) && getFillingDate().equals(request.getFillingDate())
                 && getCharterer().equals(request.getCharterer())
                 && Objects.equals(getRequiredAutomobileType(), request.getRequiredAutomobileType())
                 && Objects.equals(getRequiredLoadingType(), request.getRequiredLoadingType())

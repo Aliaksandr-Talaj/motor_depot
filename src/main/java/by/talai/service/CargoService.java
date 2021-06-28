@@ -8,4 +8,6 @@ public interface CargoService {
     List<Cargo> getCargos() throws Exception;
 
     Cargo getCargo(int id) throws Exception;
+
+    void saveCargo(Cargo cargo) throws Exception;
 }

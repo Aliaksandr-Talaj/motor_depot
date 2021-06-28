@@ -20,8 +20,6 @@ public class AutomobileServiceImpl implements AutomobileService {
     private final MalfunctionDao malfunctionDao = new MalfunctionDaoImpl();
     private final MaintenanceDao maintenanceDao = new MaintenanceDaoImpl();
     private final StatusDao technicalStatusDao = new TechnicalStatusDaoImpl();
-    private final FuelTypeDao fuelTypeDao = new FuelTypeDaoImpl();
-    private final AutomobileTypeDao automobileTypeDao = new AutomobileTypeDaoImpl();
 
 
     public static final Logger logger = LoggerFactory.getLogger(AutomobileServiceImpl.class);
@@ -152,13 +150,14 @@ public class AutomobileServiceImpl implements AutomobileService {
 
         automobile.setPlatformLength(Integer.parseInt(platformLength));
         automobile.setPlatformWidth(Integer.parseInt(platformWidth));
-        automobile.setCargoHeightLimit(Integer.parseInt(heightLimit));
+        automobile.setCargoHeightLimit(Double.parseDouble(heightLimit));
         if (volumeLimit != null && !"".equals(volumeLimit)) {
             automobile.setCargoVolumeLimit(Double.parseDouble(volumeLimit));
         }
         automobile.setTechnicalStatus(technicalStatusDao.findStatus(1));
 
         saveNewAutomobile(automobile);
+
     }
 
 

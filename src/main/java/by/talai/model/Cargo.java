@@ -9,7 +9,6 @@ public class Cargo implements Serializable {
     private int id;
     private String name;
 
-  
 
     private Unit unit;
     private double quantity;

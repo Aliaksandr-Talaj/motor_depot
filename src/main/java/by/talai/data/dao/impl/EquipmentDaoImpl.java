@@ -19,6 +19,21 @@ import java.util.Set;
 
 public class EquipmentDaoImpl implements EquipmentDao {
 
+    static final String CREATE_EQUIPMENT_SQL =
+            "INSERT INTO motor_depot.equipment (id, name, description) VALUES (?, ?, ?);";
+    static final String GET_EQUIPMENT_SQL = "SELECT * FROM motor_depot.equipment WHERE id = ?;";
+    static final String GET_ALL_EQUIPMENT_SQL = "SELECT * FROM motor_depot.charterer; ";
+    static final String UPDATE_EQUIPMENT_SQL =
+            "UPDATE motor_depot.equipment SET name = ?, description = ? WHERE (id = ?);";
+    static final String DELETE_EQUIPMENT_SQL = "DELETE FROM motor_depot.equipment WHERE (id = ?);";
+    static final String ADD_EQUIPMENT_TO_REQUEST_SQL =
+            "INSERT INTO motor_depot.request_has_required_equipment (equipment_id, request_id) VALUES (?, ?);";
+    static final String GET_ALL_EQUIPMENT_OF_REQUEST_SQL =
+            "SELECT * FROM motor_depot.equipment AS EQ, motor_depot.request_has_required_equipment AS REQ" +
+                    " WHERE (REQ.request_id = ?) AND (REQ.equipment_id = EQ.id);";
+    static final String REMOVE_EQUIPMENT_FROM_REQUEST_SQL =
+            "DELETE FROM motor_depot.request_has_required_equipment WHERE (equipment_id = ?) AND (request_id = ?)";
+
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 
@@ -32,9 +47,7 @@ public class EquipmentDaoImpl implements EquipmentDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO " +
-                            "motor_depot.equipment (id, name, description)" +
-                            " VALUES (?, ?, ?);");
+                    .prepareStatement(CREATE_EQUIPMENT_SQL);
             preparedStatement.setInt(1, equipment.getId());
             preparedStatement.setString(2, equipment.getName());
             preparedStatement.setString(3, equipment.getDescription());
@@ -63,7 +76,7 @@ public class EquipmentDaoImpl implements EquipmentDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.equipment WHERE id = ?;");
+                    .prepareStatement(GET_EQUIPMENT_SQL);
             preparedStatement.setInt(1, id);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -97,7 +110,7 @@ public class EquipmentDaoImpl implements EquipmentDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * SELECT motor_depot.charterer; ");
+                    .prepareStatement(GET_ALL_EQUIPMENT_SQL);
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 while (resultSet.next()) {
@@ -130,9 +143,7 @@ public class EquipmentDaoImpl implements EquipmentDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE motor_depot.equipment " +
-                            "SET name = ?, description = ? " +
-                            "WHERE (id = ?);");
+                    .prepareStatement(UPDATE_EQUIPMENT_SQL);
 
             preparedStatement.setString(1, equipment.getName());
             preparedStatement.setString(2, equipment.getDescription());
@@ -162,7 +173,7 @@ public class EquipmentDaoImpl implements EquipmentDao {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM motor_depot.equipment WHERE (id = ?);");
+                    .prepareStatement(DELETE_EQUIPMENT_SQL);
 
             preparedStatement.setInt(1, id);
 
@@ -186,15 +197,13 @@ public class EquipmentDaoImpl implements EquipmentDao {
 
 
     @Override
-    public void addEquipmentToRequest(int equipmentId, int requestId) throws Exception {
+    public void addEquipmentToRequest(int equipmentId, String requestId) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO " +
-                            "motor_depot.request_has_required_equipment (equipment_id, request_id)" +
-                            " VALUES (?, ?);");
+                    .prepareStatement(ADD_EQUIPMENT_TO_REQUEST_SQL);
             preparedStatement.setInt(1, equipmentId);
-            preparedStatement.setInt(2, requestId);
+            preparedStatement.setString(2, requestId);
 
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();
@@ -215,16 +224,13 @@ public class EquipmentDaoImpl implements EquipmentDao {
     }
 
     @Override
-    public Set<Equipment> getAllEquipmentOfRequest(int requestId) throws Exception {
+    public Set<Equipment> getAllEquipmentOfRequest(String requestId) throws Exception {
         Set<Equipment> equipmentList = new HashSet<>();
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM motor_depot.equipment AS EQ," +
-                            " motor_depot.request_has_required_equipment AS REQ" +
-                            " where (REQ.request_id = ?)" +
-                            " and (REQ.equipment_id = EQ.id);");
-            preparedStatement.setInt(1, requestId);
+                    .prepareStatement(GET_ALL_EQUIPMENT_OF_REQUEST_SQL);
+            preparedStatement.setString(1, requestId);
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 while (resultSet.next()) {
@@ -253,14 +259,13 @@ public class EquipmentDaoImpl implements EquipmentDao {
     }
 
     @Override
-    public void removeEquipmentFromRequest(int equipmentId, int requestId) throws Exception {
+    public void removeEquipmentFromRequest(int equipmentId, String requestId) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM motor_depot.request_has_required_equipment " +
-                            "WHERE (equipment_id = ?) and (request_id = ?)");
+                    .prepareStatement(REMOVE_EQUIPMENT_FROM_REQUEST_SQL);
             preparedStatement.setInt(1, equipmentId);
-            preparedStatement.setInt(2, requestId);
+            preparedStatement.setString(2, requestId);
 
             try (connection; preparedStatement) {
                 preparedStatement.executeUpdate();

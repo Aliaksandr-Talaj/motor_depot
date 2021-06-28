@@ -9,7 +9,8 @@ public interface RequestDao {
     void createRequest(Request request) throws Exception;
 
     // get Request by id
-    Request getRequest(int id) throws Exception;
+
+    Request getRequest(String id) throws Exception;
 
     // get all Requests
     List<Request> getAllRequests() throws Exception;
@@ -18,5 +19,6 @@ public interface RequestDao {
     void updateRequest(Request request) throws Exception;
 
     // delete Request
-    void deleteRequest(int id) throws Exception;
+
+    void deleteRequest(String id) throws Exception;
 }

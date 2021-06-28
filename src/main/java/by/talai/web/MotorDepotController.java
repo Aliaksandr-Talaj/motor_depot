@@ -7,9 +7,10 @@ import by.talai.data.exception.DaoException;
 import by.talai.model.*;
 import by.talai.model.personnel.User;
 import by.talai.model.stock.Automobile;
+import by.talai.model.stock.AutomobileType;
+import by.talai.model.stock.LoadingType;
 import by.talai.service.*;
 import by.talai.service.dto.DriverDto;
-import by.talai.service.dto.RequestDto;
 import by.talai.service.dto.UsersDto;
 import by.talai.service.impl.*;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MotorDepotController extends HttpServlet {
@@ -43,6 +45,8 @@ public class MotorDepotController extends HttpServlet {
             request.getSession(true).setAttribute("local", request.getParameter("local"));
         }
         request.getSession(true).setAttribute("role", "dispatcher");
+        request.getSession().setAttribute("usrId", 4);
+
         String role = (String) request.getSession(true).getAttribute("role");
 
         String action = request.getServletPath();
@@ -78,6 +82,18 @@ public class MotorDepotController extends HttpServlet {
                             changeUserStatus(request, response);
                         break;
 //dispatchers can do
+                    case "/user/dispatcher/request_generated":
+                        if ("dispatcher".equals(role))
+                            saveRequestGoRequests(request, response);
+                        break;
+                    case "/user/dispatcher/save_delivery":
+                        if ("dispatcher".equals(role))
+                            saveDeliveriesGoRequestForm8(request, response);
+                        break;
+                    case "/user/dispatcher/save_cargo":
+                        if ("dispatcher".equals(role))
+                            saveDeliveryGoRequestForm7(request, response);
+                        break;
                     case "/user/dispatcher/add_cargo":
                         if ("dispatcher".equals(role))
                             addCargoGoRequestForm6(request, response);
@@ -219,22 +235,122 @@ public class MotorDepotController extends HttpServlet {
 
     }
 
+    private void saveRequestGoRequests(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+////////////////////////////////////////////
+        int typeId = Integer.parseInt(request.getParameter("type"));
+        int loadingTypeId = Integer.parseInt(request.getParameter("loadingType"));
+        Request generatingRequest = (Request) request.getSession().getAttribute("generatingRequest");
+        if (loadingTypeId != 0) {
+            LoadingType loadingType = new LoadingType();
+            loadingType.setId(loadingTypeId);
+            generatingRequest.setRequiredLoadingType(loadingType);
+        }
+        if (typeId != 0) {
+            AutomobileType automobileType = new AutomobileType();
+            automobileType.setId(typeId);
+            generatingRequest.setRequiredAutomobileType(automobileType);
+        }
+        int userid = (int) request.getSession().getAttribute("usrId");
+        RequestService requestService = new RequestServiceImpl();
+        requestService.addNewRequest(generatingRequest, userid);
+        request.getSession().removeAttribute("generatingRequest");
+
+        goListRequests(request, response);
+    }
+
+    private void saveDeliveriesGoRequestForm8(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        boolean addMore = Boolean.parseBoolean(request.getParameter("addMoreDeliveries"));
+        request.getSession().removeAttribute("generatingDelivery");
+        RequestDispatcher dispatcher;
+        if (addMore) {
+            dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form2.jsp");
+        } else {
+            dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form8.jsp");
+        }
+        dispatcher.forward(request, response);
+
+    }
+
+
+    private void saveDeliveryGoRequestForm7(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        boolean addMore = Boolean.parseBoolean(request.getParameter("addMoreCargos"));
+
+        if (addMore) {
+
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form5.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            Request generatingRequest = (Request) request.getSession().getAttribute("generatingRequest");
+            Delivery delivery = (Delivery) request.getSession().getAttribute("generatingDelivery");
+            //adding addresses, used in the delivery, into the charterer's list
+            AddressService addressService = new AddressServiceImpl();
+            Address address1 = addressService.addAddressIfNew(delivery.getDestination());
+            Address address2 = addressService.addAddressIfNew(delivery.getLoadingPlace());
+            chartererService.addNewAddressToCharterer(address1, generatingRequest.getCharterer());
+            chartererService.addNewAddressToCharterer(address2, generatingRequest.getCharterer());
+
+            //saving delivery into DB
+            ///////////////////////////////////////////////////
+            delivery.setRequest(generatingRequest);
+            ///////////////////////////////////////////////
+            DeliveryService deliveryService = new DeliveryServiceImpl();
+            delivery = deliveryService.addDelivery(delivery);
+
+            //adding delivery into the generating request
+            List<Delivery> deliveryList = generatingRequest.getDeliveryList();
+            if (deliveryList == null) {
+                deliveryList = new ArrayList<>();
+            }
+            deliveryList.add(delivery);
+            generatingRequest.setDeliveryList(deliveryList);
+            request.getSession().setAttribute("generatingRequest", generatingRequest);
+
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form7.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    }
+
     private void addCargoGoRequestForm6(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        //parsing of the cargo's name
         String cargoName = request.getParameter("cargoName");
+        //parsing of unit's parameters
         String unitType = request.getParameter("unitType");
         int unitLength = Integer.parseInt(request.getParameter("unitLength"));
         int unitWidth = Integer.parseInt(request.getParameter("unitWidth"));
         double unitHeight = Double.parseDouble(request.getParameter("unitHeight"));
         double unitWeight = Double.parseDouble(request.getParameter("unitWeight"));
+        double quantity = Double.parseDouble(request.getParameter("quantity"));
 
+        // getting of cargo and delivery from the session scope
+        Cargo cargo = new Cargo();
+        Delivery delivery = (Delivery) request.getSession().getAttribute("generatingDelivery");
 
+        UnitService unitService = new UnitServiceImpl();
+        //adding new unit into DB
+        int unitId = unitService.addNewUnit(unitType, unitLength, unitWidth, unitHeight, unitWeight);
+        Unit unit = unitService.findUnit(unitId);
+        //setting it into the cargo
+        List<Cargo> cargos = delivery.getCargoList();
+        cargo.setName(cargoName);
+        cargo.setUnit(unit);
+        cargo.setQuantity(quantity);
+        if (cargos == null) {
+            cargos = new ArrayList<>();
+        }
+        cargos.add(cargo);
+        delivery.setCargoList(cargos);
 
+        request.getSession().setAttribute("generatingDelivery", delivery);
 
-
-        Cargo cargo = (Cargo) request.getSession().getAttribute("generatingCargo");
-
-
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-form6.jsp");
+        dispatcher.forward(request, response);
     }
+
 
     private void addDatesAndGoRequestForm5(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -437,8 +553,6 @@ public class MotorDepotController extends HttpServlet {
         if (isValid) {
             User user = userService.findUser(login);
             Role role = user.getRole();
-            System.out.println(role);
-            System.out.println(role.getName());
             HttpSession session = request.getSession(true);
             session.setAttribute("role", role.getName());
             session.setAttribute("usrId", user.getId());
@@ -491,10 +605,6 @@ public class MotorDepotController extends HttpServlet {
     private void addCharterer(HttpServletRequest request, HttpServletResponse response) throws Exception {
         createCharterer(request);
 
-//        int goToReq2Form = Integer.parseInt(request.getParameter("goToReq2Form"));
-//        if (goToReq2Form == 1) {
-//            goRequestForm2(request, response, chartererId);
-//        }
         response.sendRedirect("/motor_depot/user/dispatcher/charterers");
     }
 
@@ -552,6 +662,7 @@ public class MotorDepotController extends HttpServlet {
     }
 
     private void goRequestForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        request.getSession().removeAttribute("generatingRequest");
         List<Charterer> charterers = chartererService.getCharterers();
         request.setAttribute("new_request", 1);
         request.setAttribute("charterers", charterers);
@@ -607,8 +718,8 @@ public class MotorDepotController extends HttpServlet {
 
     private void goListRequests(HttpServletRequest request, HttpServletResponse response) throws Exception {
         RequestService requestService = new RequestServiceImpl();
-        List<RequestDto> requestDtoList = requestService.getRequestDtoList();
-        request.setAttribute("requestsDto", requestDtoList);
+        List<Request> requests = requestService.getAllRequests();
+        request.setAttribute("requests", requests);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/requests.jsp");
         dispatcher.forward(request, response);
     }

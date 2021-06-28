@@ -5,8 +5,9 @@ import by.talai.model.Unit;
 import java.util.List;
 
 public interface UnitDao {
-    // create Unit
-    void createUnit(Unit unit) throws Exception;
+    abstract void createUnit(Unit unit) throws Exception;
+
+    int createUnitReturnId(Unit unit) throws Exception;
 
     // get Unit by id
     Unit getUnit(int id) throws Exception;

@@ -93,7 +93,7 @@
         <div class="col-md-4">
             <label class="form-label">${CARRYING}</label>
             <label>
-                <input type="text" name="carrying" class="form-control" PLACEHOLDER="${E_CARRYING}" required>
+                <input type="number" name="carrying" class="form-control" PLACEHOLDER="${E_CARRYING}" required>
             </label>
         </div>
 
@@ -173,21 +173,21 @@
         <div class="col-md-4">
             <label class="form-label">${P_LENGTH}</label>
             <label>
-                <input type="text" name="p_length" class="form-control" PLACEHOLDER="${E_P_LENGTH}" required>
+                <input type="number" name="p_length" class="form-control" PLACEHOLDER="${E_P_LENGTH}" required>
             </label>
         </div>
 
         <div class="col-md-4">
             <label class="form-label">${P_WIDTH}</label>
             <label>
-                <input type="text" name="p_width" class="form-control" PLACEHOLDER="${E_P_WIDTH}" required>
+                <input type="number" name="p_width" class="form-control" PLACEHOLDER="${E_P_WIDTH}" required>
             </label>
         </div>
 
         <div class="col-md-4">
             <label class="form-label">${C_H_LIMIT}</label>
             <label>
-                <input type="text" name="h_limit" class="form-control" PLACEHOLDER="${E_C_H_LIMIT}">
+                <input type="number" name="h_limit" class="form-control" PLACEHOLDER="${E_C_H_LIMIT}" step="any">
             </label>
         </div>
 

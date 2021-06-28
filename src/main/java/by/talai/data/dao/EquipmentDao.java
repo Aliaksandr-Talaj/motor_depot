@@ -23,16 +23,12 @@ public interface EquipmentDao {
     void deleteEquipment(int id) throws Exception;
 
 
-
-
-
     // add required equipment to the request
-    void addEquipmentToRequest(int equipmentId, int requestId) throws Exception;
+    void addEquipmentToRequest(int equipmentId, String requestId) throws Exception;
 
     // get  all required equipment of the request
-    Set<Equipment> getAllEquipmentOfRequest(int requestId) throws Exception;
+    Set<Equipment> getAllEquipmentOfRequest(String requestId) throws Exception;
 
     //remove required equipment from the request
-    void removeEquipmentFromRequest(int equipmentId, int requestId) throws Exception;
-
+    void removeEquipmentFromRequest(int equipmentId, String requestId) throws Exception;
 }

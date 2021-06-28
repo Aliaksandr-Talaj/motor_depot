@@ -4,12 +4,14 @@ import by.talai.data.dao.ChartererDao;
 import by.talai.data.dao.impl.ChartererDaoImpl;
 import by.talai.data.exception.ConnectionPoolException;
 import by.talai.data.exception.DaoException;
+import by.talai.model.Address;
 import by.talai.model.Charterer;
 import by.talai.service.ChartererService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Set;
 
 public class ChartererServiceImpl implements ChartererService {
 
@@ -36,5 +38,10 @@ public class ChartererServiceImpl implements ChartererService {
     @Override
     public List<Charterer> getCharterers() throws Exception {
         return chartererDao.getAllCharterers();
+    }
+
+    @Override
+    public void addNewAddressToCharterer(Address address, Charterer charterer) throws Exception {
+       chartererDao.addAddressToCharterer(address.getId(),charterer.getId());
     }
 }

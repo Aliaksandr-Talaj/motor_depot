@@ -35,7 +35,7 @@
     </div>
 </nav>
 <c:if test="${!(empty invalidInput)}">
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-light bg-warning">
         <div class="container-fluid">
             <span class="navbar-brand mb-0 h1">${INVALID_DATE}</span>
         </div>

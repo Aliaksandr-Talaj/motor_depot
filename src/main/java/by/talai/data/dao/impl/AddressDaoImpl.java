@@ -29,6 +29,8 @@ public class AddressDaoImpl implements AddressDao {
             "SET country = ?, region = ?, locality = ?, street = ?, building = ?, apartment = ? WHERE (id = ?);";
     static final String DELETE_ADDRESS = "DELETE FROM motor_depot.address WHERE (id = ?);";
     static final String GET_LAST_INSERT_ID = "SELECT last_insert_id();";
+    static final String FIND_ADDRESS_CLONE_SQL = "SELECT * FROM motor_depot.address WHERE country = ? AND region = ?" +
+            " AND locality = ? AND street = ? AND building = ? AND apartment = ?;";
 
     static final Logger logger = LoggerFactory.getLogger(AddressDaoImpl.class);
 
@@ -36,7 +38,7 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     @Override
-    public int createAddress(Address address) throws Exception {
+    public Address createAddress(Address address) throws Exception {
         int id = address.getId();
         try {
             Connection connection = connectionPool.takeConnection();
@@ -44,15 +46,10 @@ public class AddressDaoImpl implements AddressDao {
             if (id == 0) {
                 preparedStatement = connection.prepareStatement(CREATE_ADDRESS_SQL_NO_ID);
 
-                preparedStatement.setString(1, address.getCountry());
-                preparedStatement.setString(2, address.getRegion());
-                preparedStatement.setString(3, address.getLocality());
-                preparedStatement.setString(4, address.getStreet());
-                preparedStatement.setString(5, address.getBuilding());
-                preparedStatement.setString(6, address.getApartment());
+                prepareWithoutId(address, preparedStatement);
             } else {
                 preparedStatement = connection.prepareStatement(CREATE_ADDRESS_SQL);
-
+                preparedStatement.setInt(1, address.getId());
                 preparedStatement.setString(2, address.getCountry());
                 preparedStatement.setString(3, address.getRegion());
                 preparedStatement.setString(4, address.getLocality());
@@ -70,6 +67,7 @@ public class AddressDaoImpl implements AddressDao {
                          ResultSet resultSet = preparedStatementForId.executeQuery()) {
                         if (resultSet.next()) {
                             id = resultSet.getInt(1);
+                            address.setId(id);
                         }
                     } catch (SQLException e) {
                         logger.error("Sql exception in createAddress() method");
@@ -88,7 +86,7 @@ public class AddressDaoImpl implements AddressDao {
             logger.error("Exception in createAddress() method");
             throw new DaoException("exception in createAddress() method", e);
         }
-        return id;
+        return address;
     }
 
     @Override
@@ -172,12 +170,7 @@ public class AddressDaoImpl implements AddressDao {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ADDRESS);
 
-            preparedStatement.setString(1, address.getCountry());
-            preparedStatement.setString(2, address.getRegion());
-            preparedStatement.setString(3, address.getLocality());
-            preparedStatement.setString(4, address.getStreet());
-            preparedStatement.setString(5, address.getBuilding());
-            preparedStatement.setString(6, address.getApartment());
+            prepareWithoutId(address, preparedStatement);
 
             preparedStatement.setInt(7, address.getId());
 
@@ -229,7 +222,7 @@ public class AddressDaoImpl implements AddressDao {
     @Override
     public int createAddress(String country, String region, String locality, String street,
                              String building, String apartment) throws DaoException {
-        int id=0;
+        int id = 0;
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement;
@@ -272,5 +265,45 @@ public class AddressDaoImpl implements AddressDao {
         return id;
     }
 
+    @Override
+    public Address createAddressIfNotRepeats(Address address) throws DaoException {
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement;
 
+            preparedStatement = connection.prepareStatement(FIND_ADDRESS_CLONE_SQL);
+
+            prepareWithoutId(address, preparedStatement);
+
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    address.setId(id);
+                    return address;
+                } else {
+                    return createAddress(address);
+                }
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in createAddressIfNotRepeats() method");
+                throw new DaoException("exception in createAddressIfNotRepeats() method", e);
+            }
+        } catch (ConnectionPoolException e) {
+            logger.error("Connection pool exception in createAddressIfNotRepeats() method");
+            throw new DaoException("exception in createAddressIfNotRepeats() method", e);
+        } catch (Exception e) {
+            logger.error("Exception in createAddressIfNotRepeats() method");
+            throw new DaoException("exception in createAddressIfNotRepeats() method", e);
+        }
+
+    }
+
+    private void prepareWithoutId(Address address, PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setString(1, address.getCountry());
+        preparedStatement.setString(2, address.getRegion());
+        preparedStatement.setString(3, address.getLocality());
+        preparedStatement.setString(4, address.getStreet());
+        preparedStatement.setString(5, address.getBuilding());
+        preparedStatement.setString(6, address.getApartment());
+    }
 }

@@ -4,12 +4,11 @@ import by.talai.data.exception.DaoException;
 import by.talai.model.Address;
 
 import java.util.List;
-import java.util.Set;
 
 public interface AddressDao {
 
     // create address
-    int createAddress(Address address) throws Exception;
+    Address createAddress(Address address) throws Exception;
 
     // get address by id
     Address getAddress(int id) throws Exception;
@@ -25,4 +24,6 @@ public interface AddressDao {
 
 
     int createAddress(String country, String region, String locality, String street, String building, String apartment) throws DaoException;
+
+    Address createAddressIfNotRepeats(Address address) throws DaoException;
 }
