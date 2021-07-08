@@ -10,7 +10,9 @@ import by.talai.model.stock.Automobile;
 import by.talai.model.stock.AutomobileType;
 import by.talai.model.stock.LoadingType;
 import by.talai.service.*;
+import by.talai.service.dto.AutomobileLoadingDto;
 import by.talai.service.dto.DriverDto;
+import by.talai.service.dto.RequestDto;
 import by.talai.service.dto.UsersDto;
 import by.talai.service.impl.*;
 import org.slf4j.Logger;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MotorDepotController extends HttpServlet {
 
@@ -40,7 +43,7 @@ public class MotorDepotController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         if (request.getParameter("local") != null) {
             request.getSession(true).setAttribute("local", request.getParameter("local"));
         }
@@ -82,6 +85,18 @@ public class MotorDepotController extends HttpServlet {
                             changeUserStatus(request, response);
                         break;
 //dispatchers can do
+                    case "/user/dispatcher/create-ride":
+                        if ("dispatcher".equals(role))
+                            createRide(request, response);
+                        break;
+                    case "/user/dispatcher/delivery-process":
+                        if ("dispatcher".equals(role))
+                            processDelivery(request, response);
+                        break;
+                    case "/user/dispatcher/request-process":
+                        if ("dispatcher".equals(role))
+                            processRequest(request, response);
+                        break;
                     case "/user/dispatcher/request_generated":
                         if ("dispatcher".equals(role))
                             saveRequestGoRequests(request, response);
@@ -235,9 +250,52 @@ public class MotorDepotController extends HttpServlet {
 
     }
 
+    private void createRide(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int deliveryId = Integer.parseInt(request.getParameter("deliveryId"));
+        String automobileId = request.getParameter("automobileId");
+        int dispatcherId = (int) request.getSession().getAttribute("usrId");
+        Ride ride = new RideServiceImpl().createRide(deliveryId, automobileId, dispatcherId);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/delivery-process.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void processDelivery(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int deliveryId = Integer.parseInt(request.getParameter("deliveryId"));
+        DeliveryService deliveryService = new DeliveryServiceImpl();
+        Delivery delivery = deliveryService.getDelivery(deliveryId);
+
+        Request currentRequest = delivery.getRequest();
+        AutomobileService automobileService = new AutomobileServiceImpl();
+        Set<Automobile> suitableAutomobiles = automobileService.findSuitableAutomobiles(currentRequest);
+        List<AutomobileLoadingDto> automobileLoadingDtoList = new ArrayList<>();
+        for (Automobile automobile : suitableAutomobiles) {
+            AutomobileLoadingDto automobileLoadingDto = deliveryService.getAutomobileLoadingDto(automobile, delivery);
+            System.out.println(automobileLoadingDto);
+            automobileLoadingDtoList.add(automobileLoadingDto);
+        }
+        request.setAttribute("delivery", delivery);
+        request.setAttribute("suitableAutomobiles", automobileLoadingDtoList);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/delivery-process.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String requestId = request.getParameter("requestId");
+        RequestService requestService = new RequestServiceImpl();
+        Request currentRequest = requestService.getRequest(requestId);
+        request.setAttribute("currentRequest", currentRequest);
+
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/req-process.jsp");
+        dispatcher.forward(request, response);
+
+    }
+
     private void saveRequestGoRequests(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-////////////////////////////////////////////
+
         int typeId = Integer.parseInt(request.getParameter("type"));
         int loadingTypeId = Integer.parseInt(request.getParameter("loadingType"));
         Request generatingRequest = (Request) request.getSession().getAttribute("generatingRequest");
@@ -718,8 +776,8 @@ public class MotorDepotController extends HttpServlet {
 
     private void goListRequests(HttpServletRequest request, HttpServletResponse response) throws Exception {
         RequestService requestService = new RequestServiceImpl();
-        List<Request> requests = requestService.getAllRequests();
-        request.setAttribute("requests", requests);
+        List<RequestDto> requestsDto = requestService.getRequestDtoList();
+        request.setAttribute("requestsDto", requestsDto);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/requests.jsp");
         dispatcher.forward(request, response);
     }
@@ -741,7 +799,7 @@ public class MotorDepotController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException {
         doGet(request, response);
     }
 

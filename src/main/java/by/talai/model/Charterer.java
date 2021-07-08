@@ -77,6 +77,6 @@ public class Charterer implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getSurname(), getOwnAddress(), getUsedAddresses());
+        return getId();
     }
 }

@@ -3,10 +3,23 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <jsp:include page="header.jsp"/>
+
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.request-form" var="page_name"/>
-<fmt:message bundle="${loc}" key="local.req7" var="REQUEST_PAGE_7"/>
+<fmt:message bundle="${loc}" key="local.request.process" var="page_name"/>
+<%--<fmt:message bundle="${loc}" key="local.request.process" var="REQUEST_PROCESS"/>--%>
+<fmt:message bundle="${loc}" key="local.request.number" var="r_number"/>
+<fmt:message bundle="${loc}" key="local.request.filling.date" var="r_filling_date"/>
+<fmt:message bundle="${loc}" key="local.request.charterer" var="r_charterer"/>
+<fmt:message bundle="${loc}" key="local.request.required.auto.type" var="r_req_auto_type"/>
+<fmt:message bundle="${loc}" key="local.request.required.loading.type" var="r_req_loading_type"/>
+<fmt:message bundle="${loc}" key="local.request.status" var="r_status"/>
+<fmt:message bundle="${loc}" key="local.request.deliveries" var="r_deliveries"/>
+<fmt:message bundle="${loc}" key="local.delivery" var="DELIVERY"/>
+<fmt:message bundle="${loc}" key="local.actions" var="r_actions"/>
+<fmt:message bundle="${loc}" key="local.process" var="r_process"/>
+<fmt:message bundle="${loc}" key="local.request.equipment" var="r_req_equipment"/>
+
 <fmt:message bundle="${loc}" key="local.cargo.name" var="CARGO_NAME"/>
 <fmt:message bundle="${loc}" key="local.unit.type" var="UNIT_TYPE"/>
 <fmt:message bundle="${loc}" key="local.unit.length" var="UNIT_LENGTH"/>
@@ -32,6 +45,14 @@
 <fmt:message bundle="${loc}" key="local.goes.to" var="GOES_TO"/>
 <fmt:message bundle="${loc}" key="local.loading.date" var="L_DATE"/>
 <fmt:message bundle="${loc}" key="local.term" var="TERM"/>
+<fmt:message bundle="${loc}" key="local.choose" var="CHOOSE"/>
+<fmt:message bundle="${loc}" key="local.auto.number" var="NUMBER"/>
+<fmt:message bundle="${loc}" key="local.auto.brand" var="BRAND"/>
+<fmt:message bundle="${loc}" key="local.auto.enter.model" var="MODEL"/>
+<fmt:message bundle="${loc}" key="local.actions" var="ACTION"/>
+<fmt:message bundle="${loc}" key="local.units.fit" var="UNITS_FIT"/>
+<fmt:message bundle="${loc}" key="local.loading.percent" var="LOADING_PERCENT"/>
+<fmt:message bundle="${loc}" key="local.autos.suitable" var="SUITABLE_AUTOS"/>
 
 
 <!--Page name -->
@@ -40,32 +61,59 @@
         <span class="navbar-brand mb-0 h1"><c:out value="${page_name}"/></span>
     </div>
 </nav>
-<nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1"><c:out value="${REQUEST_PAGE_7}"/></span>
-    </div>
-</nav>
+
 
 <jsp:useBean id="generatingRequest" class="by.talai.model.Request" scope="session" type="by.talai.model.Request"/>
-<jsp:useBean id="generatingDelivery" class="by.talai.model.Delivery" scope="session" type="by.talai.model.Delivery"/>
-<jsp:useBean id="generatingCargo" class="by.talai.model.Cargo" scope="session" type="by.talai.model.Cargo"/>
-<jsp:useBean id="generatingUnit" class="by.talai.model.Unit" scope="session" type="by.talai.model.Unit"/>
 
 
 <table class="table">
     <thead>
     <tr>
-        <th scope="col"><c:out value="${CHARTERER}:"/><br/>
-            <c:out value="${generatingRequest.charterer.name} ${generatingRequest.charterer.surname}"/>
-        </th>
+        <th scope="col">${r_number}</th>
+        <th scope="col">${r_filling_date}</th>
+        <th scope="col">${r_charterer}</th>
+        <th scope="col">${r_req_auto_type}</th>
+        <th scope="col">${r_req_loading_type}</th>
+        <th scope="col">${r_req_equipment}</th>
+        <th scope="col">${r_status}</th>
+        <%--        <th scope="col">${r_actions}</th>--%>
     </tr>
     </thead>
+    <tbody>
 
-    <c:forEach items="${generatingRequest.deliveryList}" var="delivery">
+
+    <tr>
+        <td>${currentRequest.id}</td>
+        <td>${currentRequest.fillingDate}</td>
+        <td>
+            <a href="/motor_depot/user/dispatcher/charterer?id=${currentRequest.charterer.id}">${currentRequest.charterer.name} ${currentRequest.charterer.surname}</a>
+        </td>
+        <td>${currentRequest.requiredAutomobileType.type}</td>
+        <td>${currentRequest.requiredLoadingType.type}</td>
+        <td><c:forEach items="${currentRequest.equipmentSet}" var="equipment">
+            ${equipment.name}<br/>
+        </c:forEach><br/>
+        </td>
+        <td>
+            ${currentRequest.executionStatus.status}
+        </td>
+
+    </tr>
+
+
+    </tbody>
+    <c:forEach items="${currentRequest.deliveryList}" var="delivery">
         <thead>
         <tr>
             <th scope="col"><c:out value="${DELIVERY} #${delivery.id}"/></th>
-            <th scope="col"></th>
+            <th scope="col">
+                <form method="post" action="/motor_depot/user/dispatcher/delivery-process">
+                    <input type="hidden" value="${delivery.id}" name="deliveryId"/>
+
+                    <button class="btn btn-secondary"
+                            role="button" type="submit" value="Select">${CHOOSE}</button>
+                </form>
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -154,6 +202,7 @@
                 <td>${cargo.quantity}</td>
             </tr>
         </c:forEach>
+
         </tbody>
         <tr>
             <th scope="row"></th>
@@ -166,21 +215,5 @@
     </c:forEach>
 </table>
 
-<div class="d-grid gap-2 d-md-block">
-    <form method="post" action="/motor_depot/user/dispatcher/save_delivery">
-        <input type="hidden" value="true" name="addMoreDeliveries"/>
-
-        <button class="btn btn-secondary"
-                role="button" type="submit" value="Select">${ADD_MORE}</button>
-    </form>
-    <br/>
-
-    <form method="post" action="/motor_depot/user/dispatcher/save_delivery">
-        <input type="hidden" value="false" name="addMoreDeliveries"/>
-
-        <button class="btn btn-secondary btn-lg"
-                role="button" type="submit" value="Select">${CONTINUE}</button>
-    </form>
-</div>
 
 <jsp:include page="footer.jsp"/>

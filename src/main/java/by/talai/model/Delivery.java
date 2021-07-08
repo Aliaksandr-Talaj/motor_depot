@@ -90,7 +90,7 @@ public class Delivery implements Serializable {
                 ",\n loadingDate=" + loadingDate +
                 ",\n destination=" + destination +
                 ",\n term=" + term +
-                ",\n request=" + request +
+                ",\n request=" + request.getId() +
                 ",\n status=" + executionStatus +
                 ",\n cargoList=" + cargoList +
                 '}';
@@ -111,7 +111,6 @@ public class Delivery implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getLoadingPlace(), getLoadingDate(), getDestination(), getTerm(),
-                getRequest(), getExecutionStatus(), getCargoList());
+        return getId();
     }
 }

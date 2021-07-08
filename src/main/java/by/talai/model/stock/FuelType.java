@@ -1,6 +1,7 @@
 package by.talai.model.stock;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class FuelType implements Serializable {
 
@@ -37,5 +38,18 @@ public class FuelType implements Serializable {
                 "id=" + id +
                 ",\n type='" + type + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FuelType)) return false;
+        FuelType fuelType = (FuelType) o;
+        return getId() == fuelType.getId() && Objects.equals(getType(), fuelType.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId();
     }
 }

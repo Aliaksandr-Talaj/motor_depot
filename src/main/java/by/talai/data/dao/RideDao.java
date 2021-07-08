@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RideDao {
     // createRide
-    void createRide(Ride ride) throws Exception;
+    Ride createRide(Ride ride) throws Exception;
 
     // get Ride by id
     Ride getRide(int id) throws Exception;

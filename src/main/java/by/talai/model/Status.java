@@ -46,6 +46,6 @@ public class Status implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getStatus());
+        return getId();
     }
 }

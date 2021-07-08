@@ -4,6 +4,7 @@ import by.talai.model.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class Automobile implements Serializable {
@@ -182,5 +183,44 @@ public class Automobile implements Serializable {
                 ",\n technicalStatus=" + technicalStatus +
                 ",\n automobileAttachmentList=" + automobileAttachmentList +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Automobile)) return false;
+        Automobile that = (Automobile) o;
+        return getCarrying() == that.getCarrying()
+                && getPlatformLength() == that.getPlatformLength()
+                && getPlatformWidth() == that.getPlatformWidth()
+                && Double.compare(that.getCargoHeightLimit(),
+                getCargoHeightLimit()) == 0
+                && Double.compare(that.getCargoVolumeLimit(),
+                getCargoVolumeLimit()) == 0
+                && Objects.equals(getId(),
+                that.getId())
+                && getBrand().equals(that.getBrand())
+                && getModel().equals(that.getModel())
+                && Objects.equals(getFuelType(),
+                that.getFuelType())
+                && Objects.equals(getAutomobileType(),
+                that.getAutomobileType())
+                && Objects.equals(getEquipmentSet(),
+                that.getEquipmentSet())
+                && Objects.equals(getLoadingTypes(),
+                that.getLoadingTypes())
+                && Objects.equals(getMalfunctions(),
+                that.getMalfunctions())
+                && Objects.equals(getMaintenanceList(),
+                that.getMaintenanceList())
+                && Objects.equals(getTechnicalStatus(),
+                that.getTechnicalStatus())
+                && Objects.equals(getAutomobileAttachmentList(),
+                that.getAutomobileAttachmentList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getBrand(), getModel(), getAutomobileType());
     }
 }

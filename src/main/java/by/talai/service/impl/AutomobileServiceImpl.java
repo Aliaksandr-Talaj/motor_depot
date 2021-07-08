@@ -3,6 +3,7 @@ package by.talai.service.impl;
 import by.talai.data.dao.*;
 import by.talai.data.dao.impl.*;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.model.Request;
 import by.talai.model.stock.*;
 import by.talai.service.AutomobileService;
 import by.talai.service.dto.AutomobilesDto;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class AutomobileServiceImpl implements AutomobileService {
@@ -158,6 +160,81 @@ public class AutomobileServiceImpl implements AutomobileService {
 
         saveNewAutomobile(automobile);
 
+    }
+
+    @Override
+    public Set<Automobile> findSuitableAutomobiles(Request request) throws Exception {
+        List<Automobile> automobiles = automobileDao.getAllReadyAutomobiles();
+        if (automobiles.isEmpty()) {
+            return new HashSet<>();
+        }
+        Set<Automobile> automobileSet = new HashSet<>();
+
+
+        for (Automobile automobile : automobiles) {
+
+            if (automobileHasRequiredType(automobile, request)
+                    && automobileHasRequiredLoadingType(automobile, request)
+                    && automobileHasRequiredEquipment(automobile, request)) {
+                automobileSet.add(automobile);
+            }
+        }
+
+        return automobileSet;
+    }
+
+
+    private boolean automobileHasRequiredType(Automobile automobile, Request request) {
+        AutomobileType requiredType = request.getRequiredAutomobileType();
+
+        if (requiredType != null) {
+            return requiredType.getType() == null || (requiredType.equals(automobile.getAutomobileType()));
+        }
+
+        return false;
+    }
+
+    private boolean automobileHasRequiredLoadingType(Automobile automobile, Request request) {
+        LoadingType requiredLoadingType = request.getRequiredLoadingType();
+        if (requiredLoadingType.getType() == null) {
+            return true;
+        }
+        Set<LoadingType> loadingTypes = automobile.getLoadingTypes();
+        if (loadingTypes != null && !loadingTypes.isEmpty()) {
+
+            for (LoadingType loadingType : loadingTypes) {
+                if (requiredLoadingType.equals(loadingType)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean automobileHasRequiredEquipment(Automobile automobile, Request request) {
+
+        Set<Equipment> requestEquipmentSet = request.getEquipmentSet();
+        Set<Equipment> automobileEquipmentSet = automobile.getEquipmentSet();
+        if (requestEquipmentSet == null) {
+            return true;
+        }
+        if (automobileEquipmentSet == null
+                || requestEquipmentSet.size() > automobileEquipmentSet.size()) {
+            return false;
+        }
+        if (Objects.equals(automobileEquipmentSet, requestEquipmentSet)) {
+            return true;
+        }
+
+        int counter = 0;
+        for (Equipment requiredEquipment : requestEquipmentSet) {
+            for (Equipment automobileEquipment : automobileEquipmentSet) {
+                if (automobileEquipment.equals(requiredEquipment)) {
+                    counter++;
+                }
+            }
+        }
+        return counter == requestEquipmentSet.size();
     }
 
 

@@ -1,6 +1,7 @@
 package by.talai.model.stock;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Equipment implements Serializable {
 
@@ -40,5 +41,22 @@ public class Equipment implements Serializable {
                 ",\n name='" + name + '\'' +
                 ",\n description='" + description + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Equipment)) return false;
+        Equipment equipment = (Equipment) o;
+        return getId() == equipment.getId()
+                && Objects.equals(getName(),
+                equipment.getName())
+                && Objects.equals(getDescription(),
+                equipment.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId();
     }
 }

@@ -4,6 +4,7 @@ import by.talai.data.dao.*;
 import by.talai.data.exception.ConnectionPoolException;
 import by.talai.data.exception.DaoException;
 import by.talai.model.Cargo;
+import by.talai.model.Delivery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -273,13 +274,13 @@ public class CargoDaoImpl implements CargoDao {
     }
 
     @Override
-    public List<Cargo> getAllCargosOfDelivery(int deliveryId) throws Exception {
+    public List<Cargo> getAllCargosOfDelivery(Delivery delivery) throws Exception {
         List<Cargo> cargos = new ArrayList<>();
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement(GET_ALL_CARGOS_OF_DELIVERY_SQL);
-            preparedStatement.setInt(1, deliveryId);
+            preparedStatement.setInt(1, delivery.getId());
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 while (resultSet.next()) {
@@ -291,7 +292,7 @@ public class CargoDaoImpl implements CargoDao {
                     int unitId = resultSet.getInt("unit_id");
                     cargo.setUnit(unitDao.getUnit(unitId));
                     DeliveryDao deliveryDao = new DeliveryDaoImpl();
-                    cargo.setDelivery(deliveryDao.getDelivery(deliveryId));
+                    cargo.setDelivery(delivery);
 
                     int rideId = resultSet.getInt("ride_id");
                     RideDao rideDao = new RideDaoImpl();

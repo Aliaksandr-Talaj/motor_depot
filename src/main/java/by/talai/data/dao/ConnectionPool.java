@@ -1,6 +1,8 @@
 package by.talai.data.dao;
 
 import by.talai.data.exception.ConnectionPoolException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Locale;
@@ -20,6 +22,8 @@ public final class ConnectionPool {
     private final String user;
     private final String password;
     private int poolSize;
+
+    public static final Logger logger = LoggerFactory.getLogger(ConnectionPool.class);
 
     private static ConnectionPool instance;
 
@@ -54,19 +58,26 @@ public final class ConnectionPool {
             connectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
 
             for (int i = 0; i < poolSize; i++) {
-                Connection connection = DriverManager.getConnection(url, user, password);
-                connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-                PooledConnection pooledConnection = new PooledConnection(connection);
+                PooledConnection pooledConnection = createPooledConnection();
                 connectionQueue.add(pooledConnection);
             }
 
         } catch (SQLException e) {
+            logger.error("SQL Exception in ConnectionPool", e);
             throw new ConnectionPoolException("SQL Exception in ConnectionPool", e);
         } catch (ClassNotFoundException e) {
+            logger.error("Can't find database driver class", e);
             throw new ConnectionPoolException("Can't find database driver class", e);
         }
 
     }
+
+    private PooledConnection createPooledConnection() throws SQLException {
+        Connection connection = DriverManager.getConnection(url, user, password);
+        connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+        return new PooledConnection(connection);
+    }
+
 
     public void dispose() throws ConnectionPoolException {
         clearConnectionQueue();
@@ -77,8 +88,9 @@ public final class ConnectionPool {
             closeConnectionQueue(givenAwayConQueue);
             closeConnectionQueue(connectionQueue);
         } catch (SQLException e) {
-            //TODO log.error "error closing the connection"
-            throw new ConnectionPoolException("!!!!!!!!!!", e);
+            logger.error("Error closing the connection", e);
+            throw new ConnectionPoolException("Error closing the connection", e);
+
         }
     }
 
@@ -88,8 +100,8 @@ public final class ConnectionPool {
             connection = connectionQueue.take();
             givenAwayConQueue.add(connection);
         } catch (InterruptedException e) {
+            logger.error("Error connecting the data source", e);
             throw new ConnectionPoolException("Error connecting the data source", e);
-            //TODO log.error
         }
         return connection;
     }
@@ -99,21 +111,21 @@ public final class ConnectionPool {
         try {
             resultSet.close();
         } catch (SQLException e) {
-            //TODO log.error "ResultSet isn't closed."
+            logger.error("ResultSet isn't closed", e);
             throw new ConnectionPoolException("ResultSet isn't closed.", e);
         }
 
         try {
             statement.close();
         } catch (SQLException e) {
-            //TODO log.error "Statement isn't closed."
+            logger.error("Statement isn't closed", e);
             throw new ConnectionPoolException("Statement isn't closed", e);
         }
 
         try {
             connection.close();
         } catch (SQLException e) {
-            //TODO log.error "Connection isn't return to the pool."
+            logger.error("Connection isn't return to the pool", e);
             throw new ConnectionPoolException("Connection isn't return to the pool.", e);
         }
     }
@@ -122,14 +134,14 @@ public final class ConnectionPool {
         try {
             statement.close();
         } catch (SQLException e) {
-            //TODO log.error "Statement isn't closed."
+            logger.error("Statement isn't closed", e);
             throw new ConnectionPoolException("Statement isn't closed.", e);
         }
 
         try {
             connection.close();
         } catch (SQLException e) {
-            //TODO log.error "Connection isn't return to the pool."
+            logger.error("Connection isn't return to the pool", e);
             throw new ConnectionPoolException("Connection isn't return to the pool.", e);
         }
     }
@@ -148,7 +160,7 @@ public final class ConnectionPool {
 
     private class PooledConnection implements Connection {
 
-        private Connection connection;
+        private final Connection connection;
 
         public PooledConnection(Connection connection) throws SQLException {
             this.connection = connection;
@@ -203,22 +215,24 @@ public final class ConnectionPool {
         public void close() throws SQLException {
 
             if (connection.isClosed()) {
+                logger.error("Attempting to close closed connection.");
                 throw new SQLException("Attempting to close closed connection.");
-                //TODO logging
             }
 
             if (connection.isReadOnly()) {
                 connection.setReadOnly(false);
             }
+            if (givenAwayConQueue.contains(this)) {
 
-            if (!givenAwayConQueue.remove(this)) {
-                throw new SQLException("Error deleting connection from the given away connection pool.");
-                //TODO logging
-            }
+                if (!givenAwayConQueue.remove(this)) {
+                    logger.error("Error deleting connection from the given away connection pool.");
+                    throw new SQLException("Error deleting connection from the given away connection pool.");
+                }
 
-            if (!connectionQueue.offer(this)) {
-                throw new SQLException("Error allocating connection in the pool.");
-                //TODO logging
+                if (!connectionQueue.offer(this)) {
+                    logger.error("Error allocating connection in the pool.");
+                    throw new SQLException("Error allocating connection in the pool.");
+                }
             }
         }
 

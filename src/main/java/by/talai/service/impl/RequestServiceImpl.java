@@ -8,6 +8,7 @@ import by.talai.data.dao.impl.EquipmentDaoImpl;
 import by.talai.data.dao.impl.RequestDaoImpl;
 import by.talai.model.Delivery;
 import by.talai.model.Request;
+import by.talai.model.Status;
 import by.talai.model.stock.Equipment;
 import by.talai.service.RequestService;
 import by.talai.service.dto.RequestDto;
@@ -29,15 +30,27 @@ public class RequestServiceImpl implements RequestService {
     public RequestServiceImpl() throws Exception {
     }
 
+
+    @Override
+    public void addNewRequest(Request request, int userId) throws Exception {
+        String id = generateId(userId);
+        request.setId(id);
+        addNewRequest(request);
+    }
+
     @Override
     public void addNewRequest(Request request) throws Exception {
+        if (request.getExecutionStatus() == null) {
+            Status status = new Status();
+            status.setId(1);
+            request.setExecutionStatus(status);
+        }
         requestDao.createRequest(request);
-
         List<Delivery> deliveryList = request.getDeliveryList();
 
         if (deliveryList != null && !deliveryList.isEmpty()) {
             for (Delivery delivery : deliveryList) {
-                deliveryDao.addOrUpdateDelivery(delivery);
+                deliveryDao.addOrUpdateDelivery(delivery, true);
             }
         }
     }
@@ -50,33 +63,30 @@ public class RequestServiceImpl implements RequestService {
 
         if (deliveryList != null && !deliveryList.isEmpty()) {
             for (Delivery delivery : deliveryList) {
-                deliveryDao.addOrUpdateDelivery(delivery);
+                deliveryDao.addOrUpdateDelivery(delivery, false);
             }
         }
     }
 
     @Override
-    public Request getRequest(int id) throws Exception {
+    public Request getRequest(String id) throws Exception {
         return requestDao.getRequest(id);
     }
 
     @Override
     public List<Request> getAllRequests() throws Exception {
-        return requestDao.getAllRequests();
+        List<Request> requests = requestDao.getAllRequests();
+        for (Request request : requests) {
+            List<Delivery> deliveryList = deliveryDao.getAllDeliveriesOfRequest(request);
+            request.setDeliveryList(deliveryList);
+        }
+        return requests;
     }
 
     @Override
     public List<RequestDto> getRequestDtoList() throws Exception {
-        List<RequestDto> requestDtoList = new ArrayList<>();
-        List<Request> requests = requestDao.getAllRequests();
-        EquipmentDao equipmentDao = new EquipmentDaoImpl();
-        for (Request request : requests) {
-            RequestDto requestDto = new RequestDto();
-            requestDto.setRequest(request);
-            Set<Equipment> equipmentSet = equipmentDao.getAllEquipmentOfRequest(request.getId());
-            requestDto.setEquipmentSet(equipmentSet);
-            requestDtoList.add(requestDto);
-        }
+        List<RequestDto> requestDtoList = requestDao.getAllRequestsDto();
+
         return requestDtoList;
     }
 
@@ -87,5 +97,9 @@ public class RequestServiceImpl implements RequestService {
                 && !loadingDate.before(now);
     }
 
-
+    private String generateId(int userId) {
+        return String.valueOf(new java.util.Date().getTime()) +
+                '-' +
+                userId;
+    }
 }

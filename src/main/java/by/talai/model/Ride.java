@@ -144,7 +144,6 @@ public class Ride implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getDate(), getRequest(), getDispatcher(), getAutomobile(), getLoadingPlace(),
-                getLoadingDate(), getDestination(), getTerm(), getExecutionStatus(), getCargoList());
+        return Objects.hash(getId());
     }
 }

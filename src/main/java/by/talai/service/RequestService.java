@@ -10,9 +10,11 @@ public interface RequestService {
 
     void addNewRequest(Request request) throws Exception;
 
+    void addNewRequest(Request request, int userId) throws Exception;
+
     void updateRequest(Request request) throws Exception;
 
-    Request getRequest(int id) throws Exception;
+    Request getRequest(String id) throws Exception;
 
     List<Request> getAllRequests() throws Exception;
 

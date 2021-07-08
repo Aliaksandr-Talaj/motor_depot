@@ -67,28 +67,28 @@
             <label class="form-label">${UNIT_LENGTH}</label>
             <label>
                 <input type="number" name="unitLength" class="form-control"
-                       PLACEHOLDER="${L_UNITS}" required>
+                       PLACEHOLDER="${L_UNITS}" required maxlength="6">
             </label>
         </div>
         <div class="col-md-3">
             <label class="form-label">${UNIT_WIDTH}</label>
             <label>
                 <input type="number" name="unitWidth" class="form-control"
-                       PLACEHOLDER="${L_UNITS}" required>
+                       PLACEHOLDER="${L_UNITS}" required maxlength="6">
             </label>
         </div>
         <div class="col-md-3">
             <label class="form-label">${UNIT_HEIGHT}</label>
             <label>
                 <input type="number" name="unitHeight" class="form-control"
-                       PLACEHOLDER="${L_UNITS}" required>
+                       PLACEHOLDER="${L_UNITS}" required step="any" maxlength="6">
             </label>
         </div>
         <div class="col-md-3">
             <label class="form-label">${UNIT_WEIGHT}</label>
             <label>
                 <input type="number" name="unitWeight" class="form-control"
-                       PLACEHOLDER="${W_UNITS}" required>
+                       PLACEHOLDER="${W_UNITS}" required step="any" maxlength="6">
             </label>
         </div>
 
@@ -97,7 +97,7 @@
             <label class="form-label">${UNIT_QUANTITY}</label>
             <label>
                 <input type="number" name="quantity" class="form-control"
-                        required>
+                        required step="any" maxlength="6">
             </label>
         </div>
 

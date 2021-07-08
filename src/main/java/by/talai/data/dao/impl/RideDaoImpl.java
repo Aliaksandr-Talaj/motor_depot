@@ -25,7 +25,7 @@ public class RideDaoImpl implements RideDao {
             "UPDATE motor_depot.ride SET date = ?, request_id = ?, dispatcher_id = ?, automobile_id = ?, " +
                     "loading_place_id = ?, loading_date = ?, destination_id = ?, term = ?, status_id = ? WHERE (id = ?);";
     static final String DELETE_RIDE_SQL = "DELETE FROM motor_depot.ride WHERE (id = ?);";
-
+    static final String GET_LAST_INSERT_ID = "SELECT last_insert_id();";
 
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
@@ -42,13 +42,13 @@ public class RideDaoImpl implements RideDao {
     }
 
     @Override
-    public void createRide(Ride ride) throws Exception {
+    public Ride createRide(Ride ride) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement(CREATE_RIDE_SQL);
-
-            preparedStatement.setInt(1, ride.getId());
+            int id = ride.getId();
+            preparedStatement.setInt(1, id);
             preparedStatement.setDate(2, ride.getDate());
             preparedStatement.setString(3, ride.getRequest().getId());
             preparedStatement.setInt(4, ride.getDispatcher().getId());
@@ -64,6 +64,18 @@ public class RideDaoImpl implements RideDao {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
+                if (id == 0) {
+                    try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID);
+                         ResultSet resultSet = preparedStatementForId.executeQuery()) {
+                        if (resultSet.next()) {
+                            id = resultSet.getInt(1);
+                            ride.setId(id);
+                        }
+                    } catch (SQLException e) {
+                        logger.error("Sql exception in createRide() method");
+                        throw new DaoException("exception in createRide() method", e);
+                    }
+                }
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createRide() method");
@@ -76,6 +88,7 @@ public class RideDaoImpl implements RideDao {
             logger.error("Exception in createRide() method");
             throw new DaoException("exception in createRide() method", e);
         }
+        return ride;
     }
 
     @Override

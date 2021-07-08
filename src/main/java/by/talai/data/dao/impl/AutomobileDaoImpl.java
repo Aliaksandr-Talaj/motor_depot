@@ -31,6 +31,8 @@ public class AutomobileDaoImpl implements AutomobileDao {
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ;";
     static final String GET_AUTOMOBILE_SQL = "SELECT * FROM motor_depot.automobile WHERE id=?;";
     static final String GET_ALL_AUTOMOBILES_SQL = "SELECT * FROM motor_depot.automobile; ";
+    static final String GET_ALL_READY_AUTOMOBILES_SQL =
+            "SELECT * FROM motor_depot.automobile WHERE technical_status_id=1; ";
     static final String UPDATE_AUTOMOBILE_SQL =
             "UPDATE motor_depot.automobile SET brand = ?, model = ?, type_id = ?, fuel_type_id = ?," +
                     " carrying = ?, platform_length = ?, platform_width = ?, cargo_height_limit = ?," +
@@ -134,7 +136,6 @@ public class AutomobileDaoImpl implements AutomobileDao {
     }
 
 
-
     @Override
     public Automobile getAutomobile(String id) throws Exception {
         Automobile automobile = new Automobile();
@@ -200,11 +201,23 @@ public class AutomobileDaoImpl implements AutomobileDao {
 
     @Override
     public List<Automobile> getAllAutomobiles() throws Exception {
+
+        return getAutomobiles(GET_ALL_AUTOMOBILES_SQL);
+
+    }
+
+    @Override
+    public List<Automobile> getAllReadyAutomobiles() throws Exception {
+
+        return getAutomobiles(GET_ALL_READY_AUTOMOBILES_SQL);
+
+    }
+
+    private List<Automobile> getAutomobiles(String statement) throws Exception {
         List<Automobile> automobiles = new ArrayList<>();
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement(GET_ALL_AUTOMOBILES_SQL);
+            PreparedStatement preparedStatement = connection.prepareStatement(statement);
 
             try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -234,6 +247,7 @@ public class AutomobileDaoImpl implements AutomobileDao {
         }
         return automobiles;
     }
+
 
     @Override
     public void updateAutomobile(Automobile automobile) throws Exception {

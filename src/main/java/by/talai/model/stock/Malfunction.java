@@ -2,6 +2,7 @@ package by.talai.model.stock;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Objects;
 
 public class Malfunction implements Serializable {
 
@@ -60,5 +61,22 @@ public class Malfunction implements Serializable {
                 ",\n fixTime=" + fixTime +
                 ",\n automobile='" + automobile + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Malfunction)) return false;
+        Malfunction that = (Malfunction) o;
+        return getId() == that.getId() && Objects.equals(getProblem(),
+                that.getProblem()) && Objects.equals(getDetectionTime(),
+                that.getDetectionTime()) && Objects.equals(getFixTime(),
+                that.getFixTime()) && Objects.equals(getAutomobile(),
+                that.getAutomobile());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId();
     }
 }

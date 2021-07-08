@@ -84,6 +84,6 @@ public class Unit implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getType(), getLength(), getWidth(), getHeight(), getWeight());
+        return getId();
     }
 }

@@ -1,6 +1,8 @@
 package by.talai.data.dao;
 
+import by.talai.data.exception.DaoException;
 import by.talai.model.Request;
+import by.talai.service.dto.RequestDto;
 
 import java.util.List;
 
@@ -21,4 +23,6 @@ public interface RequestDao {
     // delete Request
 
     void deleteRequest(String id) throws Exception;
+
+    List<RequestDto> getAllRequestsDto() throws DaoException;
 }

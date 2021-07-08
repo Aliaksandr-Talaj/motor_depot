@@ -1,10 +1,12 @@
 package by.talai.service;
 
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.model.Request;
 import by.talai.model.stock.Automobile;
 import by.talai.service.dto.AutomobilesDto;
 
 import java.util.List;
+import java.util.Set;
 
 public interface AutomobileService {
 
@@ -22,4 +24,6 @@ public interface AutomobileService {
                           String equipment1, String equipment2, String equipment3, String top, String rear,
                           String side, String platformLength, String platformWidth, String heightLimit,
                           String volumeLimit) throws Exception;
+
+    Set<Automobile> findSuitableAutomobiles(Request request) throws Exception;
 }

@@ -21,6 +21,8 @@ public interface AutomobileDao {
     // GET ALL automobiles
     List<Automobile> getAllAutomobiles() throws Exception;
 
+    List<Automobile> getAllReadyAutomobiles() throws Exception;
+
     //UPDATE automobile
     void updateAutomobile(Automobile automobile) throws Exception;
 

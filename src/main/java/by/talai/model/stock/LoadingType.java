@@ -1,6 +1,7 @@
 package by.talai.model.stock;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class LoadingType implements Serializable {
 
@@ -37,5 +38,18 @@ public class LoadingType implements Serializable {
                 "id=" + id +
                 ",\n type='" + type + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LoadingType)) return false;
+        LoadingType that = (LoadingType) o;
+        return getId() == that.getId() && Objects.equals(getType(), that.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId();
     }
 }

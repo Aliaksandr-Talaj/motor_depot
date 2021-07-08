@@ -115,7 +115,6 @@ public class Request implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFillingDate(), getCharterer(), getRequiredAutomobileType(),
-                getRequiredLoadingType(), getExecutionStatus(), getDeliveryList());
+        return Objects.hash(getId());
     }
 }

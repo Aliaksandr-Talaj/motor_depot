@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DeliveryDao {
     // create delivery
-    void createDelivery(Delivery delivery) throws Exception;
+    Delivery createDelivery(Delivery delivery) throws Exception;
 
     // get delivery by id
     Delivery getDelivery(int id) throws Exception;
@@ -24,5 +24,5 @@ public interface DeliveryDao {
 
     List<Delivery> getAllDeliveriesOfRequest(Request request) throws Exception;
 
-    void addOrUpdateDelivery(Delivery delivery) throws Exception;
+    void addOrUpdateDelivery(Delivery delivery, boolean cargoListIsSaved) throws Exception;
 }

@@ -24,7 +24,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
     static final String GET_DELIVERY_SQL = "SELECT * FROM motor_depot.delivery WHERE id = ?;";
     static final String GET_ALL_DELIVERIES_SQL = "SELECT * FROM motor_depot.delivery; ";
     static final String UPDATE_DELIVERY_SQL =
-            "UPDATE motor_depot.delivery SET loading_place_id = ?, loading_date_id = ?, destination_id = ?," +
+            "UPDATE motor_depot.delivery SET loading_place_id = ?, loading_date = ?, destination_id = ?," +
                     " term = ?, request_id = ?, status_id = ? WHERE (id = ?);";
     static final String DELETE_DELIVERY_SQL = "DELETE FROM motor_depot.delivery WHERE (id = ?);";
     static final String GET_ALL_DELIVERIES_OF_REQUEST_SQL = "SELECT * FROM motor_depot.delivery WHERE request_id = ?; ";
@@ -33,6 +33,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
                     " term, request_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE " +
                     " loading_place_id = ?, loading_date = ?, destination_id = ?," +
                     " term = ?, request_id = ?, status_id = ?;";
+    static final String GET_LAST_INSERT_ID = "SELECT last_insert_id();";
 
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
@@ -47,7 +48,8 @@ public class DeliveryDaoImpl implements DeliveryDao {
     }
 
     @Override
-    public void createDelivery(Delivery delivery) throws Exception {
+    public Delivery createDelivery(Delivery delivery) throws Exception {
+        int id = delivery.getId();
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
@@ -57,19 +59,26 @@ public class DeliveryDaoImpl implements DeliveryDao {
             preparedStatement.setDate(3, delivery.getLoadingDate());
             preparedStatement.setInt(4, delivery.getDestination().getId());
             preparedStatement.setDate(5, delivery.getTerm());
-            preparedStatement.setInt(6, delivery.getRequest().getId());
+            preparedStatement.setString(6, delivery.getRequest().getId());
             preparedStatement.setInt(7, delivery.getExecutionStatus().getId());
 
             try (connection; preparedStatement) {
-                List<Cargo> cargoList = delivery.getCargoList();
-                if (cargoList != null && !cargoList.isEmpty()) {
-                    for (Cargo cargo : cargoList) {
-                        cargoDao.createCargo(cargo);
-                    }
-                }
+
                 preparedStatement.executeUpdate();
                 connection.commit();
 
+                if (id == 0) {
+                    try (PreparedStatement preparedStatementForId = connection.prepareStatement(GET_LAST_INSERT_ID);
+                         ResultSet resultSet = preparedStatementForId.executeQuery()) {
+                        if (resultSet.next()) {
+                            id = resultSet.getInt(1);
+                            delivery.setId(id);
+                        }
+                    } catch (SQLException e) {
+                        logger.error("Sql exception in createAddress() method");
+                        throw new DaoException("exception in createAddress() method", e);
+                    }
+                }
 
             } catch (SQLException e) {
                 logger.error("Sql exception in createDelivery() method");
@@ -82,6 +91,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
             logger.error("Exception in createDelivery() method");
             throw new DaoException("exception in createDelivery() method", e);
         }
+        return delivery;
     }
 
     @Override
@@ -108,14 +118,14 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
                     delivery.setTerm(resultSet.getDate("term"));
 
-                    int requestId = resultSet.getInt("request_id");
+                    String requestId = resultSet.getString("request_id");
                     RequestDao requestDao = new RequestDaoImpl();
                     delivery.setRequest(requestDao.getRequest(requestId));
 
                     int executionStatusId = resultSet.getInt("status_id");
                     delivery.setExecutionStatus(statusDao.findStatus(executionStatusId));
 
-                    delivery.setCargoList(cargoDao.getAllCargosOfDelivery(deliveryId));
+                    delivery.setCargoList(cargoDao.getAllCargosOfDelivery(delivery));
                 }
 
             } catch (SQLException e) {
@@ -158,14 +168,14 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
                     delivery.setTerm(resultSet.getDate("term"));
 
-                    int requestId = resultSet.getInt("request_id");
-                    RequestDao requestDao = new RequestDaoImpl();
-                    delivery.setRequest(requestDao.getRequest(requestId));
-
                     int executionStatusId = resultSet.getInt("status_id");
                     delivery.setExecutionStatus(statusDao.findStatus(executionStatusId));
 
-                    delivery.setCargoList(cargoDao.getAllCargosOfDelivery(deliveryId));
+                    String requestId = resultSet.getString("request_id");
+                    RequestDao requestDao = new RequestDaoImpl();
+                    delivery.setRequest(requestDao.getRequest(requestId));
+
+                    delivery.setCargoList(cargoDao.getAllCargosOfDelivery(delivery));
 
                     deliveries.add(delivery);
                 }
@@ -197,7 +207,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
             preparedStatement.setDate(2, delivery.getLoadingDate());
             preparedStatement.setInt(3, delivery.getDestination().getId());
             preparedStatement.setDate(4, delivery.getTerm());
-            preparedStatement.setInt(5, delivery.getRequest().getId());
+            preparedStatement.setString(5, delivery.getRequest().getId());
             preparedStatement.setInt(6, delivery.getExecutionStatus().getId());
 
             preparedStatement.setInt(7, delivery.getId());
@@ -261,10 +271,12 @@ public class DeliveryDaoImpl implements DeliveryDao {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
                     .prepareStatement(GET_ALL_DELIVERIES_OF_REQUEST_SQL);
-            preparedStatement.setInt(1, request.getId());
-            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
+            preparedStatement.setString(1, request.getId());
 
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
+                connection.close();
                 while (resultSet.next()) {
+
                     Delivery delivery = new Delivery();
 
                     int deliveryId = resultSet.getInt("id");
@@ -280,12 +292,12 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
                     delivery.setTerm(resultSet.getDate("term"));
 
-                    delivery.setRequest(request);
-
                     int executionStatusId = resultSet.getInt("status_id");
                     delivery.setExecutionStatus(statusDao.findStatus(executionStatusId));
 
-                    delivery.setCargoList(cargoDao.getAllCargosOfDelivery(deliveryId));
+                    delivery.setRequest(request);
+
+                    delivery.setCargoList(cargoDao.getAllCargosOfDelivery(delivery));
 
                     deliveries.add(delivery);
                 }
@@ -306,7 +318,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
     }
 
     @Override
-    public void addOrUpdateDelivery(Delivery delivery) throws Exception {
+    public void addOrUpdateDelivery(Delivery delivery, boolean cargoListIsSaved) throws Exception {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection
@@ -326,8 +338,8 @@ public class DeliveryDaoImpl implements DeliveryDao {
             preparedStatement.setDate(5, delivery.getTerm());
             preparedStatement.setDate(11, delivery.getTerm());
 
-            preparedStatement.setInt(6, delivery.getRequest().getId());
-            preparedStatement.setInt(12, delivery.getRequest().getId());
+            preparedStatement.setString(6, delivery.getRequest().getId());
+            preparedStatement.setString(12, delivery.getRequest().getId());
 
             preparedStatement.setInt(7, delivery.getExecutionStatus().getId());
             preparedStatement.setInt(13, delivery.getExecutionStatus().getId());
@@ -335,13 +347,14 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
             try (connection; preparedStatement) {
 
-                List<Cargo> cargoList = delivery.getCargoList();
-                if (cargoList != null && !cargoList.isEmpty()) {
-                    for (Cargo cargo : cargoList) {
-                        cargoDao.addOrUpdateCargo(cargo);
+                if (!cargoListIsSaved) {
+                    List<Cargo> cargoList = delivery.getCargoList();
+                    if (cargoList != null && !cargoList.isEmpty()) {
+                        for (Cargo cargo : cargoList) {
+                            cargoDao.addOrUpdateCargo(cargo);
+                        }
                     }
                 }
-
                 preparedStatement.executeUpdate();
                 connection.commit();
 

@@ -58,7 +58,7 @@
             <label class="form-label">${REQ_L_TYPE}</label>
             <label>
                 <select class="form-select" name="loadingType" >
-                    <option selected disabled value="0">${NOTHING}</option>
+                    <option selected value="0">${NOTHING}</option>
                     <option value="1">${TOP}</option>
                     <option value="2">${REAR}</option>
                     <option value="3">${SIDE}</option>

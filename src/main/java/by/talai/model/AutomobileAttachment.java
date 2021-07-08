@@ -96,6 +96,6 @@ public class AutomobileAttachment implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getAutomobile(), getDriver(), getDateOfAttachment(), getDateOfDetachment());
+        return getId();
     }
 }

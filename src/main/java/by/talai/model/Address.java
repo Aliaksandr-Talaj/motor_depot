@@ -123,7 +123,6 @@ public class Address implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCountry(), getRegion(),
-                getLocality(), getStreet(), getBuilding(), getApartment());
+        return getId();
     }
 }

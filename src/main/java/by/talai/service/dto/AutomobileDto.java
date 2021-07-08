@@ -70,8 +70,6 @@ public class AutomobileDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, brand, model, fuelType, carrying, automobileType, equipmentSet, loadingTypes,
-                platformLength, platformWidth, cargoHeightLimit, cargoVolumeLimit, malfunctions, maintenanceList,
-                technicalStatus, automobileAttachmentList);
+        return Objects.hash(id, brand, model, automobileType);
     }
 }

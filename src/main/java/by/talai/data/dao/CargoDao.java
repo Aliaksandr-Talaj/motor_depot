@@ -1,6 +1,7 @@
 package by.talai.data.dao;
 
 import by.talai.model.Cargo;
+import by.talai.model.Delivery;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface CargoDao {
 
     List<Cargo> getAllCargosOfRide(int rideId) throws Exception;
 
-    List<Cargo> getAllCargosOfDelivery(int deliveryId) throws Exception;
+    List<Cargo> getAllCargosOfDelivery(Delivery delivery) throws Exception;
 
     void addOrUpdateCargo(Cargo cargo) throws Exception;
 }

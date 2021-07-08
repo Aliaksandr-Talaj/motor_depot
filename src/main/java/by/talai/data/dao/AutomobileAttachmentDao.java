@@ -7,21 +7,63 @@ import by.talai.model.stock.Automobile;
 
 import java.util.List;
 
+/**
+ * The interface Automobile attachment dao.
+ */
 public interface AutomobileAttachmentDao {
 
-    //create attachment
+    /**
+     * Create attachment int.
+     *
+     * @param automobileAttachment the automobile attachment
+     * @return the id of new attachment
+     * @throws Exception the exception
+     */
+//create attachment
     int createAttachment(AutomobileAttachment automobileAttachment) throws Exception;
 
-    //find all attachments
+    /**
+     * Find all automobile attachments list.
+     *
+     * @return the list of all attachments
+     * @throws Exception the exception
+     */
+//find all attachments
     List<AutomobileAttachment> findAllAutomobileAttachments() throws Exception;
 
-    //update attachment
+    /**
+     * Update automobile attachment.
+     *
+     * @param automobileAttachment the automobile attachment
+     * @throws Exception the exception
+     */
+//update attachment
     void updateAutomobileAttachment(AutomobileAttachment automobileAttachment) throws Exception;
 
-    //delete attachment
+    /**
+     * Delete automobile attachment.
+     *
+     * @param id the id
+     * @throws Exception the exception
+     */
+//delete attachment
     void deleteAutomobileAttachment(int id) throws Exception;
 
+    /**
+     * Find attachments of driver list.
+     *
+     * @param user the user
+     * @return the list of all attachments of the driver
+     * @throws DaoException the dao exception
+     */
     List<AutomobileAttachment> findAttachmentsOfDriver(User user) throws DaoException;
 
+    /**
+     * Find attachments of automobile list.
+     *
+     * @param automobile the automobile
+     * @return the list of all attachments of the automobile
+     * @throws DaoException the dao exception
+     */
     List<AutomobileAttachment> findAttachmentsOfAutomobile(Automobile automobile) throws DaoException;
 }

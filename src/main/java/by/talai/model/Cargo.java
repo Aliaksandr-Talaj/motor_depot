@@ -72,7 +72,7 @@ public class Cargo implements Serializable {
                 ",\n name='" + name + '\'' +
                 ",\n unit=" + unit +
                 ",\n quantity=" + quantity +
-                ",\n delivery=" + delivery +
+                ",\n delivery=" + delivery.getId() +
                 ",\n ride=" + ride +
                 '}';
     }
@@ -89,6 +89,6 @@ public class Cargo implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getUnit(), getQuantity(), getDelivery(), getRide());
+        return getId();
     }
 }

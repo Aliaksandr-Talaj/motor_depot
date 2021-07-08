@@ -34,36 +34,37 @@
         <th scope="col">${r_req_auto_type}</th>
         <th scope="col">${r_req_loading_type}</th>
         <th scope="col">${r_req_equipment}</th>
-        <th scope="col">${r_deliveries}</th>
         <th scope="col">${r_status}</th>
         <th scope="col">${r_actions}</th>
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${requestsDto}" var="reqDto">
+    <c:forEach items="${requestsDto}" var="currentRequest">
         <tr>
-            <td>${reqDto.request.id}</td>
-            <td>${reqDto.request.fillingDate}</td>
+            <td>${currentRequest.requestId}</td>
+            <td>${currentRequest.fillingDate}</td>
             <td>
-                <a href="/motor_depot/user/dispatcher/charterer?id=${reqDto.request.charterer.id}">${reqDto.request.charterer.name} ${reqDto.request.charterer.surname}</a>
+                <a href="/motor_depot/user/dispatcher/charterer?id=${currentRequest.charterer.id}">${currentRequest.charterer.name} ${currentRequest.charterer.surname}</a>
             </td>
-            <td>${reqDto.request.requiredAutomobileType.type}</td>
-            <td>${reqDto.request.requiredLoadingType.type}</td>
-            <td><c:forEach items="${reqDto.equipmentSet}" var="equipment">
-                ${equipment.name}
+            <td>${currentRequest.requiredAutomobileType.type}</td>
+            <td>${currentRequest.requiredLoadingType.type}</td>
+            <td><c:forEach items="${currentRequest.equipmentSet}" var="equipment">
+                ${equipment.name}<br/>
             </c:forEach><br/>
             </td>
-            <td><c:forEach items="${reqDto.request.deliveryList}" var="delivery">
 
-                <c:out value="${DELIVERY}"/><a href="motor_depot/user/delivery"> #${delivery.id}</a><br/>
-
-            </c:forEach>
-            </td>
-            <td>${reqDto.request.executionStatus.status}</td>
+            <td>${currentRequest.executionStatus.status}</td>
             <td>
-                <c:if test="${reqDto.request.executionStatus.id eq 1}">
+                <c:if test="${currentRequest.executionStatus.id eq 1}">
                     <c:if test="${sessionScope.role eq 'dispatcher'}">
-                        <a href="motor_depot/user/dispatcher/request-form?id=${reqDto.request.id}">${r_process}</a>
+                        <form method="post" action="/motor_depot/user/dispatcher/request-process">
+                            <input type="hidden" value="${currentRequest.requestId}" name="requestId"/>
+
+                            <button class="btn btn-secondary"
+                                    role="button" type="submit" value="Select">${r_process}</button>
+                        </form>
+
+
                     </c:if>
                 </c:if>
 
