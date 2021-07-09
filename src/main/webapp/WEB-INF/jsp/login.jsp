@@ -7,7 +7,7 @@
 
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.login" var="page_name"/>
+<fmt:message bundle="${loc}" key="local.login" var="PAGE_NAME"/>
 <fmt:message bundle="${loc}" key="local.login.btn" var="login_btn"/>
 <fmt:message bundle="${loc}" key="local.login.sub" var="login_sub"/>
 <fmt:message bundle="${loc}" key="local.loginform" var="login_ph"/>
@@ -18,7 +18,7 @@
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1"><c:out value="${page_name}"/></span>
+        <span class="navbar-brand mb-0 h1"><c:out value="${PAGE_NAME}"/></span>
     </div>
 </nav>
 

@@ -5,19 +5,22 @@
 <jsp:include page="header.jsp"/>
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.automobile.attachments" var="page_name"/>
+<fmt:message bundle="${loc}" key="local.automobile.attachments" var="PAGE_NAME"/>
 
 <fmt:message bundle="${loc}" key="local.attachment.date" var="a_date"/>
 <fmt:message bundle="${loc}" key="local.detachment.date" var="d_date"/>
 <fmt:message bundle="${loc}" key="local.driver" var="a_driver"/>
-<fmt:message bundle="${loc}" key="local.actions" var="actions"/>
+<fmt:message bundle="${loc}" key="local.actions" var="ACTIONS"/>
 <fmt:message bundle="${loc}" key="local.change" var="CHANGE"/>
+<fmt:message bundle="${loc}" key="local.detach" var="DETACH"/>
+<fmt:message bundle="${loc}" key="local.attach" var="ATTACH"/>
+<fmt:message bundle="${loc}" key="local.new.attach" var="NEW_ATTACH"/>
 
 
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1"><c:out value="${page_name}"/></span>
+        <span class="navbar-brand mb-0 h1"><c:out value="${PAGE_NAME}"/></span>
     </div>
 </nav>
 
@@ -33,20 +36,55 @@
         <th scope="col">${a_driver}</th>
         <th scope="col">${a_date}</th>
         <th scope="col">${d_date}</th>
-        <th scope="col">${actions}</th>
+        <th scope="col">${ACTIONS}</th>
     </tr>
     </thead>
     <tbody>
+    <c:set var="addButtonIsNedded" value="false"/>
+    <c:if test="${empty automobile.automobileAttachmentList}"><c:set var="addButtonIsNedded" value="true"/></c:if>
     <c:forEach items="${automobile.automobileAttachmentList}" var="attachment">
         <tr>
-            <td><c:out value="${attachment.driver.name} ${attachment.driver.name}"/></td>
+            <td><c:out value="${attachment.driver.name} ${attachment.driver.surname}"/></td>
             <td>${attachment.dateOfAttachment}</td>
             <td>${attachment.dateOfDetachment}</td>
-            <td><a class="btn btn-secondary"
-                   href="/motor_depot/user/dispatcher/c_attachment?id=${attachment.id}"
-                   role="button">${CHANGE}</a></td>
+            <td>
+                <c:choose>
+                    <c:when test="${attachment.dateOfDetachment eq null}">
+                        <c:set var="hasActiveAttachment" value="true"/>
+                        <form method="post" action="/motor_depot/user/dispatcher/change-attachment">
+                            <input type="hidden" value="${attachment.id}" name="attachmentId"/>
+                            <input type="hidden" value="${automobile.id}" name="automobileId"/>
+                            <button class="btn btn-secondary"
+                                    role="button" type="submit" value="Select">${CHANGE}</button>
+                        </form>
+                        <form method="post" action="/motor_depot/user/dispatcher/detach-driver">
+                            <input type="hidden" value="${attachment.id}" name="attachmentId"/>
+                            <button class="btn btn-secondary"
+                                    role="button" type="submit" value="Select">${DETACH}</button>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                        <form method="post" action="/motor_depot/user/dispatcher/attach-driver">
+                            <input type="hidden" value="${automobile.id}" name="automobileId"/>
+                            <input type="hidden" value="${attachment.driver.id}" name="driverId"/>
+                            <button class="btn btn-secondary"
+                                    role="button" type="submit" value="Select">${ATTACH}</button>
+                        </form>
+                    </c:otherwise>
+
+                </c:choose>
+
+
+            </td>
         </tr>
     </c:forEach>
+    <c:if test="${addButtonIsNedded}">
+        <form method="post" action="/motor_depot/user/dispatcher/attach-new-driver">
+            <input type="hidden" value="${automobile.id}" name="automobileId"/>
+            <button class="btn btn-secondary"
+                    role="button" type="submit" value="Select">${NEW_ATTACH}</button>
+        </form>
+    </c:if>
     </tbody>
 </table>
 

@@ -85,6 +85,22 @@ public class MotorDepotController extends HttpServlet {
                             changeUserStatus(request, response);
                         break;
 //dispatchers can do
+                    case "/user/dispatcher/attach-new-driver":
+                        if ("dispatcher".equals(role))
+                            attachNewDriver(request, response);
+                        break;
+                    case "/user/dispatcher/attach-driver":
+                        if ("dispatcher".equals(role))
+                            attachDriver(request, response);
+                        break;
+                    case "/user/dispatcher/detach-driver":
+                        if ("dispatcher".equals(role))
+                            detachDriver(request, response);
+                        break;
+                    case "/user/dispatcher/change-attachment":
+                        if ("dispatcher".equals(role))
+                            changeAttachment(request, response);
+                        break;
                     case "/user/dispatcher/create-ride":
                         if ("dispatcher".equals(role))
                             createRide(request, response);
@@ -248,6 +264,42 @@ public class MotorDepotController extends HttpServlet {
             }
         }
 
+    }
+
+
+    private void attachNewDriver(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String automobileId = request.getParameter("automobileId");
+        List<DriverDto> drivers = userService.getAllDriversDtoList();
+        request.setAttribute("drivers", drivers);
+        request.setAttribute("automobileId", automobileId);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/choose-driver.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void attachDriver(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String automobileId = request.getParameter("automobileId");
+        int driverId = Integer.parseInt(request.getParameter("driverId"));
+        AutomobileAttachmentService automobileAttachmentService = new AutomobileAttachmentServiceImpl();
+        automobileAttachmentService.createAttachment(automobileId, driverId);
+
+        response.sendRedirect("/motor_depot/user/dispatcher/autos");
+    }
+
+    private void detachDriver(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int attachmentId = Integer.parseInt(request.getParameter("attachmentId"));
+        AutomobileAttachmentService automobileAttachmentService = new AutomobileAttachmentServiceImpl();
+        automobileAttachmentService.closeAttachment(attachmentId);
+
+        response.sendRedirect("/motor_depot/user/dispatcher/autos");
+    }
+
+    private void changeAttachment(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int attachmentId = Integer.parseInt(request.getParameter("attachmentId"));
+        AutomobileAttachmentService automobileAttachmentService = new AutomobileAttachmentServiceImpl();
+        automobileAttachmentService.closeAttachment(attachmentId);
+
+        attachNewDriver(request, response);
     }
 
     private void createRide(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -568,7 +620,7 @@ public class MotorDepotController extends HttpServlet {
         String platformWidth = request.getParameter("p_width");
         String heightLimit = request.getParameter("h_limit");
         String volumeLimit = request.getParameter("v_limit");
-//TODO check
+
         automobileService.addNewAutomobile(id, brand, model, fuel, carrying, type, equipment1, equipment2, equipment3,
                 top, rear, side, platformLength, platformWidth, heightLimit, volumeLimit);
         response.sendRedirect("/motor_depot/user/dispatcher/autos");

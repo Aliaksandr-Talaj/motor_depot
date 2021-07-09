@@ -6,7 +6,7 @@
 
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.request.process" var="page_name"/>
+<fmt:message bundle="${loc}" key="local.request.process" var="PAGE_NAME"/>
 <%--<fmt:message bundle="${loc}" key="local.request.process" var="REQUEST_PROCESS"/>--%>
 <fmt:message bundle="${loc}" key="local.request.number" var="r_number"/>
 <fmt:message bundle="${loc}" key="local.request.filling.date" var="r_filling_date"/>
@@ -40,7 +40,7 @@
 <fmt:message bundle="${loc}" key="local.street" var="c_street"/>
 <fmt:message bundle="${loc}" key="local.building" var="c_building"/>
 <fmt:message bundle="${loc}" key="local.apartment" var="c_apartment"/>
-<fmt:message bundle="${loc}" key="local.actions" var="actions"/>
+<fmt:message bundle="${loc}" key="local.actions" var="ACTIONS"/>
 <fmt:message bundle="${loc}" key="local.goes.from" var="GOES_FROM"/>
 <fmt:message bundle="${loc}" key="local.goes.to" var="GOES_TO"/>
 <fmt:message bundle="${loc}" key="local.loading.date" var="L_DATE"/>
@@ -58,7 +58,7 @@
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1"><c:out value="${page_name}"/></span>
+        <span class="navbar-brand mb-0 h1"><c:out value="${PAGE_NAME}"/></span>
     </div>
 </nav>
 

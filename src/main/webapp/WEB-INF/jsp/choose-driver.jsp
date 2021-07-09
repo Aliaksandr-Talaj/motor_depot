@@ -8,8 +8,8 @@
 <fmt:message bundle="${loc}" key="local.drivers" var="PAGE_NAME"/>
 <fmt:message bundle="${loc}" key="local.user.name" var="NAME"/>
 <fmt:message bundle="${loc}" key="local.user.surname" var="SURNAME"/>
-<fmt:message bundle="${loc}" key="local.current.attached.auto" var="CURENT_ATT"/>
-<fmt:message bundle="${loc}" key="local.attachment.date" var="ATT_DATE"/>
+<fmt:message bundle="${loc}" key="local.actions" var="ACTIONS"/>
+<fmt:message bundle="${loc}" key="local.choose" var="CHOOSE"/>
 
 
 <!--Page name -->
@@ -25,27 +25,27 @@
     <tr>
         <th scope="col">${NAME}</th>
         <th scope="col">${SURNAME}</th>
-        <th scope="col">${CURENT_ATT}</th>
-        <%--    <th scope="col">${actions}</th>--%>
+        <th scope="col">${ACTIONS}</th>
     </tr>
     </thead>
     <tbody>
     <jsp:useBean id="drivers" scope="request" type="java.util.List"/>
     <c:forEach items="${drivers}" var="driver">
-        <tr>
-            <td>${driver.driver.name}</td>
-            <td>${driver.driver.surname}</td>
-            <td>
-                <c:if test="${driver.currentAttachment.automobile ne null}">
-                    <c:out value="${driver.currentAttachment.automobile.id} ${driver.currentAttachment.automobile.brand} ${driver.currentAttachment.automobile.model}"/>
-                    <br/>
-                    <fmt:formatDate value="${driver.currentAttachment.dateOfAttachment}" var="att_date"
-                                    pattern="dd-MM-yyyy"/>
-                    <c:out value="${ATT_DATE}: ${att_date}"/>
-                </c:if>
-            </td>
+        <c:if test="${driver.currentAttachment.automobile eq null}">
+            <tr>
+                <td>${driver.driver.name}</td>
+                <td>${driver.driver.surname}</td>
+                <td>
+                    <form method="post" action="/motor_depot/user/dispatcher/attach-driver">
+                        <input type="hidden" value="${driver.driver.id}" name="driverId"/>
+                        <input type="hidden" value="${automobileId}" name="automobileId"/>
+                        <button class="btn btn-secondary"
+                                role="button" type="submit" value="Select">${CHOOSE}</button>
+                    </form>
+                </td>
 
-        </tr>
+            </tr>
+        </c:if>
     </c:forEach>
     </tbody>
 </table>

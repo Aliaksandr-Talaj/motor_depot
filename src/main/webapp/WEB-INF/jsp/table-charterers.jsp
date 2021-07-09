@@ -4,7 +4,7 @@
 
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.charterers" var="page_name"/>
+<fmt:message bundle="${loc}" key="local.charterers" var="PAGE_NAME"/>
 
 <fmt:message bundle="${loc}" key="local.charterers" var="page_name"/>
 <fmt:message bundle="${loc}" key="local.user.name" var="c_name"/>
@@ -17,7 +17,7 @@
 <fmt:message bundle="${loc}" key="local.street" var="c_street"/>
 <fmt:message bundle="${loc}" key="local.building" var="c_building"/>
 <fmt:message bundle="${loc}" key="local.apartment" var="c_apartment"/>
-<fmt:message bundle="${loc}" key="local.actions" var="actions"/>
+<fmt:message bundle="${loc}" key="local.actions" var="ACTIONS"/>
 <fmt:message bundle="${loc}" key="local.choose.that" var="CHOOSE_THAT"/>
 
 
@@ -36,7 +36,7 @@
         <th scope="col">${c_apartment}</th>
 
         <c:if test="${new_request eq 1}">
-            <th scope="col">${actions}</th>
+            <th scope="col">${ACTIONS}</th>
         </c:if>
 
 

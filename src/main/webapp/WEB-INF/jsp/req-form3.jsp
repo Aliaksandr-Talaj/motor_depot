@@ -6,7 +6,7 @@
 
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.request-form" var="page_name"/>
+<fmt:message bundle="${loc}" key="local.request-form" var="PAGE_NAME"/>
 <fmt:message bundle="${loc}" key="local.add.new.one" var="ADD_NEW"/>
 <fmt:message bundle="${loc}" key="local.req3" var="REQUEST_PAGE_3"/>
 <fmt:message bundle="${loc}" key="local.auto.number" var="c_number"/>
@@ -16,13 +16,13 @@
 <fmt:message bundle="${loc}" key="local.street" var="c_street"/>
 <fmt:message bundle="${loc}" key="local.building" var="c_building"/>
 <fmt:message bundle="${loc}" key="local.apartment" var="c_apartment"/>
-<fmt:message bundle="${loc}" key="local.actions" var="actions"/>
+<fmt:message bundle="${loc}" key="local.actions" var="ACTIONS"/>
 <fmt:message bundle="${loc}" key="local.choose.that" var="CHOOSE_THAT"/>
 
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1"><c:out value="${page_name}"/></span>
+        <span class="navbar-brand mb-0 h1"><c:out value="${PAGE_NAME}"/></span>
     </div>
 </nav>
 
@@ -45,7 +45,7 @@
         <th scope="col">${c_street}</th>
         <th scope="col">${c_building}</th>
         <th scope="col">${c_apartment}</th>
-        <th scope="col">${actions}</th>
+        <th scope="col">${ACTIONS}</th>
     </tr>
     </thead>
     <tbody>

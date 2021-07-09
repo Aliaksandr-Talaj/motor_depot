@@ -5,7 +5,7 @@
 <jsp:include page="header.jsp"/>
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.request-form" var="page_name"/>
+<fmt:message bundle="${loc}" key="local.request-form" var="PAGE_NAME"/>
 <fmt:message bundle="${loc}" key="local.req6" var="REQUEST_PAGE_6"/>
 <fmt:message bundle="${loc}" key="local.cargo.name" var="CARGO_NAME"/>
 <fmt:message bundle="${loc}" key="local.unit.type" var="UNIT_TYPE"/>
@@ -22,7 +22,7 @@
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1"><c:out value="${page_name}"/></span>
+        <span class="navbar-brand mb-0 h1"><c:out value="${PAGE_NAME}"/></span>
     </div>
 </nav>
 <nav class="navbar navbar-light bg-light">

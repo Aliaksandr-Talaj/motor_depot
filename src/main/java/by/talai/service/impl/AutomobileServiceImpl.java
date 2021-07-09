@@ -3,6 +3,8 @@ package by.talai.service.impl;
 import by.talai.data.dao.*;
 import by.talai.data.dao.impl.*;
 import by.talai.data.exception.ConnectionPoolException;
+import by.talai.data.exception.DaoException;
+import by.talai.model.AutomobileAttachment;
 import by.talai.model.Request;
 import by.talai.model.stock.*;
 import by.talai.service.AutomobileService;
@@ -50,12 +52,28 @@ public class AutomobileServiceImpl implements AutomobileService {
 
     }
 
+
     public Automobile findAutomobileById(String id) throws Exception {
-        return automobileDao.getAutomobile(id);
+        Automobile automobile = automobileDao.getAutomobile(id);
+
+        return setAutomobileAttachments(automobile);
     }
 
+    private Automobile setAutomobileAttachments(Automobile automobile) throws DaoException, ConnectionPoolException {
+        AutomobileAttachmentDao automobileAttachmentDao = new AutomobileAttachmentDaoImpl();
+        List<AutomobileAttachment> automobileAttachmentList
+                = automobileAttachmentDao.findAttachmentsOfAutomobile(automobile);
+        automobile.setAutomobileAttachmentList(automobileAttachmentList);
+        return automobile;
+    }
+
+
     public List<Automobile> findAllAutomobiles() throws Exception {
-        return automobileDao.getAllAutomobiles();
+        List<Automobile> automobiles = automobileDao.getAllAutomobiles();
+        for (Automobile automobile : automobiles) {
+            setAutomobileAttachments(automobile);
+        }
+        return automobiles;
     }
 
     public void updateAutomobile(Automobile automobile) throws Exception {

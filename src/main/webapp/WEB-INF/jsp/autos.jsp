@@ -5,7 +5,7 @@
 <jsp:include page="header.jsp"/>
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.autos" var="page_name"/>
+<fmt:message bundle="${loc}" key="local.autos" var="PAGE_NAME"/>
 
 <fmt:message bundle="${loc}" key="local.auto.number" var="auto_number"/>
 <fmt:message bundle="${loc}" key="local.auto.brand" var="auto_brand"/>
@@ -21,7 +21,7 @@
 <fmt:message bundle="${loc}" key="local.auto.cargo.volume.limit" var="auto_v_limit"/>
 <fmt:message bundle="${loc}" key="local.auto.status" var="auto_status"/>
 <fmt:message bundle="${loc}" key="local.view.attachments" var="v_att"/>
-<fmt:message bundle="${loc}" key="local.actions" var="actions"/>
+<fmt:message bundle="${loc}" key="local.actions" var="ACTIONS"/>
 <fmt:message bundle="${loc}" key="local.weight.units" var="w_unit"/>
 <fmt:message bundle="${loc}" key="local.length.units" var="l_unit"/>
 <fmt:message bundle="${loc}" key="local.unit.volume" var="v_unit"/>
@@ -29,7 +29,7 @@
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1"><c:out value="${page_name}"/></span>
+        <span class="navbar-brand mb-0 h1"><c:out value="${PAGE_NAME}"/></span>
     </div>
 </nav>
 
@@ -49,7 +49,7 @@
         <th scope="col">${auto_h_limit}<br/>${l_unit}</th>
         <th scope="col">${auto_v_limit}<br/>${v_unit}</th>
         <th scope="col">${auto_status}</th>
-        <th scope="col">${actions}</th>
+        <th scope="col">${ACTIONS}</th>
     </tr>
     </thead>
     <tbody>
