@@ -4,6 +4,7 @@ import by.talai.data.dao.*;
 import by.talai.data.exception.ConnectionPoolException;
 import by.talai.data.exception.DaoException;
 import by.talai.model.Ride;
+import by.talai.model.stock.Automobile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,7 @@ public class RideDaoImpl implements RideDao {
                     "loading_date, destination_id, term, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     static final String GET_RIDE_SQL = "SELECT * FROM motor_depot.ride WHERE id = ?;";
     static final String GET_ALL_RIDES_SQL = "SELECT * FROM motor_depot.ride; ";
+    static final String GET_ALL_RIDES_OF_AUTOMOBILE_SQL = "SELECT * FROM motor_depot.ride WHERE (automobile_id = ?); ";
     static final String UPDATE_RIDE_SQL =
             "UPDATE motor_depot.ride SET date = ?, request_id = ?, dispatcher_id = ?, automobile_id = ?, " +
                     "loading_place_id = ?, loading_date = ?, destination_id = ?, term = ?, status_id = ? WHERE (id = ?);";
@@ -205,6 +207,66 @@ public class RideDaoImpl implements RideDao {
         }
         return rides;
     }
+
+    @Override
+    public List<Ride> getAllRidesOfAutomobile(Automobile automobile) throws Exception {
+        String automobileId = automobile.getId();
+        List<Ride> rides = new ArrayList<>();
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(GET_ALL_RIDES_OF_AUTOMOBILE_SQL);
+            preparedStatement.setString(1, automobileId);
+            try (connection; preparedStatement; ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    Ride ride = new Ride();
+
+                    int rideId = resultSet.getInt("id");
+                    ride.setId(rideId);
+                    ride.setDate(resultSet.getDate("date"));
+
+                    String requestId = resultSet.getString("request_id");
+                    ride.setRequest(requestDao.getRequest(requestId));
+
+                    int dispatcherId = resultSet.getInt("dispatcher_id");
+                    ride.setDispatcher(userDao.getUser(dispatcherId));
+
+                    ride.setAutomobile(automobile);
+
+                    int loadingPlaceId = resultSet.getInt("loading_place_id");
+                    ride.setLoadingPlace(addressDao.getAddress(loadingPlaceId));
+
+                    ride.setLoadingDate(resultSet.getDate("loading_date"));
+
+                    int destinationId = resultSet.getInt("destination_id");
+                    ride.setDestination(addressDao.getAddress(destinationId));
+
+                    ride.setTerm(resultSet.getDate("term"));
+
+                    int executionStatusId = resultSet.getInt("status_id");
+                    ride.setExecutionStatus(statusDao.findStatus(executionStatusId));
+
+                    ride.setCargoList(cargoDao.getAllCargosOfRide(rideId));
+
+                    rides.add(ride);
+                }
+
+
+            } catch (SQLException e) {
+                logger.error("Sql exception in getAllRides() method");
+                throw new DaoException("exception in getAllRides() method", e);
+            }
+        } catch (ConnectionPoolException e) {
+            logger.error("Connection pool exception in getAllRides() method");
+            throw new DaoException("exception in getAllRides() method", e);
+        } catch (Exception e) {
+            logger.error("Exception in getAllRides() method");
+            throw new DaoException("exception in getAllRides() method", e);
+        }
+        return rides;
+    }
+
 
     @Override
     public void updateRide(Ride ride) throws Exception {

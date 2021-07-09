@@ -17,6 +17,10 @@
 <fmt:message bundle="${loc}" key="local.term" var="r_term"/>
 <fmt:message bundle="${loc}" key="local.request.status" var="r_status"/>
 <fmt:message bundle="${loc}" key="local.cargo" var="r_cargo"/>
+<fmt:message bundle="${loc}" key="local.accept" var="ACCEPT"/>
+<fmt:message bundle="${loc}" key="local.complete" var="COMPLETE"/>
+<fmt:message bundle="${loc}" key="local.cancel" var="CANCEL"/>
+
 
 <!--Page name -->
 <nav class="navbar navbar-light bg-light">
@@ -24,6 +28,7 @@
         <span class="navbar-brand mb-0 h1"><c:out value="${PAGE_NAME}"/></span>
     </div>
 </nav>
+
 
 <table class="table">
     <thead>
@@ -37,7 +42,6 @@
         <th scope="col">${r_loading_date}</th>
         <th scope="col">${r_destination}</th>
         <th scope="col">${r_term}</th>
-        <th scope="col">${r_cargo}</th>
         <th scope="col">${r_status}</th>
     </tr>
     </thead>
@@ -47,7 +51,15 @@
             <td>${ride.id}</td>
             <td>${ride.date}</td>
             <td>
-                <a href="motor-depot/user/request?id=${ride.request.id}">${ride.request.id}</a>
+                <c:choose>
+                    <c:when test="${role eq 'driver'}">
+                        <c:out value="${ride.request.id}"/>
+                    </c:when>
+
+                    <c:otherwise>
+                        <a href="motor-depot/user/request?id=${ride.request.id}">${ride.request.id}</a>
+                    </c:otherwise>
+                </c:choose>
             </td>
             <td>${ride.dispatcher.id}<br/>
                     ${ride.dispatcher.name}
@@ -55,7 +67,15 @@
                     ${ride.dispatcher.surname}
             </td>
             <td>
-                <a href="motor-depot/user/driver/auto?id=${ride.automobile.id}">${ride.automobile.id} ${ride.automobile.brand} ${ride.automobile.model}</a>
+                <c:choose>
+                    <c:when test="${role eq 'driver'}">
+                        <c:out value="${ride.automobile.id} ${ride.automobile.brand} ${ride.automobile.model}"/>
+                    </c:when>
+
+                    <c:otherwise>
+                        <a href="motor-depot/user/driver/auto?id=${ride.automobile.id}">${ride.automobile.id} ${ride.automobile.brand} ${ride.automobile.model}</a>
+                    </c:otherwise>
+                </c:choose>
             </td>
             <td>${ride.loadingPlace.country}<br/>
                     ${ride.loadingPlace.region}<br/>
@@ -76,15 +96,40 @@
             </td>
             <td>${ride.term}</td>
 
-            <td><c:forEach items="${ride.cargoList}" var="cargo">
+            <td>${ride.executionStatus.status}
+                <c:if test="${role eq 'dispatcher'}">
+                    <c:if test="${(ride.executionStatus.id ne 3) and (ride.executionStatus.id ne 4) }">\
+                        <br/>
+                        <form method="post" action="/motor_depot/user/dispatcher/cancel-ride">
+                            <input type="hidden" name="rideId"
+                                   value="${ride.id}"/>
+                            <button class="btn btn-secondary"
+                                    role="button" type="submit" value="Save">${CANCEL}</button>
+                        </form>
+                    </c:if>
+                </c:if>
+                <c:if test="${role eq 'driver'}">
+                    <c:if test="${ride.executionStatus.id eq 1}">
+                        <br/>
+                        <form method="post" action="/motor_depot/user/driver/accept-ride">
+                            <input type="hidden" name="rideId"
+                                   value="${ride.id}"/>
+                            <button class="btn btn-secondary"
+                                    role="button" type="submit" value="Save">${ACCEPT}</button>
+                        </form>
+                    </c:if>
+                    <c:if test="${ride.executionStatus.id eq 2}">
+                        <br/>
+                        <form method="post" action="/motor_depot/user/driver/complete-ride">
+                            <input type="hidden" name="rideId"
+                                   value="${ride.id}"/>
+                            <button class="btn btn-secondary"
+                                    role="button" type="submit" value="Save">${COMPLETE}</button>
+                        </form>
 
-                <a href="motor-depot/user/cargo?id=${cargo.id}"> #${cargo.id} ${cargo.name}</a><br/>
-
-            </c:forEach>
+                    </c:if>
+                </c:if>
             </td>
-
-            <td>${ride.executionStatus.status}</td>
-
         </tr>
     </c:forEach>
     </tbody>

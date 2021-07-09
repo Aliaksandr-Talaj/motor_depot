@@ -5,22 +5,62 @@ import by.talai.model.stock.Malfunction;
 
 import java.util.List;
 
+/**
+ * The interface Malfunction dao.
+ */
 public interface MalfunctionDao {
-    // create Malfunction
+    /**
+     * Create malfunction.
+     *
+     * @param malfunction the malfunction
+     * @throws Exception the exception
+     */
+// create Malfunction
     void createMalfunction(Malfunction malfunction) throws Exception;
 
-    // get Malfunction by id
+    /**
+     * Gets malfunction.
+     *
+     * @param id the id
+     * @return the malfunction
+     * @throws Exception the exception
+     */
+// get Malfunction by id
     Malfunction getMalfunction(int id) throws Exception;
 
-    // get all Malfunctions
+    /**
+     * Gets all malfunctions.
+     *
+     * @return the all malfunctions
+     * @throws Exception the exception
+     */
+// get all Malfunctions
     List<Malfunction> getAllMalfunctions() throws Exception;
 
-    //update Malfunction
+    /**
+     * Update malfunction.
+     *
+     * @param malfunction the malfunction
+     * @throws Exception the exception
+     */
+//update Malfunction
     void updateMalfunction(Malfunction malfunction) throws Exception;
 
+    /**
+     * Add or update malfunction.
+     *
+     * @param malfunction the malfunction
+     * @throws Exception the exception
+     */
     void addOrUpdateMalfunction(Malfunction malfunction) throws Exception;
 
-    // delete Malfunction
+    /**
+     * Delete malfunction.
+     *
+     * @param id the id
+     * @throws Exception the exception
+     */
+// delete Malfunction
     void deleteMalfunction(int id) throws Exception;
 
 

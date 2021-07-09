@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The type Motor depot controller.
+ */
 public class MotorDepotController extends HttpServlet {
 
     private final AutomobileService automobileService = new AutomobileServiceImpl();
@@ -39,6 +42,11 @@ public class MotorDepotController extends HttpServlet {
 
     private final Logger logger = LoggerFactory.getLogger(MotorDepotController.class);
 
+    /**
+     * Instantiates a new Motor depot controller.
+     *
+     * @throws Exception the exception
+     */
     public MotorDepotController() throws Exception {
     }
 
@@ -47,8 +55,7 @@ public class MotorDepotController extends HttpServlet {
         if (request.getParameter("local") != null) {
             request.getSession(true).setAttribute("local", request.getParameter("local"));
         }
-        request.getSession(true).setAttribute("role", "dispatcher");
-        request.getSession().setAttribute("usrId", 4);
+
 
         String role = (String) request.getSession(true).getAttribute("role");
 
@@ -85,6 +92,10 @@ public class MotorDepotController extends HttpServlet {
                             changeUserStatus(request, response);
                         break;
 //dispatchers can do
+                    case "/user/dispatcher/cancel-ride":
+                        if ("dispatcher".equals(role))
+                            cancelRide(request, response);
+                        break;
                     case "/user/dispatcher/attach-new-driver":
                         if ("dispatcher".equals(role))
                             attachNewDriver(request, response);
@@ -244,9 +255,25 @@ public class MotorDepotController extends HttpServlet {
                             goGetDelivery(request, response);
                         break;
                     //drivers can do
+                    case "/user/driver/complete-ride":
+                        if ("driver".equals(role))
+                            completeRide(request, response);
+                        break;
+                        case "/user/driver/accept-ride":
+                        if ("driver".equals(role))
+                            acceptRide(request, response);
+                        break;
+                    case "/user/driver/add-malfunction":
+                        if ("driver".equals(role))
+                            addMalfunction(request, response);
+                        break;
                     case "/user/driver/auto":
                         if ("driver".equals(role))
                             goAutomobile(request, response);
+                        break;
+                    case "/user/driver/rides":
+                        if ("driver".equals(role))
+                            listRidesOfDriver(request, response);
                         break;
                     case "/user/driver/repair-request":
                         if ("driver".equals(role))
@@ -264,6 +291,50 @@ public class MotorDepotController extends HttpServlet {
             }
         }
 
+    }
+
+    private void cancelRide(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int rideId = Integer.parseInt(request.getParameter("rideId"));
+        RideService rideService = new RideServiceImpl();
+        rideService.cancelRide(rideId);
+
+        response.sendRedirect("/motor_depot/user/rides");
+    }
+
+    private void completeRide(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int rideId = Integer.parseInt(request.getParameter("rideId"));
+        RideService rideService = new RideServiceImpl();
+        rideService.completeRide(rideId);
+
+        response.sendRedirect("/motor_depot/user/driver/rides");
+    }
+
+    private void acceptRide(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int rideId = Integer.parseInt(request.getParameter("rideId"));
+        RideService rideService = new RideServiceImpl();
+        rideService.acceptRide(rideId);
+
+        response.sendRedirect("/motor_depot/user/driver/rides");
+    }
+
+    private void addMalfunction(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int driverId = (int) request.getSession().getAttribute("usrId");
+        Automobile automobile = automobileService.findAutomobileOfDriver(driverId);
+        String problem = request.getParameter("problem");
+        automobileService.createMalfunction(automobile, problem);
+
+        goAutomobile(request, response);
+    }
+
+    private void listRidesOfDriver(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int driverId = (int) request.getSession().getAttribute("usrId");
+        RideService rideService = new RideServiceImpl();
+        Automobile automobile = automobileService.findAutomobileOfDriver(driverId);
+        List<Ride> rides = rideService.getRidesOfAutomobile(automobile);
+        request.setAttribute("rides", rides);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/rides.jsp");
+        dispatcher.forward(request, response);
     }
 
 
@@ -307,9 +378,11 @@ public class MotorDepotController extends HttpServlet {
         String automobileId = request.getParameter("automobileId");
         int dispatcherId = (int) request.getSession().getAttribute("usrId");
         Ride ride = new RideServiceImpl().createRide(deliveryId, automobileId, dispatcherId);
+        Request currentRequest = ride.getRequest();
+        RequestService requestService = new RequestServiceImpl();
+        requestService.quenchRequest(currentRequest);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/delivery-process.jsp");
-        dispatcher.forward(request, response);
+        response.sendRedirect("/motor_depot/user/rides");
     }
 
     private void processDelivery(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -403,9 +476,8 @@ public class MotorDepotController extends HttpServlet {
             chartererService.addNewAddressToCharterer(address2, generatingRequest.getCharterer());
 
             //saving delivery into DB
-            ///////////////////////////////////////////////////
             delivery.setRequest(generatingRequest);
-            ///////////////////////////////////////////////
+
             DeliveryService deliveryService = new DeliveryServiceImpl();
             delivery = deliveryService.addDelivery(delivery);
 
@@ -756,18 +828,31 @@ public class MotorDepotController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void goRequestRepair(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void goRequestRepair(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        int driverId = (int) request.getSession().getAttribute("usrId");
+        Automobile automobile = automobileService.findAutomobileOfDriver(driverId);
+        request.setAttribute("auto", automobile);
+
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/repair-request.jsp");
         dispatcher.forward(request, response);
     }
 
-    private void goAutomobile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void goAutomobile(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        int driverId = (int) request.getSession().getAttribute("usrId");
+        Automobile automobile = automobileService.findAutomobileOfDriver(driverId);
+
+        request.setAttribute("auto", automobile);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/auto.jsp");
         dispatcher.forward(request, response);
     }
 
-    private void goListMaintenances(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/maintenance.jsp");
+    private void goListMaintenances(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/maintenances.jsp");
         dispatcher.forward(request, response);
     }
 

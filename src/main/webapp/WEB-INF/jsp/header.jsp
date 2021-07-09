@@ -101,13 +101,13 @@
 
                         <c:if test="${sessionScope.role eq 'driver'}">
 
-                            <li><a class="dropdown-item" href="#"><c:out value="${my_auto_mp}"/></a></li>
+                            <li><a class="dropdown-item" href="/motor_depot/user/driver/auto"><c:out value="${my_auto_mp}"/></a></li>
 
-                            <li><a class="dropdown-item" href="#"><c:out value="${my_rides_mp}"/></a></li>
+                            <li><a class="dropdown-item" href="/motor_depot/user/driver/rides"><c:out value="${my_rides_mp}"/></a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#"><c:out value="${add_repair_request}"/></a></li>
+                            <li><a class="dropdown-item" href="/motor_depot/user/driver/repair-request"><c:out value="${add_repair_request}"/></a></li>
                         </c:if>
 
                         <!-- DISPATCHERS MENU -->

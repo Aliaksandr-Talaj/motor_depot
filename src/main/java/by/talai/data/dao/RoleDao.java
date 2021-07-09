@@ -5,21 +5,55 @@ import by.talai.model.Role;
 
 import java.util.List;
 
+/**
+ * The interface Role dao.
+ */
 public interface RoleDao {
 
-    // create role
+    /**
+     * Create role.
+     *
+     * @param role the role
+     * @throws Exception the exception
+     */
+// create role
     void createRole(Role role) throws Exception;
 
-    // get role by id
+    /**
+     * Gets role.
+     *
+     * @param id the id
+     * @return the role
+     * @throws Exception the exception
+     */
+// get role by id
     Role getRole(int id) throws Exception;
 
-    // get all roles
+    /**
+     * Gets all roles.
+     *
+     * @return the all roles
+     * @throws Exception the exception
+     */
+// get all roles
     List<Role> getAllRoles() throws Exception;
 
-    //update role
+    /**
+     * Update role.
+     *
+     * @param role the role
+     * @throws Exception the exception
+     */
+//update role
     void updateRole(Role role) throws Exception;
 
-    // delete role
+    /**
+     * Delete role.
+     *
+     * @param id the id
+     * @throws Exception the exception
+     */
+// delete role
     void deleteRole(int id) throws Exception;
 
 }

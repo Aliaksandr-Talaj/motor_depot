@@ -7,6 +7,7 @@ import by.talai.data.dao.impl.RideDaoImpl;
 import by.talai.model.Delivery;
 import by.talai.model.Request;
 import by.talai.model.Ride;
+import by.talai.model.Status;
 import by.talai.model.stock.Automobile;
 import by.talai.service.AutomobileService;
 import by.talai.service.DeliveryService;
@@ -59,6 +60,40 @@ public class RideServiceImpl implements RideService {
     @Override
     public List<Ride> getRides() throws Exception {
         return rideDao.getAllRides();
+    }
+
+    @Override
+    public List<Ride> getRidesOfAutomobile(Automobile automobile) throws Exception {
+        return rideDao.getAllRidesOfAutomobile(automobile);
+
+
+    }
+
+    @Override
+    public void acceptRide(int rideId) throws Exception {
+        Ride ride = rideDao.getRide(rideId);
+        StatusDao statusDao = new ExecutionStatusDaoImpl();
+        Status status = statusDao.findStatus(2);
+        ride.setExecutionStatus(status);
+        rideDao.updateRide(ride);
+    }
+
+    @Override
+    public void completeRide(int rideId) throws Exception {
+        Ride ride = rideDao.getRide(rideId);
+        StatusDao statusDao = new ExecutionStatusDaoImpl();
+        Status status = statusDao.findStatus(3);
+        ride.setExecutionStatus(status);
+        rideDao.updateRide(ride);
+    }
+
+    @Override
+    public void cancelRide(int rideId) throws Exception {
+        Ride ride = rideDao.getRide(rideId);
+        StatusDao statusDao = new ExecutionStatusDaoImpl();
+        Status status = statusDao.findStatus(4);
+        ride.setExecutionStatus(status);
+        rideDao.updateRide(ride);
     }
 
 

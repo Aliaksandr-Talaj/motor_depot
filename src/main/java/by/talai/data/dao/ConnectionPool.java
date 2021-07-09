@@ -12,6 +12,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
+/**
+ * The type Connection pool.
+ */
 public final class ConnectionPool {
 
     private BlockingQueue<Connection> connectionQueue;
@@ -23,6 +26,9 @@ public final class ConnectionPool {
     private final String password;
     private int poolSize;
 
+    /**
+     * The constant logger.
+     */
     public static final Logger logger = LoggerFactory.getLogger(ConnectionPool.class);
 
     private static ConnectionPool instance;
@@ -42,6 +48,12 @@ public final class ConnectionPool {
         initPoolData();
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     * @throws ConnectionPoolException the connection pool exception
+     */
     public static ConnectionPool getInstance() throws ConnectionPoolException {
         if (instance == null) {
             instance = new ConnectionPool();
@@ -49,6 +61,11 @@ public final class ConnectionPool {
         return instance;
     }
 
+    /**
+     * Init pool data.
+     *
+     * @throws ConnectionPoolException the connection pool exception
+     */
     public void initPoolData() throws ConnectionPoolException {
         Locale.setDefault(Locale.ENGLISH);
 
@@ -79,10 +96,20 @@ public final class ConnectionPool {
     }
 
 
+    /**
+     * Dispose.
+     *
+     * @throws ConnectionPoolException the connection pool exception
+     */
     public void dispose() throws ConnectionPoolException {
         clearConnectionQueue();
     }
 
+    /**
+     * Clear connection queue.
+     *
+     * @throws ConnectionPoolException the connection pool exception
+     */
     public void clearConnectionQueue() throws ConnectionPoolException {
         try {
             closeConnectionQueue(givenAwayConQueue);
@@ -94,6 +121,12 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Take connection connection.
+     *
+     * @return the connection
+     * @throws ConnectionPoolException the connection pool exception
+     */
     public Connection takeConnection() throws ConnectionPoolException {
         Connection connection = null;
         try {
@@ -162,11 +195,22 @@ public final class ConnectionPool {
 
         private final Connection connection;
 
+        /**
+         * Instantiates a new Pooled connection.
+         *
+         * @param connection the connection
+         * @throws SQLException the sql exception
+         */
         public PooledConnection(Connection connection) throws SQLException {
             this.connection = connection;
             this.connection.setAutoCommit(false);
         }
 
+        /**
+         * Really close.
+         *
+         * @throws SQLException the sql exception
+         */
         public void reallyClose() throws SQLException {
             connection.close();
         }

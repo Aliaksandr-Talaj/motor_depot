@@ -2,11 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<jsp:include page="header.jsp"/>
+
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.autos" var="PAGE_NAME"/>
-
+<fmt:message bundle="${loc}" key="local.auto" var="PAGE_NAME"/>
 <fmt:message bundle="${loc}" key="local.auto.number" var="AUTO_NUMBER"/>
 <fmt:message bundle="${loc}" key="local.auto.brand" var="AUTO_BRAND"/>
 <fmt:message bundle="${loc}" key="local.auto.model" var="AUTO_MODEL"/>
@@ -26,13 +25,6 @@
 <fmt:message bundle="${loc}" key="local.length.units" var="L_UNIT"/>
 <fmt:message bundle="${loc}" key="local.unit.volume" var="V_UNIT"/>
 
-<!--Page name -->
-<nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1"><c:out value="${PAGE_NAME}"/></span>
-    </div>
-</nav>
-
 <table class="table">
     <thead>
     <tr>
@@ -49,42 +41,33 @@
         <th scope="col">${AUTO_H_LIMIT}<br/>${L_UNIT}</th>
         <th scope="col">${AUTO_V_LIMIT}<br/>${V_UNIT}</th>
         <th scope="col">${AUTO_STATUS}</th>
-        <th scope="col">${ACTIONS}</th>
+
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${automobiles}" var="auto">
-        <tr>
-            <td>${auto.id}</td>
-            <td>${auto.brand}</td>
-            <td>${auto.model}</td>
-            <td>${auto.fuelType.type}</td>
-            <td>${auto.carrying}</td>
-            <td>${auto.automobileType.type}</td>
-            <td>
-                <c:forEach items="${auto.equipmentSet}" var="equipment">
-                    ${equipment.name}
-                </c:forEach>
-            </td>
-            <td>
-                <c:forEach items="${auto.loadingTypes}" var="l_type">
-                    ${l_type.type}<br/>
-                </c:forEach>
-                    </td>
-            <td>${auto.platformLength}</td>
-            <td>${auto.platformWidth}</td>
-            <td>${auto.cargoHeightLimit}</td>
-            <td>${auto.cargoVolumeLimit}</td>
-            <td>${auto.technicalStatus.status}</td>
-            <td>
-                <a class="btn btn-secondary"
-                   href="/motor_depot/user/dispatcher/v_attachment?id=${auto.id}"
-                   role="button">${V_ATTACHMENTS}</a>
-            </td>
-        </tr>
-    </c:forEach>
+    <tr>
+        <td>${auto.id}</td>
+        <td>${auto.brand}</td>
+        <td>${auto.model}</td>
+        <td>${auto.fuelType.type}</td>
+        <td>${auto.carrying}</td>
+        <td>${auto.automobileType.type}</td>
+        <td>
+            <c:forEach items="${auto.equipmentSet}" var="equipment">
+                ${equipment.name}
+            </c:forEach>
+        </td>
+        <td>
+            <c:forEach items="${auto.loadingTypes}" var="l_type">
+                ${l_type.type}<br/>
+            </c:forEach>
+        </td>
+        <td>${auto.platformLength}</td>
+        <td>${auto.platformWidth}</td>
+        <td>${auto.cargoHeightLimit}</td>
+        <td>${auto.cargoVolumeLimit}</td>
+        <td>${auto.technicalStatus.status}</td>
+
+    </tr>
     </tbody>
 </table>
-
-
-<jsp:include page="footer.jsp"/>

@@ -5,7 +5,10 @@ import by.talai.data.dao.impl.AutomobileAttachmentDaoImpl;
 import by.talai.data.exception.ConnectionPoolException;
 import by.talai.model.AutomobileAttachment;
 import by.talai.model.personnel.Driver;
+import by.talai.model.stock.Automobile;
 import by.talai.service.AutomobileAttachmentService;
+import by.talai.service.AutomobileService;
+import by.talai.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +54,13 @@ public class AutomobileAttachmentServiceImpl implements AutomobileAttachmentServ
         attachment.setDriver(attachedDriver);
         attachment.setDateOfAttachment(new Date(new java.util.Date().getTime()));
         automobileAttachmentDao.createAttachment(attachment);
+    }
+
+    @Override
+    public List<AutomobileAttachment> getAutomobileAttachmentsOfDriver(int driverId) throws Exception {
+        UserService userService = new UserServiceImpl();
+        Driver driver = userService.getDriver(driverId);
+        return automobileAttachmentDao.findAttachmentsOfDriver(driver);
     }
 
 }

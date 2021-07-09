@@ -114,6 +114,26 @@ public class UserServiceImpl implements UserService {
         return drivers;
     }
 
+    @Override
+    public Driver getDriver(int driverId) throws ServiceException, ConnectionPoolException {
+        AutomobileAttachmentDao automobileAttachmentDao = new AutomobileAttachmentDaoImpl();
+        Driver driver;
+        try {
+
+            User user = userDao.getUser(driverId);
+            driver = new Driver();
+            driver.setId(user.getId());
+            driver.setName(user.getName());
+            driver.setSurname(user.getSurname());
+            driver.setAutomobileAttachments(automobileAttachmentDao.findAttachmentsOfDriver(driver));
+
+        } catch (Exception e) {
+            logger.error("Sql exception in findDriver() method");
+            throw new ServiceException("Sql exception in findDriver() method", e);
+        }
+
+        return driver;
+    }
 
     @Override
     public List<User> findAllUsersOnPage(int pageNum, int pageSize) throws ServiceException {

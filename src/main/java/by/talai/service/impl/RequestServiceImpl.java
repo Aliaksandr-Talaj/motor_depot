@@ -1,24 +1,21 @@
 package by.talai.service.impl;
 
 import by.talai.data.dao.DeliveryDao;
-import by.talai.data.dao.EquipmentDao;
 import by.talai.data.dao.RequestDao;
+import by.talai.data.dao.StatusDao;
 import by.talai.data.dao.impl.DeliveryDaoImpl;
-import by.talai.data.dao.impl.EquipmentDaoImpl;
+import by.talai.data.dao.impl.ExecutionStatusDaoImpl;
 import by.talai.data.dao.impl.RequestDaoImpl;
 import by.talai.model.Delivery;
 import by.talai.model.Request;
 import by.talai.model.Status;
-import by.talai.model.stock.Equipment;
 import by.talai.service.RequestService;
 import by.talai.service.dto.RequestDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class RequestServiceImpl implements RequestService {
 
@@ -101,5 +98,12 @@ public class RequestServiceImpl implements RequestService {
         return String.valueOf(new java.util.Date().getTime()) +
                 '-' +
                 userId;
+    }
+
+    @Override
+    public void quenchRequest(Request request) throws Exception {
+        StatusDao statusDao = new ExecutionStatusDaoImpl();
+        request.setExecutionStatus(statusDao.findStatus(2));
+        requestDao.updateRequest(request);
     }
 }

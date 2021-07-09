@@ -6,12 +6,15 @@ import by.talai.data.exception.ConnectionPoolException;
 import by.talai.data.exception.DaoException;
 import by.talai.model.AutomobileAttachment;
 import by.talai.model.Request;
+import by.talai.model.Status;
 import by.talai.model.stock.*;
+import by.talai.service.AutomobileAttachmentService;
 import by.talai.service.AutomobileService;
 import by.talai.service.dto.AutomobilesDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +34,7 @@ public class AutomobileServiceImpl implements AutomobileService {
     public AutomobileServiceImpl() throws ConnectionPoolException {
     }
 
-
+    @Override
     public void saveNewAutomobile(Automobile automobile) throws Exception {
 
         automobileDao.createAutomobile(automobile);
@@ -52,7 +55,7 @@ public class AutomobileServiceImpl implements AutomobileService {
 
     }
 
-
+    @Override
     public Automobile findAutomobileById(String id) throws Exception {
         Automobile automobile = automobileDao.getAutomobile(id);
 
@@ -67,7 +70,20 @@ public class AutomobileServiceImpl implements AutomobileService {
         return automobile;
     }
 
+    @Override
+    public Automobile findAutomobileOfDriver(int driverId) throws Exception {
+        Automobile automobile = new Automobile();
+        AutomobileAttachmentService attachmentService = new AutomobileAttachmentServiceImpl();
+        List<AutomobileAttachment> automobileAttachments = attachmentService.getAutomobileAttachmentsOfDriver(driverId);
+        for (AutomobileAttachment attachment : automobileAttachments) {
+            if (attachment.getDateOfDetachment() == null) {
+                automobile = attachment.getAutomobile();
+            }
+        }
+        return automobile;
+    }
 
+    @Override
     public List<Automobile> findAllAutomobiles() throws Exception {
         List<Automobile> automobiles = automobileDao.getAllAutomobiles();
         for (Automobile automobile : automobiles) {
@@ -76,6 +92,7 @@ public class AutomobileServiceImpl implements AutomobileService {
         return automobiles;
     }
 
+    @Override
     public void updateAutomobile(Automobile automobile) throws Exception {
         automobileDao.updateAutomobile(automobile);
 
@@ -255,5 +272,17 @@ public class AutomobileServiceImpl implements AutomobileService {
         return counter == requestEquipmentSet.size();
     }
 
+    @Override
+    public void createMalfunction(Automobile automobile, String problem) throws Exception {
+        Status status = technicalStatusDao.findStatus(2);
+        automobile.setTechnicalStatus(status);
+        automobileDao.updateAutomobile(automobile);
+        Malfunction malfunction = new Malfunction();
+        malfunction.setAutomobile(automobile);
+        malfunction.setProblem(problem);
+        malfunction.setDetectionTime(new Date(new java.util.Date().getTime()));
+
+        malfunctionDao.createMalfunction(malfunction);
+    }
 
 }
